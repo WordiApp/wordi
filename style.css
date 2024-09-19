@@ -1,0 +1,42 @@
+#leaderboard{
+    display: flex;
+    width: 500px;
+    height: 500px;
+    overflow: auto;
+    border: black solid 5px;
+    border-radius: 1%;
+    display: block;
+    padding: 20px;
+    margin: 10px;
+}
+
+#signin_area{
+    width: 500px;
+    border: solid 5px;
+    margin: 10px;
+    padding: 10px;
+}
+
+#generate_word{
+    margin: 10px;
+}
+
+.option_button{
+    width: 40%;
+    margin-left: 6%;
+}
+
+.spot{
+    width: 90%;
+    height: 40px;
+}
+
+.defined_word{
+    font-weight: 750;
+    font-size: 30px;
+}
+
+.part_of_speech{
+    font-weight: 600;
+    margin-top: 10px;
+}
