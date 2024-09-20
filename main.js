@@ -34,6 +34,10 @@ const email_input = document.getElementById("input_email")
 const password_input = document.getElementById("input_password")
 const password_checkbox = document.getElementById("show_password")
 
+const display_username = document.getElementById("username_display")
+const display_email = document.getElementById("email_display")
+const display_score = document.getElementById("score_display")
+
 const update_username_input = document.getElementById("update_username_input")
 const update_email_input = document.getElementById("update_email_input")
 const update_password_input = document.getElementById("update_password_input")
@@ -45,6 +49,18 @@ const update_password_button = document.getElementById("update_password_button")
 const submit_button = document.getElementById("submit_button")
 
 const signout_button = document.getElementById("signout_button")
+//----------------Functions----------------//
+function display_info(user){
+    if(user != null){
+        get(ref(db, "userdata/" + user.uid)).then(function(snapshot){
+            display_username.textContent = "Username: " + snapshot.val()["username"]
+            display_email.textContent = "Email: " + snapshot.val()["email"]
+            display_score.textContent = "Score: " + snapshot.val()["score"]
+        }).catch(function(err){
+            alert(err)
+        })
+    }
+}
 //----------------Leaderboards----------------//
 let spots = 25
 
@@ -142,7 +158,7 @@ document.getElementById("signin").addEventListener("submit", function(event){
 })
 
 onAuthStateChanged(auth, function(user){
-    // Todo: Show user information
+    display_info(user)
 })
 
 password_checkbox.addEventListener("change", function(e){
