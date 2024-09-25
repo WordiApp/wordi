@@ -1,24 +1,37 @@
 export default class Word{
-    constructor(len){
+    constructor(given, make_definitions){
         this.word = ""
+        this.word_length = ""
         this.word_definitions = []
-        if(len != null){
-            if(len > 12){
-                len = 12
-            } else if (len < 3){
-                len = 3
+        if(given != null && isNaN(parseInt(given)) == true){
+            this.word = given
+            this.word_length = given.length
+        } else {
+            if(given != null){
+                if(given > 12){
+                    given = 12
+                } else if (given < 3){
+                    given = 3
+                }
             }
+            this.word_length = given
+            this.generate_word()
         }
-        this.word_length = len
-        this.change_word()
+        if(make_definitions == true){
+            this.generate_definitions()
+        }
     }
 
-    async change_word(){
+    async generate_word(){
         // Generates a random word
-        const word_api = "https://random-word-api.herokuapp.com/word?length=" + this.word_length
+        const word_api = "https://random-word.ryanrk.com/api/en/word/random"
+
         let word_response = await fetch(word_api)
         let word_json = await word_response.json()
         this.word = word_json[0]
+    }
+
+    async generate_definitions(){
         // Grabs the definition of the word
         const definition_api = "https://api.dictionaryapi.dev/api/v2/entries/en/" + String(this.word)
         let definition_response = await fetch(definition_api)

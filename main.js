@@ -3,6 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/fireba
 import { getDatabase, query, orderByChild, limitToFirst, ref, get, set, update} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js"
 import { getAuth, onAuthStateChanged, updateEmail, updatePassword, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js"
 import Word from "./word.js"
+import Topics from "./topics.js"
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -250,7 +251,7 @@ signout_button.addEventListener("click", function(){
     auth.signOut()
 })
 
-let word = new Word(8)
+let word = new Word(8, true)
 document.getElementById("generate_word").addEventListener("click", function(){
     definition_popup(word)
 })
