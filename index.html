@@ -11,7 +11,7 @@
     <!--Navbar-->
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Wordi</a>
+            <a class="navbar-brand" href="index.html">Wordi</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -24,7 +24,7 @@
                         <a class="nav-link" href="#">Games</a>
                     </li>
                     <li class="nav-item"></li>
-                        <a class="nav-link" href="#">Dictionary</a>
+                        <a class="nav-link" href="dictionary.html">Dictionary</a>
                     </li>
                     <li class="nav-item"></li>
                         <a class="nav-link" href="leaderboards.html">Leaderboards</a>
@@ -66,35 +66,8 @@
             <button type="submit" id="submit_button" class="btn btn-primary">Login</button>
         </form>
     </div>
-
-    <div id="account_information"></div>
-        <h5 id="username_display">Username: </h5>
-        <h5 id="email_display">Email: </h5>
-        <h5 id="score_display">Score: </h5>
-    </div>
-    
-    <button type="button" class="btn btn-primary" id="generate_word">
-        Loading...
-    </button>
-
-    <div class="modal fade" id="word_modal" tabindex="-1" aria-labelledby="word_modal" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="word_modal">New word!</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="definition_body">
-                    <div id="word"></div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="login_submit">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
 </body>
-<script src="main.js" type="module"></script>
+<script src="index.js" type="module"></script>
 <script type="module">
     // Import the functions you need from the SDKs you need
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
