@@ -38,7 +38,7 @@ document.getElementById("signin").addEventListener("submit", function(event){
     let name = document.getElementById("input_username").value
     let email = document.getElementById("input_email").value
     let password = document.getElementById("input_password").value
-
+    console.log("click")
     if(register_activated){
         console.log(email + " | " + password)
         createUserWithEmailAndPassword(auth, email, password).then(function(user_credential){
@@ -48,13 +48,13 @@ document.getElementById("signin").addEventListener("submit", function(event){
                 email: email,
                 score: 0
             })
+            document.location.href = "dashboard.html" 
         }).catch(function(err){
             console.log(err)
         })
     } else{
         signInWithEmailAndPassword(auth, email, password).then(function(user_credential){
-            alert(user_credential.user.uid + " -  Has successfully signed in!")
-            console.log(user_credential.user.uid + " -  Has successfully signed in!")
+            document.location.href = "dashboard.html"
         }).catch(function(err){
             alert(err)
             console.log(err)

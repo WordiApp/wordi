@@ -68,7 +68,6 @@ update_username_button.addEventListener("click", function(event){
 })
 
 update_email_button.addEventListener("click", function(event){
-    console.log(auth.currentUser)
     if(auth.currentUser != null){
         let new_email = update_email_input.value
         updateEmail(auth.currentUser, new_email).then(function(){
@@ -108,4 +107,5 @@ update_password_button.addEventListener("click", function(event){
 
 signout_button.addEventListener("click", function(){
     auth.signOut()
+    document.location.href = "index.html"
 })
