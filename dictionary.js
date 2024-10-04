@@ -1,4 +1,23 @@
+// Import the functions you need from the SDKs you need
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js"
+import {getDatabase} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js"
+import {getAuth, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js"
 import Word from "./word.js"
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyDft-OAjQovGmUmmcyowkcYgV0kEPBMrME",
+    authDomain: "wordsearch-8ef82.firebaseapp.com",
+    projectId: "wordsearch-8ef82",
+    storageBucket: "wordsearch-8ef82.appspot.com",
+    messagingSenderId: "483921968995",
+    appId: "1:483921968995:web:040b330d0dd874fbfc9d56"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig)
+const auth = getAuth()
+const db = getDatabase()
 
 let word = new Word("adopt")
 
@@ -9,7 +28,6 @@ document.getElementById("generate_word").addEventListener("click", function(){
 setTimeout(function(){
     document.getElementById("generate_word").textContent = word.get_word()
 }, 500)
-
 //----------------Random Words----------------//
 function definition_popup(word_object){
     const modalContent = document.getElementById("definition_body")
@@ -40,3 +58,9 @@ function definition_popup(word_object){
         word_div.append(error_div)
     }
 }
+
+onAuthStateChanged(auth, function(user){
+    if(user == null){
+        document.location.href = "index.html"
+    }
+})

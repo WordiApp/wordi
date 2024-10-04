@@ -44,7 +44,11 @@ function display_info(user){
     }
 }
 onAuthStateChanged(auth, function(user){
-    display_info(user)
+    if(user != null){
+        display_info(user)
+    } else {
+        document.location.href = "index.html"
+    }
 })
 
 update_username_button.addEventListener("click", function(event){
