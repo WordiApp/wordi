@@ -18,13 +18,13 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="dashboard.html">Dashboard</a>
+                        <a class="nav-link" aria-current="page" href="dashboard.html">Dashboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="games.html">Games</a>
                     </li>
                     <li class="nav-item"></li>
-                        <a class="nav-link" href="dictionary.html">Dictionary</a>
+                        <a class="nav-link active" href="dictionary.html">Dictionary</a>
                     </li>
                     <li class="nav-item"></li>
                         <a class="nav-link" href="leaderboards.html">Leaderboards</a>
@@ -40,6 +40,26 @@
             </div>
         </div>
     </nav>
+
+    <div class="container dictionary-container">
+        <h2 class="text-center mb-1">Wordi Dictionary</h2>
+        <h5 class="text-center mb-4">Look up words, learn, and earn points!</h5>
+        <div class="input-group mb-3">
+            <input type="text" id="word_input" class="form-control" placeholder="Enter a word to look up" autofocus>
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="button" id="search_button">Look Up</button>
+                <button class="btn btn-secondary" type="button" id="random_button">Random</button>
+            </div>
+        </div>
+    
+        <div class="definition-result">
+            <div id="word_definition" class="mt-3">
+                ...
+            </div>
+        </div>
+      </div>
+
+
     <div class="modal fade" id="word_modal" tabindex="-1" aria-labelledby="word_modal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">

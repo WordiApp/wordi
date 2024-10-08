@@ -29,15 +29,16 @@ setTimeout(function(){
     document.getElementById("generate_word").textContent = word.get_word()
 }, 500)
 //----------------Random Words----------------//
-function definition_popup(word_object){
-    const modalContent = document.getElementById("definition_body")
-    const modalBS = new bootstrap.Modal(document.getElementById("word_modal"))
-    modalBS.toggle()
-            
-    document.getElementById("word").remove()
-    let word_div = document.createElement("div")
-    word_div.id = "word"
-    modalContent.append(word_div)
+function display_definition(word_object){
+    const definition_area = document.getElementById("word_definition")
+    
+    if(document.getElementById("word") == null){
+        document.createElement("div").id = "word"
+    }
+    let word_div = document.getElementById("word")
+    definition_area.append(word_div)
+
+    // STOPPED HERE
             
     let defined_word = document.createElement("div")
     defined_word.classList.add("defined_word")
@@ -58,6 +59,16 @@ function definition_popup(word_object){
         word_div.append(error_div)
     }
 }
+
+document.getElementById("search_button").addEventListener("click", function(e){
+    let val = document.getElementById("word_input").value
+    if(val != ""){
+        document.getElementById("word_definition").textContent = "Loading..."
+        setTimeout(function(){
+            display_definition(new Word(val))
+        }, 1000)
+    }
+})
 
 onAuthStateChanged(auth, function(user){
     if(user == null){
