@@ -31,14 +31,13 @@ setTimeout(function(){
 //----------------Random Words----------------//
 function display_definition(word_object){
     const definition_area = document.getElementById("word_definition")
-    
-    if(document.getElementById("word") == null){
-        document.createElement("div").id = "word"
+    definition_area.textContent = ""
+    if(document.getElementById("word") != null){
+        document.getElementById("word").remove()
     }
-    let word_div = document.getElementById("word")
+    let word_div = document.createElement("div")
+    word_div.id = "word"
     definition_area.append(word_div)
-
-    // STOPPED HERE
             
     let defined_word = document.createElement("div")
     defined_word.classList.add("defined_word")
@@ -53,21 +52,41 @@ function display_definition(word_object){
             definition_div.textContent = definition
             word_div.append(definition_div)
         })
+        definition_area.append(word_div)
     } else{
         let error_div = document.createElement("div")
-        error_div.textContent = "Couldn't get a definition for this word. Sorry!"
+        error_div.textContent = "Definition Unavailable."
         word_div.append(error_div)
+        return null
     }
+    return true
 }
 
 document.getElementById("search_button").addEventListener("click", function(e){
     let val = document.getElementById("word_input").value
     if(val != ""){
         document.getElementById("word_definition").textContent = "Loading..."
+        let word = new Word(val.toLowerCase())
         setTimeout(function(){
-            display_definition(new Word(val))
+            display_definition(word)
         }, 1000)
     }
+})
+
+document.getElementById("random_button").addEventListener("click", function(e){
+    document.getElementById("random_button").style.visibility = "HIDDEN"
+    document.getElementById("word_definition").textContent = "Loading..."
+    function try_generate(){
+        let word = new Word()
+        setTimeout(function(){
+            if(display_definition(word) == null){
+                try_generate()
+            }else{
+                document.getElementById("random_button").style.visibility = "VISIBLE"
+                // BUG: fix the process of recursion being shown.
+            }}, 1000)
+    }
+    try_generate()
 })
 
 onAuthStateChanged(auth, function(user){
