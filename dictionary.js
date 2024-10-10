@@ -18,48 +18,37 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const auth = getAuth()
 const db = getDatabase()
-
-let word = new Word("adopt")
-
-document.getElementById("generate_word").addEventListener("click", function(){
-    definition_popup(word)
-})
-
-setTimeout(function(){
-    document.getElementById("generate_word").textContent = word.get_word()
-}, 500)
 //----------------Random Words----------------//
 function display_definition(word_object){
     const definition_area = document.getElementById("word_definition")
-    definition_area.textContent = ""
     if(document.getElementById("word") != null){
         document.getElementById("word").remove()
     }
     let word_div = document.createElement("div")
     word_div.id = "word"
-    definition_area.append(word_div)
             
     let defined_word = document.createElement("div")
     defined_word.classList.add("defined_word")
     defined_word.textContent = word_object.get_word()
     word_div.append(defined_word)
 
-    let definitions = word_object.get_definitions()
-    if(definitions.length != 0){
-        definitions.forEach(function(definition){
-            let definition_div = document.createElement("div")
-            definition_div.classList.add("definition")
-            definition_div.textContent = definition
-            word_div.append(definition_div)
-        })
-        definition_area.append(word_div)
-    } else{
+    try{
+        let definitions = word_object.get_definitions()
+        if(definitions.length != 0){
+            definitions.forEach(function(definition){
+                let definition_div = document.createElement("div")
+                definition_div.classList.add("definition")
+                definition_div.textContent = definition
+                word_div.append(definition_div)
+            })
+            definition_area.textContent = ""
+            definition_area.append(word_div)
+        }
+    } catch {
         let error_div = document.createElement("div")
         error_div.textContent = "Definition Unavailable."
         word_div.append(error_div)
-        return null
     }
-    return true
 }
 
 document.getElementById("search_button").addEventListener("click", function(e){
@@ -69,22 +58,20 @@ document.getElementById("search_button").addEventListener("click", function(e){
         let word = new Word(val.toLowerCase())
         setTimeout(function(){
             display_definition(word)
-        }, 1000)
+        }, 100)
     }
 })
 
 document.getElementById("random_button").addEventListener("click", function(e){
-    document.getElementById("random_button").style.visibility = "HIDDEN"
     document.getElementById("word_definition").textContent = "Loading..."
     function try_generate(){
-        let word = new Word()
+        let word = new Word(4)
+        document.getElementById("random_button").disabled = true
         setTimeout(function(){
-            if(display_definition(word) == null){
-                try_generate()
-            }else{
-                document.getElementById("random_button").style.visibility = "VISIBLE"
-                // BUG: fix the process of recursion being shown.
-            }}, 1000)
+            display_definition(word) 
+            document.getElementById("random_button").disabled = false
+            // TODO: Add recursive functionality
+        }, 1000)
     }
     try_generate()
 })
@@ -94,3 +81,5 @@ onAuthStateChanged(auth, function(user){
         document.location.href = "index.html"
     }
 })
+
+
