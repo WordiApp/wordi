@@ -32,22 +32,20 @@ function display_definition(word_object){
     defined_word.textContent = word_object.get_word()
     word_div.append(defined_word)
 
-    try{
-        let definitions = word_object.get_definitions()
-        if(definitions.length != 0){
-            definitions.forEach(function(definition){
-                let definition_div = document.createElement("div")
-                definition_div.classList.add("definition")
-                definition_div.textContent = definition
-                word_div.append(definition_div)
-            })
-            definition_area.textContent = ""
-            definition_area.append(word_div)
-        }
-    } catch {
-        let error_div = document.createElement("div")
-        error_div.textContent = "Definition Unavailable."
-        word_div.append(error_div)
+    let definitions = word_object.get_definitions()
+    console.log(definitions)
+    if(definitions.length > 0){
+        definitions.forEach(function(definition){
+            let definition_div = document.createElement("div")
+            definition_div.classList.add("definition")
+            definition_div.textContent = definition
+            word_div.append(definition_div)
+        })
+        definition_area.textContent = ""
+        definition_area.append(word_div)
+        return true
+    }else{
+        return false
     }
 }
 
@@ -64,13 +62,18 @@ document.getElementById("search_button").addEventListener("click", function(e){
 
 document.getElementById("random_button").addEventListener("click", function(e){
     document.getElementById("word_definition").textContent = "Loading..."
+    let success = false
+    let counter = 0
     function try_generate(){
-        let word = new Word(4)
+        let word = new Word()
         document.getElementById("random_button").disabled = true
         setTimeout(function(){
-            display_definition(word) 
+            success = display_definition(word) 
             document.getElementById("random_button").disabled = false
-            // TODO: Add recursive functionality
+            counter++
+            if(success == false && counter < 10){
+                try_generate()
+            }
         }, 1000)
     }
     try_generate()
