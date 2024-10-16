@@ -60,23 +60,27 @@ document.getElementById("search_button").addEventListener("click", function(e){
     }
 })
 
-document.getElementById("random_button").addEventListener("click", function(e){
+function sleep(ms) {
+    return new Promise(function(resolve){setTimeout(resolve, ms)})
+}
+
+document.getElementById("random_button").addEventListener("click", async function(e){
     document.getElementById("word_definition").textContent = "Loading..."
-    let success = false
-    let counter = 0
-    function try_generate(){
-        let word = new Word()
-        document.getElementById("random_button").disabled = true
-        setTimeout(function(){
-            success = display_definition(word) 
-            document.getElementById("random_button").disabled = false
-            counter++
-            if(success == false && counter < 10){
-                try_generate()
-            }
-        }, 1000)
+    document.getElementById("random_button").disabled = true
+    let word_api = "https://random-word-api.herokuapp.com/word?number=50"
+    let word_response = await fetch(word_api)
+    let word_json = await word_response.json()
+    for(let i = 0; i < word_json.length; i++){
+        let word = new Word(word_json[i])
+        await sleep(750)
+        if(word.get_definitions().length > 0){
+            display_definition(word)
+            break
+        }
     }
-    try_generate()
+    setTimeout(function(){
+        document.getElementById("random_button").disabled = false
+    }, 500)
 })
 
 onAuthStateChanged(auth, function(user){
