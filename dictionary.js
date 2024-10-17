@@ -33,7 +33,6 @@ function display_definition(word_object){
     word_div.append(defined_word)
 
     let definitions = word_object.get_definitions()
-    console.log(definitions)
     if(definitions.length > 0){
         definitions.forEach(function(definition){
             let definition_div = document.createElement("div")
@@ -49,20 +48,25 @@ function display_definition(word_object){
     }
 }
 
-document.getElementById("search_button").addEventListener("click", function(e){
-    let val = document.getElementById("word_input").value
-    if(val != ""){
-        document.getElementById("word_definition").textContent = "Loading..."
-        let word = new Word(val.toLowerCase())
-        setTimeout(function(){
-            display_definition(word)
-        }, 100)
-    }
-})
-
 function sleep(ms) {
     return new Promise(function(resolve){setTimeout(resolve, ms)})
 }
+
+document.getElementById("search_button").addEventListener("click", async function(e){
+    let val = document.getElementById("word_input").value
+    document.getElementById("search_button").disabled = true
+    if(val != ""){
+        document.getElementById("word_definition").textContent = "Loading..."
+        let word = new Word(val.toLowerCase())
+        await sleep(250)
+        if(display_definition(word) == false){
+            document.getElementById("word_definition").textContent = "Could not find a definition for this word in the dictionary. Try another word!"
+        }
+        setTimeout(function(){
+            document.getElementById("search_button").disabled = false
+        }, 100)
+    }
+})
 
 document.getElementById("random_button").addEventListener("click", async function(e){
     document.getElementById("word_definition").textContent = "Loading..."
@@ -80,7 +84,7 @@ document.getElementById("random_button").addEventListener("click", async functio
     }
     setTimeout(function(){
         document.getElementById("random_button").disabled = false
-    }, 500)
+    }, 100)
 })
 
 onAuthStateChanged(auth, function(user){

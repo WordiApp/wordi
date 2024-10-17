@@ -23,10 +23,20 @@
     margin-left: 6%;
 }
 
-.spot{
-    width: 90%;
-    height: 40px;
-}
+/*DICTIONARY*/
+.dictionary_container {
+    max-width: 600px;
+    min-height: 300px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+.input-group .form-control {
+    margin-right: 5px;
+  }
 
 .defined_word{
     font-weight: 750;
@@ -38,33 +48,16 @@
     margin-top: 10px;
 }
 
-
-.dictionary-container {
+/*ACCOUNT*/
+.account_container{
     max-width: 600px;
     margin: 50px auto;
     padding: 30px;
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }
-  .input-group {
-    margin-bottom: 20px; /* Spacing between input group and result */
-  }
-  .input-group .form-control {
-    margin-right: 10px; /* Equal spacing between the search bar and buttons */
-  }
-  .input-group .btn {
-    margin-left: 0; /* No additional spacing between buttons */
-  }
-  .definition-result {
-    margin-top: 20px;
-  }
-  .definition-result p {
-    font-size: 1.1rem;
-    line-height: 1.5;
-  }
-  .definition-word {
-    font-weight: bold;
-    font-size: 1.5rem;
-    color: #007bff;
-  }
+}
+
+#account_information{
+  margin-bottom: 10px;
+}

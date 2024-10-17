@@ -33,49 +33,47 @@
                         <a class="nav-link" href="account.html">Account</a>
                     </li>
                 </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Look up a word..." aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
             </div>
         </div>
     </nav>
-    <div id="account_information"></div>
-        <h5>Account Information</h5>
-        <div id="username_display">Username:</div>
-        <div id="email_display">Email: </div>
-        <div id="score_display">Score: </div>
-    </div>
 
-    <div id="update_form">
-        <form>
-            <div class="form-group">
-                <label for="update_username_input">New Username</label>
-                <div style="display: flex;">
-                    <input type="text" class="form-control" id="update_username_input" placeholder="Enter new username" style="width: 70%;">
-                    <button type="submit" class="btn btn-primary" style="margin-left: 10px;" id="update_username_button">Edit</button>
+    <div class="account_container">
+        <div id="account_information">
+            <h5>Account Information</h5>
+            <div id="username_display">Username:</div>
+            <div id="email_display">Email: </div>
+            <div id="score_display">Score: </div>
+        </div>
+        <div id="update_form">
+            <form>
+                <div class="form-group">
+                    <label for="update_username_input">New Username</label>
+                    <div style="display: flex;">
+                        <input type="text" class="form-control" id="update_username_input" placeholder="Enter new username" style="width: 70%;">
+                        <button type="submit" class="btn btn-primary" style="margin-left: 10px;" id="update_username_button">Edit</button>
+                    </div>
                 </div>
-            </div>
-        </form>
-        <form>
-            <div class="form-group">
-                <label for="update_email_input">New Email</label>
-                <div style="display: flex;">
-                    <input type="email" class="form-control" id="update_email_input" placeholder="Enter new email" style="width: 70%;">
-                    <button type="submit" class="btn btn-primary" style="margin-left: 10px;"  id="update_email_button">Edit</button>
+            </form>
+            <form>
+                <div class="form-group">
+                    <label for="update_email_input">New Email</label>
+                    <div style="display: flex;">
+                        <input type="email" class="form-control" id="update_email_input" placeholder="Enter new email" style="width: 70%;">
+                        <button type="submit" class="btn btn-primary" style="margin-left: 10px;"  id="update_email_button">Edit</button>
+                    </div>
                 </div>
-            </div>
-        </form>
-        <form>
-            <div class="form-group">
-                <label for="update_password_input">New Password</label>
-                <div style="display: flex;">
-                    <input type="password" class="form-control" id="update_password_input" placeholder="Enter new password" style="width: 70%;">
-                    <button type="submit" class="btn btn-primary" style="margin-left: 10px;"  id="update_password_button">Edit</button>
+            </form>
+            <form>
+                <div class="form-group">
+                    <label for="update_password_input">New Password</label>
+                    <div style="display: flex;">
+                        <input type="password" class="form-control" id="update_password_input" placeholder="Enter new password" style="width: 70%;">
+                        <button type="submit" class="btn btn-primary" style="margin-left: 10px;"  id="update_password_button">Edit</button>
+                    </div>
                 </div>
-            </div>
-        </form>
+            </form>
         <button class="btn btn-danger" id="signout_button">Sign Out</button>
+        </div>
     </div>
 </body>
 <script src="account.js" type="module"></script>
