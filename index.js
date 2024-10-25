@@ -2,7 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js"
 import { getDatabase, query, orderByChild, limitToFirst, ref, get, set, update } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js"
 import { getAuth, onAuthStateChanged, updateEmail, updatePassword, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js"
-
+import Notification  from "./notification.js";
 // Your web app's Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyDft-OAjQovGmUmmcyowkcYgV0kEPBMrME",
@@ -38,7 +38,6 @@ document.getElementById("signin").addEventListener("submit", function(event){
     let name = document.getElementById("input_username").value
     let email = document.getElementById("input_email").value
     let password = document.getElementById("input_password").value
-    console.log("click")
     if(register_activated){
         console.log(email + " | " + password)
         createUserWithEmailAndPassword(auth, email, password).then(function(user_credential){
@@ -87,4 +86,8 @@ register_button.addEventListener("click", function(){
     username_input_section.style.visibility = "visible"
     username_input_section.style.height = ""
     submit_button.textContent = "Register"
+})
+
+document.getElementById("click").addEventListener("click", function(){
+    new Notification(document, "sample")
 })

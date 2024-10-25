@@ -23,6 +23,39 @@
     margin-left: 6%;
 }
 
+.notifications{
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 300px; 
+    max-width: 90%; 
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.notifications *{
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #444;
+    color: white;
+    font-family: Arial, sans-serif;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0.9;
+}
+
+@keyframes fadeInSlide {
+    0% {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
 /*DICTIONARY*/
 .dictionary_container {
     max-width: 600px;
