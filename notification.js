@@ -8,11 +8,16 @@ export default class Notification{
             page.body.append(container)
         }
         let notifciation = page.createElement("div")
-        notifciation.classList.add("notificiation")
+        notifciation.classList.add("notification")
         notifciation.textContent = text
         container.append(notifciation)
+
+        requestAnimationFrame(() => {
+            newItem.classList.add('show');
+        });
+
         setTimeout(function(){
             notifciation.remove()
-        }, 3000)
+        }, 5000)
     }
 }
