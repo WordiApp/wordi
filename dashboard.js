@@ -2,7 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js"
 import { getDatabase, ref, get, update} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js"
 import { getAuth, onAuthStateChanged, updateEmail, updatePassword} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js"
-
+import Notification from "./notification.js";
 // Your web app's Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyDft-OAjQovGmUmmcyowkcYgV0kEPBMrME",
@@ -21,5 +21,11 @@ const db = getDatabase()
 onAuthStateChanged(auth, function(user){
     if(user == null){
         document.location.href = "index.html"
+    } else {
+        get(ref(db, "userdata/" + user.uid)).then(function(snapshot){
+            new Notification(document, "Welcome, " + snapshot.val()["username"], 5)
+        }).catch(function(err){
+            alert(err)
+        })
     }
 })

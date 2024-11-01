@@ -87,7 +87,3 @@ register_button.addEventListener("click", function(){
     username_input_section.style.height = ""
     submit_button.textContent = "Register"
 })
-
-document.getElementById("click").addEventListener("click", function(){
-    new Notification(document, "sample")
-})
