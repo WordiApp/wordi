@@ -35,7 +35,6 @@ export default class Word{
             let definition_json = await definition_response.json()
             let definition_array = []
             let count = 1
-            console.log(definition_json)
             if(definition_json != undefined){
                 definition_json[0]["meanings"].forEach(function(meaning){
                     let part_of_speech = meaning["partOfSpeech"]

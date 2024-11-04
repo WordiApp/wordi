@@ -3,6 +3,7 @@ import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.5/firebase
 import {getDatabase} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js"
 import {getAuth, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js"
 import Word from "./word.js"
+import Notification from "./notification.js"
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -61,11 +62,13 @@ document.getElementById("search_button").addEventListener("click", async functio
         await sleep(250)
         if(display_definition(word) == false){
             document.getElementById("word_definition").textContent = "Could not find a definition for this word in the dictionary. Try another word!"
+        } else {
+            new Notification(document, "You earned a point! 🪙", 5)
         }
-        setTimeout(function(){
-            document.getElementById("search_button").disabled = false
-        }, 100)
     }
+    setTimeout(function(){
+        document.getElementById("search_button").disabled = false
+    }, 100)
 })
 
 document.getElementById("random_button").addEventListener("click", async function(e){
