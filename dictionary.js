@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js"
-import {getDatabase} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js"
+import {getDatabase, update} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js"
 import {getAuth, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js"
 import Word from "./word.js"
 import Notification from "./notification.js"
@@ -51,6 +51,13 @@ function display_definition(word_object){
 
 function sleep(ms) {
     return new Promise(function(resolve){setTimeout(resolve, ms)})
+}
+
+function award_points(point_amount){
+    update(ref(db, "userdata/" + uid),{
+        
+    })
+    new Notification(document, "You earned " + point_amount + " point(s)! 🪙", 5)
 }
 
 document.getElementById("search_button").addEventListener("click", async function(e){
