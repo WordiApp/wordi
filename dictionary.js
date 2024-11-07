@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js"
-import {getDatabase, update} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js"
+import {getDatabase, ref, get, update} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js"
 import {getAuth, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js"
 import Word from "./word.js"
 import Notification from "./notification.js"
@@ -53,11 +53,21 @@ function sleep(ms) {
     return new Promise(function(resolve){setTimeout(resolve, ms)})
 }
 
-function award_points(point_amount){
-    update(ref(db, "userdata/" + uid),{
-        
-    })
-    new Notification(document, "You earned " + point_amount + " point(s)! 🪙", 5)
+function award_points(auth, point_amount){
+    if(auth.currentUser.uid != null){
+        get(ref(db, "userdata/" + auth.currentUser.uid + "/score")).then(function(snapshot){
+            let current_points = snapshot.val()
+            update(ref(db, "userdata/" + auth.currentUser.uid),{
+                score: current_points + point_amount
+            }).then(function(){
+                new Notification(document, "You earned " + point_amount + " point(s)! 🪙", 5)
+            }).catch(function(err){
+                new Notification(document, "Error: " + err, 5)
+            })
+        }).catch(function(err){
+            new Notification(document, "Error: " + err, 5)
+        })
+    }       
 }
 
 document.getElementById("search_button").addEventListener("click", async function(e){
@@ -70,7 +80,7 @@ document.getElementById("search_button").addEventListener("click", async functio
         if(display_definition(word) == false){
             document.getElementById("word_definition").textContent = "Could not find a definition for this word in the dictionary. Try another word!"
         } else {
-            new Notification(document, "You earned a point! 🪙", 5)
+            award_points(auth, 1)
         }
     }
     setTimeout(function(){
