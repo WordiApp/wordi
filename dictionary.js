@@ -99,6 +99,7 @@ document.getElementById("random_button").addEventListener("click", async functio
         await sleep(750)
         if(word.get_definitions().length > 0){
             display_definition(word)
+            award_points(auth, 1)
             break
         }
     }
