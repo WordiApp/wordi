@@ -1,5 +1,12 @@
 :root{
-  --light-blue: #A389CA
+  --light-blue: #A3B9CA;
+  --blue: #6E8CA3;
+  --deep-blue: #486D8A;
+  --dark-blue: #2A516F;
+}
+
+body{
+  background: var(--blue);
 }
 
 #leaderboard{
