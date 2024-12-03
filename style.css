@@ -1,6 +1,10 @@
+:root{
+  --light-blue: #A389CA
+}
+
 #leaderboard{
     display: flex;
-    width: 500px;
+    width: 400px;
     height: 500px;
     overflow: auto;
     border: black solid 5px;
@@ -105,3 +109,56 @@
 #account_information{
   margin-bottom: 10px;
 }
+
+.dashboard {
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.box {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.5rem;
+  color: #6c757d;
+}
+
+.wide {
+  grid-column: span 2;
+}
+
+.square {
+  aspect-ratio: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.activities {
+  grid-column: span 2;
+}
+
+
+
