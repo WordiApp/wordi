@@ -29,7 +29,12 @@ onAuthStateChanged(auth, function(user){
         })
     }
 })
-
+//----------------Dashboard Functions----------------//
+const date_box = document.getElementById("date_box")
+setInterval(function(){
+    let current_date = new Date()
+    date_box.textContent = current_date.toDateString() + " " + current_date.toLocaleTimeString()
+}, 1000)
 //----------------Leaderboards----------------//
 const leaderboard = document.getElementById("leaderboard")
 let spots = 25
