@@ -125,6 +125,11 @@ body{
 #calendar{
   width: 100%;
   height: 70%;
+  border-radius: 10px;
+}
+
+#calendar *{
+  background-color: var(--beige) !important;
 }
 
 .grid-container {
