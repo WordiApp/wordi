@@ -24,6 +24,39 @@ onAuthStateChanged(auth, function(user){
     } else {
         get(ref(db, "userdata/" + user.uid)).then(function(snapshot){
             new Notification(document, "Welcome, " + snapshot.val()["username"], 5)
+            let last_streak_log = snapshot.val()["last_streak_log"]
+            console.log(new Date(last_streak_log))
+            let previous_seconds = Number(new Date(last_streak_log).getTime())
+            let current_seconds = Number(new Date().getTime())
+            let current_streak = snapshot.val()["streak"]
+            if(current_streak == undefined){
+                current_streak = 0
+            }
+            if(last_streak_log != undefined){
+                let time_difference = Math.floor((current_seconds - previous_seconds)/1000)
+                console.log(previous_seconds)
+                console.log(current_seconds)
+                console.log(time_difference)
+                if(time_difference >= 86400){
+                    update(ref(db, "userdata/" + user.uid), {
+                        last_streak_log: new Date()
+                    }).then().catch(function(err){console.log(err)})
+                    if(time_difference < 172800){
+                        update(ref(db, "userdata/" + user.uid), {
+                            streak: current_streak + 1
+                        }).then().catch(function(err){console.log(err)})
+                    } else {
+                        update(ref(db, "userdata/" + user.uid), {
+                            streak: 0
+                        }).then().catch(function(err){console.log(err)})
+                    }
+                }
+                //TBA: Display Streak
+            } else {
+                update(ref(db, "userdata/" + user.uid), {
+                    last_streak_log: new Date()
+                })
+            } 
         }).catch(function(err){
             alert(err)
         })
@@ -58,9 +91,9 @@ function leaderboard_refresh(){
             }
             if (i < data_keys.length){
                 get(ref(db, "userdata/" + data_keys[i] + "/username")).then(function(snapshot){
-                    spot.textContent = String("#" + (i+1) +  " " + snapshot.val() + " - " + data_values[i].score) 
+                    spot.textContent = String("#" + (i+1) +  " " + snapshot.val() + " - " + data_values[i].score) + " Points" 
                 }).catch(function(err){
-                    spot.textContent = String("#" + (i+1) +  " Username Unknown - " + data_values[i].score) 
+                    spot.textContent = String("#" + (i+1) +  " Username Unknown - " + data_values[i].score) + " Points"  
                     console.log(err)
                 })
             } else{
