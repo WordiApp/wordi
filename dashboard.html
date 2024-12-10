@@ -38,49 +38,45 @@
         </div>
     </nav>
     <div class="dashboard">
-        <h1 class="text-center">Hello, User!</h1>
+        <h1 class="text-center m-3" id="greeting">Hello, User!</h1>
         <div class="grid-container">
-            <!-- Date Wide Box -->
+            <div class="box stack">
+                <div class="box square">
+                    <div class="icon">
+                        <i class="bi bi-fire"></i>
+                    </div>
+                    <h2>Streak</h2>
+                    <p id="streak">??? days</p>
+                </div>
+                <div class="box square bottom">
+                    <div class="icon">
+                        <i class="bi bi-pencil-fill"></i>
+                    </div>
+                    <h3>Words Searched</h3>
+                    <p id="words">??? Words</p>
+                </div>
+            </div>
             <div class="box wider">
                 <div class="icon">
-                    <i class="bi bi-calendar-event"></i>
+                    <i class="bi bi-calendar-event-fill"></i>
                 </div>
                 <h2>Calandar</h2>
                 <p id="date_box">November 21, 2024</p>
                 <iframe id="calendar" src="https://calendar.google.com/calendar/embed?height=250&wkst=1&ctz=America%2FChicago&showPrint=0&showTitle=0&showNav=0&showTabs=0&showCalendars=0&showTz=0&mode=MONTH&showTz=0&src=ZW4udXNhI2hvbGlkYXlAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t" style="border-width:0" frameborder="0" scrolling="no"></iframe>
             </div>
-            <!-- Streak Square Box -->
-            <div class="stack square">
-                <div class="box square">
-                <div class="icon">
-                    <i class="bi bi-fire"></i>
-                </div>
-                <h2>Streak</h2>
-                <p>7 days</p>
-            </div>
-            <!-- # Words Square Box -->
-            <div class="box square">
-                <div class="icon">
-                    <i class="bi bi-pencil-fill"></i>
-                </div>
-                <h2># Words</h2>
-                <p>1500</p>
-            </div>
-            </div>
-            <!-- Activities Wide Box -->
             <div class="box wide">
                 <div class="icon">
-                    <i class="bi bi-list-task"></i>
+                    <i class="bi bi-search-fill"></i>
                 </div>
-                <h2>Activities</h2>
-                <p>Here you can view or track recent activities.</p>
+                <h2>Word History</h2>
+                <p>View your most recently searched words!</p>
             </div>
             <div class="box wide">
                 <div class="icon">
                     <i class="bi bi-trophy-fill"></i>
                 </div>
                 <h2>Global Leaderboards</h2>
-                <p>Compete to be on top!</p>
+                <p>Compete for the most points worldwide!</p>
                 <div id="leaderboard"></div>
             </div>
         </div>

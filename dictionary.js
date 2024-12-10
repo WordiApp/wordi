@@ -53,14 +53,25 @@ function sleep(ms) {
     return new Promise(function(resolve){setTimeout(resolve, ms)})
 }
 
-function award_points(auth, point_amount){
+function evaluate_word(word){
+    word = word.toLowerCase()
     if(auth.currentUser.uid != null){
-        get(ref(db, "userdata/" + auth.currentUser.uid + "/score")).then(function(snapshot){
-            let current_points = snapshot.val()
+        get(ref(db, "userdata/" + auth.currentUser.uid)).then(function(snapshot){
+            let word_history = JSON.parse(snapshot.val()["word_history"])
+            let current_words_searched = Number(snapshot.val()["words_searched"])
+            let current_points = Number(snapshot.val()["score"])
+            let added_points = 1
+            if(word_history.includes(word) == false){
+                added_points = 2
+                word_history.unshift(word)
+            }
             update(ref(db, "userdata/" + auth.currentUser.uid),{
-                score: current_points + point_amount
+                score: current_points + added_points,
+                words_searched: current_words_searched + (added_points - 1),
+                word_history: JSON.stringify(word_history)
             }).then(function(){
-                new Notification(document, "You earned " + point_amount + " point(s)! 🪙", 5)
+                refresh_word_history()
+                new Notification(document, "You earned " + added_points + " point(s)! 🪙", 5)
             }).catch(function(err){
                 new Notification(document, "Error: " + err, 5)
             })
@@ -68,6 +79,26 @@ function award_points(auth, point_amount){
             new Notification(document, "Error: " + err, 5)
         })
     }       
+}
+
+function refresh_word_history(){
+    if(auth.currentUser.uid != null){
+        get(ref(db, "userdata/" + auth.currentUser.uid)).then(function(snapshot){
+            let word_history = JSON.parse(snapshot.val()["word_history"])
+            document.getElementById("word_history").innerHTML = ""
+            for(let i = 0; i < word_history.length; i++){
+                let card = document.createElement("div")
+                let wordObj = new Word(word_history[i])
+                card.classList.add("word_card")
+                card.textContent = word_history[i]
+                card.addEventListener("click", function(){
+                    display_definition(wordObj)
+                    window.scrollTo({top: 0, left: 0, behavior: "smooth"})
+                })
+                document.getElementById("word_history").appendChild(card)
+            }
+        })
+    }
 }
 
 document.getElementById("search_button").addEventListener("click", async function(e){
@@ -80,7 +111,7 @@ document.getElementById("search_button").addEventListener("click", async functio
         if(display_definition(word) == false){
             document.getElementById("word_definition").textContent = "Could not find a definition for this word in the dictionary. Try another word!"
         } else {
-            award_points(auth, 1)
+            evaluate_word(val)
         }
     }
     setTimeout(function(){
@@ -99,7 +130,7 @@ document.getElementById("random_button").addEventListener("click", async functio
         await sleep(750)
         if(word.get_definitions().length > 0){
             display_definition(word)
-            award_points(auth, 1)
+            evaluate_word(word_json[i])
             break
         }
     }
@@ -111,6 +142,8 @@ document.getElementById("random_button").addEventListener("click", async functio
 onAuthStateChanged(auth, function(user){
     if(user == null){
         document.location.href = "index.html"
+    } else {
+        refresh_word_history()
     }
 })
 

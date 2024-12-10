@@ -18,21 +18,22 @@ const app = initializeApp(firebaseConfig)
 const auth = getAuth()
 const db = getDatabase()
 
+const greetings = ["Hello, ", "Greetings, ", "Salutations, ",  "Good day, ", "Welcome back, ", "Why hello there, ", "Nice to see you,  ", "Glad you're back, ", "Hope you're having a good day, ", "Welcome to Wordi, ", "Aloha, "]
+
 onAuthStateChanged(auth, function(user){
     if(user == null){
         document.location.href = "index.html"
     } else {
         get(ref(db, "userdata/" + user.uid)).then(function(snapshot){
-            new Notification(document, "Welcome, " + snapshot.val()["username"], 5)
+            document.getElementById("greeting").textContent = greetings[Math.floor(Math.random()*greetings.length)] + snapshot.val()["username"] + "!"
             let last_streak_log = snapshot.val()["last_streak_log"]
-            console.log(new Date(last_streak_log))
-            let previous_seconds = Number(new Date(last_streak_log).getTime())
-            let current_seconds = Number(new Date().getTime())
             let current_streak = snapshot.val()["streak"]
             if(current_streak == undefined){
                 current_streak = 0
             }
             if(last_streak_log != undefined){
+                let previous_seconds = Number(new Date(last_streak_log).getTime())
+                let current_seconds = Number(new Date().getTime())
                 let time_difference = Math.floor((current_seconds - previous_seconds)/1000)
                 console.log(previous_seconds)
                 console.log(current_seconds)
@@ -40,25 +41,35 @@ onAuthStateChanged(auth, function(user){
                 if(time_difference >= 86400){
                     update(ref(db, "userdata/" + user.uid), {
                         last_streak_log: new Date()
-                    }).then().catch(function(err){console.log(err)})
+                    }).then().catch(function(err){new Notification(document, "Streak Error: " + err, 3)})
                     if(time_difference < 172800){
                         update(ref(db, "userdata/" + user.uid), {
                             streak: current_streak + 1
-                        }).then().catch(function(err){console.log(err)})
+                        }).then(function(){
+                            document.getElementById("streak").textContent = (current_streak + 1) + " days"
+                            new Notification(document, "You kept your streak! Login everyday to maintain it.")
+                        }).catch(function(err){
+                            new Notification(document, "Streak Error: " + err)
+                        })
                     } else {
                         update(ref(db, "userdata/" + user.uid), {
-                            streak: 0
-                        }).then().catch(function(err){console.log(err)})
+                            streak: 1
+                        }).then(function(){
+                            document.getElementById("streak").textContent = "0 days"
+                            new Notification(document, "You lost your streak! Login everyday to maintain it.")
+                        }).catch(function(err){
+                            new Notification(document, "Streak Error: " + err)
+                        })
                     }
-                }
-                //TBA: Display Streak
+                }          
             } else {
                 update(ref(db, "userdata/" + user.uid), {
                     last_streak_log: new Date()
-                })
+                }).then().catch(function(err){new Notification(document, "Streak Error: " + err, 5, "var(--error-red)")})
             } 
+            document.getElementById("streak").textContent = snapshot.val()["streak"] + " days"
         }).catch(function(err){
-            alert(err)
+            new Notification(document, "Error fetching user data: " + err, 5, "var(--error-red)")
         })
     }
 })
@@ -94,7 +105,7 @@ function leaderboard_refresh(){
                     spot.textContent = String("#" + (i+1) +  " " + snapshot.val() + " - " + data_values[i].score) + " Points" 
                 }).catch(function(err){
                     spot.textContent = String("#" + (i+1) +  " Username Unknown - " + data_values[i].score) + " Points"  
-                    console.log(err)
+                    console.log("Leadeboard error: " + err)
                 })
             } else{
                 spot.textContent = String("#" + (i+1) + " ???")

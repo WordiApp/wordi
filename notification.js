@@ -8,6 +8,9 @@ export default class Notification{
             container.classList.add("notifications")
             page.body.append(container)
         }
+        if(duration == null){
+            duration = 5
+        }
         // Creates Notification
         let notifciation = page.createElement("div")
         notifciation.classList.add("notification")

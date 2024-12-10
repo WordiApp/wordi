@@ -45,17 +45,22 @@ document.getElementById("signin").addEventListener("submit", function(event){
             set(ref(db, "userdata/" + uid),{
                 username: name,
                 email: email,
-                score: 0
+                score: 0,
+                words_searched: 0,
+                streak: 0,
+                word_history: "",
+                last_streak_log: ""
             })
             document.location.href = "dashboard.html" 
         }).catch(function(err){
+            new Notification(document, "Register Error: " + err, 5, "var(--error-red)")
             console.log(err)
         })
     } else{
         signInWithEmailAndPassword(auth, email, password).then(function(user_credential){
             document.location.href = "dashboard.html"
         }).catch(function(err){
-            alert(err)
+            new Notification(document, "Login Error: " + err, 5, "var(--error-red)")
             console.log(err)
         })
     }
