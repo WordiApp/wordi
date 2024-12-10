@@ -83,10 +83,10 @@ function evaluate_word(word){
 
 function refresh_word_history(){
     if(auth.currentUser.uid != null){
-        get(ref(db, "userdata/" + auth.currentUser.uid)).then(function(snapshot){
+        get(ref(db, "userdata/" + auth.currentUser.uid)).then(async function(snapshot){
             let word_history = JSON.parse(snapshot.val()["word_history"])
             document.getElementById("word_history").innerHTML = ""
-            for(let i = 0; i < word_history.length; i++){
+            for(let i = 0; i < Math.min(100, word_history.length); i++){
                 let card = document.createElement("div")
                 let wordObj = new Word(word_history[i])
                 card.classList.add("word_card")
@@ -96,6 +96,7 @@ function refresh_word_history(){
                     window.scrollTo({top: 0, left: 0, behavior: "smooth"})
                 })
                 document.getElementById("word_history").appendChild(card)
+                await sleep(10)
             }
         })
     }
@@ -120,7 +121,7 @@ document.getElementById("search_button").addEventListener("click", async functio
 })
 
 document.getElementById("random_button").addEventListener("click", async function(e){
-    document.getElementById("word_definition").textContent = "Loading..."
+    document.getElementById("spinner").style.display = "block"
     document.getElementById("random_button").disabled = true
     let word_api = "https://random-word-api.herokuapp.com/word?number=50"
     let word_response = await fetch(word_api)
@@ -134,6 +135,7 @@ document.getElementById("random_button").addEventListener("click", async functio
             break
         }
     }
+    document.getElementById("spinner").style.display = "none"
     setTimeout(function(){
         document.getElementById("random_button").disabled = false
     }, 100)
