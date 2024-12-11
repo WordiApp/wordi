@@ -1,3 +1,28 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import {getDatabase, ref, get, update} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js"
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyCL1o4DPK4trjBkaALzjfPQ-7ubu-BJtOQ",
+    authDomain: "words-3a481.firebaseapp.com",
+    databaseURL: "https://words-3a481-default-rtdb.firebaseio.com",
+    projectId: "words-3a481",
+    storageBucket: "words-3a481.firebasestorage.app",
+    messagingSenderId: "448694732469",
+    appId: "1:448694732469:web:5bbdaffef9bf6564a4e0fc"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getDatabase()
+
+function sleep(ms) {
+  return new Promise(function(resolve){setTimeout(resolve, ms)})
+}
+
 function readFile() {
     const fileInput = document.getElementById("file_input");
     const file = fileInput.files[0];
@@ -9,12 +34,19 @@ function readFile() {
 
     const reader = new FileReader();
 
-    reader.onload = (event) => {
+    reader.onload = async (event) => {
       const fileContent = event.target.result; // The file content as a string
       let array = JSON.parse(fileContent)
-      console.log(array)
-      for(let i = 0; i < 100; i++){
-        console.log("Word: " + array[i][0] + " | " + "Definitions: " + array[i][1])
+
+      for(let i = 0; i < array.length; i++){
+        update(ref(db, "words/" + array[i]["word"]), {
+          definition: JSON.stringify(array[i]["definitions"]),
+          id: i
+        }).then(function(){console.log("Word Added!")}).catch(function(err){console.log(err)})
+        update(ref(db, "/"), {
+          word_count: i + 1
+        }).then(function(){}).catch(function(err){console.log(err)})
+        await sleep(5)
       }  
     };
 
