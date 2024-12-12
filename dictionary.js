@@ -20,6 +20,7 @@ const app = initializeApp(firebaseConfig)
 const auth = getAuth()
 const db = getDatabase()
 //----------------Random Words----------------//
+// TODO: fix this function to work w/ new system
 function display_definition(word_object){
     const definition_area = document.getElementById("word_definition")
     if(document.getElementById("word") != null){
@@ -107,8 +108,8 @@ document.getElementById("search_button").addEventListener("click", async functio
     document.getElementById("search_button").disabled = true
     if(val != ""){
         document.getElementById("word_definition").textContent = "Loading..."
-        let word = new Word(val.toLowerCase())
-        await sleep(250)
+        let word = new Word()
+        await word.create_word(val.toLowerCase())
         if(display_definition(word) == false){
             document.getElementById("word_definition").textContent = "Could not find a definition for this word in the dictionary. Try another word!"
         } else {
@@ -145,8 +146,6 @@ onAuthStateChanged(auth, function(user){
     if(user == null){
         document.location.href = "index.html"
     } else {
-        refresh_word_history()
+        //refresh_word_history()
     }
 })
-
-
