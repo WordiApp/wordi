@@ -89,7 +89,9 @@ function refresh_word_history(){
             document.getElementById("word_history").innerHTML = ""
             for(let i = 0; i < Math.min(100, word_history.length); i++){
                 let card = document.createElement("div")
-                let wordObj = new Word(word_history[i])
+                let wordObj = new Word()
+                console.log(word_history[i])
+                await wordObj.create_word(word_history[i])
                 card.classList.add("word_card")
                 card.textContent = word_history[i]
                 card.addEventListener("click", function(){
@@ -97,7 +99,6 @@ function refresh_word_history(){
                     window.scrollTo({top: 0, left: 0, behavior: "smooth"})
                 })
                 document.getElementById("word_history").appendChild(card)
-                await sleep(10)
             }
         })
     }
@@ -110,6 +111,7 @@ document.getElementById("search_button").addEventListener("click", async functio
         document.getElementById("word_definition").textContent = "Loading..."
         let word = new Word()
         await word.create_word(val.toLowerCase())
+        await(250)
         if(display_definition(word) == false){
             document.getElementById("word_definition").textContent = "Could not find a definition for this word in the dictionary. Try another word!"
         } else {
@@ -128,8 +130,9 @@ document.getElementById("random_button").addEventListener("click", async functio
     let word_response = await fetch(word_api)
     let word_json = await word_response.json()
     for(let i = 0; i < word_json.length; i++){
-        let word = new Word(word_json[i])
-        await sleep(750)
+        let word = new Word()
+        await word.create_word(word_json[i])
+        await sleep(250)
         if(word.get_definitions().length > 0){
             display_definition(word)
             evaluate_word(word_json[i])
@@ -146,6 +149,6 @@ onAuthStateChanged(auth, function(user){
     if(user == null){
         document.location.href = "index.html"
     } else {
-        //refresh_word_history()
+        refresh_word_history()
     }
 })
