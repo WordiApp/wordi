@@ -39,7 +39,7 @@ function readFile() {
       let array = JSON.parse(fileContent)
 
       for(let i = 0; i < array.length; i++){
-        update(ref(db, "words/" + array[i]["word"]), {
+        update(ref(db, "words/" + array[i]["word"].toLowerCase()), {
           definition: JSON.stringify(array[i]["definitions"]),
           id: i
         }).then(function(){console.log("Word Added!")}).catch(function(err){console.log(err)})
