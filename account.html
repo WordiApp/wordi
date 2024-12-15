@@ -15,14 +15,17 @@
     <!--Navbar-->
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-            <a class="navbar-brand" href="dashboard.html">Wordi</a>
+            <a class="navbar-brand" href="dashboard.html" style="display: flex;">
+                <img src="/images/WordiLogo.png" alt="Wordi Logo" style="width: 30px; height: 30px;">
+                <div>Wordi</div>
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="dashboard.html">Dashboard</a>
+                        <a class="nav-link" aria-current="page" href="dashboard.html">Dashboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="games.html">Games</a>
@@ -31,19 +34,24 @@
                         <a class="nav-link" href="dictionary.html">Dictionary</a>
                     </li>
                     <li class="nav-item"></li>
-                        <a class="nav-link" href="account.html">Account</a>
+                        <a class="nav-link active" href="account.html">Account</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
+    <div id="title">
+        <h1 class="text-center mb-1">Your Account</h1>
+        <h5 class="text-center mb-1">View and update your account details!</h5>
+    </div>
+
     <div class="account_container">
         <div id="account_information">
             <h5>Account Information</h5>
             <div id="username_display">Username:</div>
             <div id="email_display">Email: </div>
-            <div id="score_display">Score: </div>
+            <div id="score_display">Total Points: </div>
         </div>
         <div id="update_form">
             <form>
@@ -51,7 +59,7 @@
                     <label for="update_username_input">New Username</label>
                     <div style="display: flex;">
                         <input type="text" class="form-control" id="update_username_input" placeholder="Enter new username" style="width: 70%;">
-                        <button type="submit" class="btn btn-primary" style="margin-left: 10px;" id="update_username_button">Edit</button>
+                        <button type="submit" class="btn btn-primary edit" style="margin-left: 10px;" id="update_username_button">Edit</button>
                     </div>
                 </div>
             </form>
@@ -60,7 +68,7 @@
                     <label for="update_email_input">New Email</label>
                     <div style="display: flex;">
                         <input type="email" class="form-control" id="update_email_input" placeholder="Enter new email" style="width: 70%;">
-                        <button type="submit" class="btn btn-primary" style="margin-left: 10px;"  id="update_email_button">Edit</button>
+                        <button type="submit" class="btn btn-primary edit" style="margin-left: 10px;" id="update_email_button">Edit</button>
                     </div>
                 </div>
             </form>
@@ -69,7 +77,7 @@
                     <label for="update_password_input">New Password</label>
                     <div style="display: flex;">
                         <input type="password" class="form-control" id="update_password_input" placeholder="Enter new password" style="width: 70%;">
-                        <button type="submit" class="btn btn-primary" style="margin-left: 10px;"  id="update_password_button">Edit</button>
+                        <button type="submit" class="btn btn-primary edit" style="margin-left: 10px;"  id="update_password_button">Edit</button>
                     </div>
                 </div>
             </form>

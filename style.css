@@ -64,9 +64,9 @@ body{
 }
 
 ::-webkit-scrollbar {
-    background-color: var(--cardboard);
+    background-color: var(--white);
 }
   
 ::-webkit-scrollbar-thumb {
-    background-color: var(--tan);
+    background-color: var(--black);
 }

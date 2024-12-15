@@ -3,7 +3,7 @@ import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.5/firebase
 import {getDatabase, ref, get, update} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js"
 import {getAuth, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js"
 import Word from "./word.js"
-import Notification from "./notification.js"
+import notification from "./notification.js"
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -20,20 +20,21 @@ const app = initializeApp(firebaseConfig)
 const auth = getAuth()
 const db = getDatabase()
 
+let previous_word = ""
+
 function sleep(ms) {
     return new Promise(function (resolve) {
         setTimeout(resolve, ms)
     })
 }
 
-window.addEventListener("load", async function () {
-    await sleep(1000)
-    if (auth.currentUser == null) {
+onAuthStateChanged(auth, async function (user) {
+    if (user == null) {
         window.location.href = "index.html"
     } else {
         function refresh_word_history() {
-            if (auth.currentUser.uid != null) {
-                get(ref(db, "userdata/" + auth.currentUser.uid)).then(async function (snapshot) {
+            if (user != null) {
+                get(ref(db, "userdata/" + user.uid)).then(async function (snapshot) {
                     let word_history = JSON.parse(snapshot.val()["word_history"])
                     document.getElementById("word_history").innerHTML = ""
                     for (let i = 0; i < Math.min(100, word_history.length); i++) {
@@ -41,7 +42,7 @@ window.addEventListener("load", async function () {
                         card.classList.add("word_card")
                         card.textContent = word_history[i]
                         card.addEventListener("click", function () {
-                            search_word(word_history[i])
+                            search_word(word_history[i], false)
                             window.scrollTo({top: 0, left: 0, behavior: "smooth"})
                         })
                         document.getElementById("word_history").appendChild(card)
@@ -50,7 +51,7 @@ window.addEventListener("load", async function () {
             }
         }
 
-        async function search_word(input) {
+        async function search_word(input, evaluate) {
             document.getElementById("spinner").style.display = "block"
             let wordObj = new Word()
             await wordObj.create_word(input)
@@ -76,8 +77,7 @@ window.addEventListener("load", async function () {
                     definition_div.textContent = definition
                     word_div.append(definition_div)
                 })
-
-                get(ref(db, "userdata/" + auth.currentUser.uid))
+                    get(ref(db, "userdata/" + user.uid))
                     .then(function (snapshot) {
                         let word_history = JSON.parse(snapshot.val()["word_history"])
                         let current_words_searched = Number(snapshot.val()["words_searched"])
@@ -90,21 +90,28 @@ window.addEventListener("load", async function () {
                             word_history.splice(word_history.indexOf(word), 1)
                             word_history.unshift(word)
                         }
-                        update(ref(db, "userdata/" + auth.currentUser.uid), {
+                        if(evaluate == false || previous_word == word){
+                            added_points = 0
+                        } else {
+                            previous_word = word
+                        }
+                        update(ref(db, "userdata/" + user.uid), {
                             score: current_points + added_points,
-                            words_searched: current_words_searched + (added_points - 1),
+                            words_searched: current_words_searched + 1,
                             word_history: JSON.stringify(word_history),
                         })
                             .then(function () {
                                 refresh_word_history()
-                                new Notification(document, "You earned " + added_points + " point(s)! 🪙", 5)
+                                if(added_points > 0){
+                                    notification("You earned " + added_points + " point(s)! 🪙", 5)
+                                }
                             })
                             .catch(function (err) {
-                                new Notification(document, "Error: " + err, 5)
+                                notification("Error: " + err, 5)
                             })
                     })
                     .catch(function (err) {
-                        new Notification(document, "Error: " + err, 5)
+                        notification("Error1: " + err, 5)
                     })
             } else {
                 let no_definition_div = document.createElement("div")
@@ -124,7 +131,7 @@ window.addEventListener("load", async function () {
             if (val != "") {
                 search_word(val.toLowerCase())
             } else {
-                new Notification(document, "Please enter a word!")
+                notification("Please enter a word!")
             }
             setTimeout(function () {
                 document.getElementById("search_button").disabled = false
@@ -136,15 +143,15 @@ window.addEventListener("load", async function () {
             search_word()
             setTimeout(function () {
                 document.getElementById("random_button").disabled = false
-            }, 100)
+            }, 1000)
         })
 
         refresh_word_history()
+
+        if(localStorage["word_to_look_up"] != undefined){
+            search_word(localStorage["word_to_look_up"], false)
+            delete localStorage["word_to_look_up"]
+        }
     }
 })
 
-onAuthStateChanged(auth, function (user) {
-    if (user == null) {
-        document.location.href = "index.html"
-    }
-})

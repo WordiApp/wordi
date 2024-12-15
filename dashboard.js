@@ -2,7 +2,7 @@
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js"
 import {getDatabase, query, orderByChild, limitToFirst, ref, get, set, update} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js"
 import {getAuth, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js"
-import Notification from "./notification.js"
+import notification from "./notification.js"
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -21,11 +21,12 @@ const db = getDatabase()
 
 const greetings = ["Hello, ", "Greetings, ", "Salutations, ", "Good day, ", "Welcome back, ", "Why hello there, ", "Nice to see you,  ", "Glad you're back, ", "Hope you're having a good day, ", "Welcome to Wordi, ", "Aloha, "]
 
-window.addEventListener("load", function () {
-    if (auth.currentUser != null) {
-    } else {
-    }
-})
+const greeting = document.getElementById("greeting")
+const streak = document.getElementById("streak")
+const word_count = document.getElementById("word_count")
+const date_box = document.getElementById("date_box")
+const word_history = document.getElementById("word_history")
+const leaderboard = document.getElementById("leaderboard")
 
 onAuthStateChanged(auth, function (user) {
     if (user == null) {
@@ -34,14 +35,23 @@ onAuthStateChanged(auth, function (user) {
         //----------------Display User Data----------------//
         get(ref(db, "userdata/" + user.uid))
             .then(function (snapshot) {
-                document.getElementById("greeting").textContent = greetings[Math.floor(Math.random() * greetings.length)] + snapshot.val()["username"] + "!"
+                greeting.textContent = greetings[Math.floor(Math.random() * greetings.length)] + snapshot.val()["username"] + "!"
                 //----------------Streak----------------//
                 let last_streak_log = snapshot.val()["last_streak_log"]
                 let current_streak = snapshot.val()["streak"]
-                if (current_streak == undefined) {
-                    current_streak = 0
+                if (current_streak == "") {
+                    update(ref(db, "userdata/" + user.uid), {
+                        last_streak_log: new Date(),
+                        streak: 1
+                    })
+                        .then(function(){
+                            streak.textContent = "1 days"
+                        })
+                        .catch(function(err){
+                            notification("Streak Error: " + err)
+                        })
                 }
-                if (last_streak_log != undefined) {
+                if (last_streak_log != "") {
                     let previous_seconds = Number(new Date(last_streak_log).getTime())
                     let current_seconds = Number(new Date().getTime())
                     let time_difference = Math.floor((current_seconds - previous_seconds) / 1000)
@@ -51,50 +61,54 @@ onAuthStateChanged(auth, function (user) {
                         })
                             .then()
                             .catch(function (err) {
-                                new Notification(document, "Streak Error: " + err, 3)
+                                notification("Streak Error: " + err, 3)
                             })
                         if (time_difference < 172800) {
                             update(ref(db, "userdata/" + user.uid), {
                                 streak: current_streak + 1,
                             })
                                 .then(function () {
-                                    document.getElementById("streak").textContent = current_streak + 1 + " days"
-                                    new Notification(document, "You kept your streak! Login everyday to maintain it.")
+                                    streak.textContent = current_streak + 1 + " days"
+                                    notification("You kept your streak! Login everyday to maintain it.")
                                 })
                                 .catch(function (err) {
-                                    new Notification(document, "Streak Error: " + err)
+                                    notification("Streak Error: " + err)
                                 })
                         } else {
                             update(ref(db, "userdata/" + user.uid), {
                                 streak: 1,
                             })
                                 .then(function () {
-                                    document.getElementById("streak").textContent = "0 days"
-                                    new Notification(document, "You lost your streak! Login everyday to maintain it.")
+                                    streak.textContent = "1 days"
+                                    notification("You lost your streak! Login everyday to maintain it.")
                                 })
                                 .catch(function (err) {
-                                    new Notification(document, "Streak Error: " + err)
+                                    notification("Streak Error: " + err)
                                 })
                         }
                     }
                 }
-                document.getElementById("streak").textContent = snapshot.val()["streak"] + " days"
+                streak.textContent = snapshot.val()["streak"] + " days"
                 //----------------Word Count----------------//
-                // TBA
+                let count = Number(snapshot.val()["words_searched"])
+                word_count.textContent = count + " Words"
                 //----------------Word History----------------//
-                // TBA
+                let history = JSON.parse(snapshot.val()["word_history"])
+                for(let i = 0; i < Math.min(history.length, 50); i++){
+                    let card = document.createElement("div")
+                    card.classList.add("word_card")
+                    card.textContent = history[i]
+                    card.addEventListener("click", function () {
+                        localStorage["word_to_look_up"] = history[i]
+                        window.location.href = "dictionary.html"
+                    })
+                    word_history.appendChild(card)
+                }
             })
             .catch(function (err) {
-                new Notification(document, "Error fetching user data: " + err, 5, "var(--error-red)")
+                notification("Error fetching user data: " + err, 5, "var(--error-red)")
             })
-        //----------------Calendar----------------//
-        const date_box = document.getElementById("date_box")
-        setInterval(function () {
-            let current_date = new Date()
-            date_box.textContent = current_date.toDateString() + " " + current_date.toLocaleTimeString()
-        }, 1000)
         //----------------Leaderboards----------------//
-        const leaderboard = document.getElementById("leaderboard")
         let spots = 25
 
         function leaderboard_refresh() {
@@ -140,6 +154,12 @@ onAuthStateChanged(auth, function (user) {
                 loop()
             }, 2000)
         }
+        //----------------Calendar----------------//
+        setInterval(function () {
+            let current_date = new Date()
+            date_box.textContent = current_date.toDateString() + " " + current_date.toLocaleTimeString()
+        }, 1000)
+
         leaderboard_refresh()
         loop()
     }

@@ -30,10 +30,10 @@ export default class Word{
         if(given != null && given != "" && given != undefined){
             this.word = given
             this.word_length = given.length
-            const snapshot_definition = await get(ref(db, "words/" + given))
-            if(snapshot_definition.val() != null){
+            try{
+                const snapshot_definition = await get(ref(db, "words/" + given))
                 this.word_definitions = JSON.parse(snapshot_definition.val()["definition"])
-            } else {
+            } catch{
                 this.word_definitions = null
             }
         } else {

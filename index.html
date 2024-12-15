@@ -15,11 +15,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="index.js" type="module" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.js" integrity="sha384-kFR7iWz3FqM9H4X7el1IGKTI6bxkfiJkOgSz9PL1HNEuCkD+dFyx2hbDlC69a70b" crossorigin="anonymous"></script>
     <title>Wordi</title>
 </head>
 <body>
-    <div class="logo">
+    <div id="logo">
         <img src="/images/WordiLogo.png" alt="Wordi Logo">
         <div>Wordi</div>
     </div>
@@ -42,7 +41,7 @@
                         <i class="bi bi-eye" id="toggle_password_icon"></i>
                     </button>
                 </div>
-                <a href="#" class="forgot-password">Forgot password?</a>
+                <a id="forgot_password">Forgot password?</a>
                 <button type="submit" class="btn" id="submit_button">LOGIN</button>
             </form>
             <div class="toggle_link" id="toggle_link">Don't have an account? Register here!</div>

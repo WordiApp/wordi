@@ -1,6 +1,6 @@
 .account_container{
     max-width: 600px;
-    margin: 50px auto;
+    margin: 25px auto;
     padding: 30px;
     background-color: var(--white);
     border-radius: 8px;
@@ -9,4 +9,18 @@
 
 #account_information{
   margin-bottom: 10px;
+}
+
+#title{
+    margin-top: 15px;
+}
+
+.edit{
+    background-color: var(--black) !important;
+    border: var(--black) solid !important;
+}
+
+#signout_button{
+    background-color: var(--error-red) !important;
+    border: var(--error-red) solid !important;
 }

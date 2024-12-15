@@ -1,4 +1,4 @@
-.logo {
+#logo {
     width: 100%;
     text-align: center;
     vertical-align: middle;
@@ -14,11 +14,6 @@
     margin-bottom: 20px;
 }
 
-.logo .img{
-    height: 60px;
-    width: 60px;
-    align-self: center;
-}
 
 .container {
     background-color: var(--white);
@@ -70,14 +65,15 @@
     text-decoration: underline;
 }
 
-.forgot-password {
+#forgot_password {
     display: block;
     margin-top: -10px;
     font-size: 0.9rem;
     color: var(--black);
     margin-bottom: 20px;
+    cursor: pointer;
 }
 
-.forgot-password:hover {
+#forgot_password:hover {
     text-decoration: underline;
 }
