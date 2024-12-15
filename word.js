@@ -31,17 +31,16 @@ export default class Word{
             this.word = given
             this.word_length = given.length
             const snapshot_definition = await get(ref(db, "words/" + given))
-            if(snapshot_definition != null){
+            if(snapshot_definition.val() != null){
                 this.word_definitions = JSON.parse(snapshot_definition.val()["definition"])
             } else {
                 this.word_definitions = null
             }
         } else {
-            console.log("random")
             let word_count = await get(ref(db, "/word_count"))
             let rand = Math.floor(Math.random()*Number(word_count.val()))
             let snapshot_word = await get(query(ref(db, "/words"), orderByChild("id"), limitToFirst(1), startAt(rand)))
-            
+
             this.word = Object.keys(snapshot_word.val())[0]
             this.word_length = Object.keys(snapshot_word.val())[0].length
             this.word_definitions = JSON.parse(Object.values(snapshot_word.val())[0]["definition"])

@@ -19,8 +19,7 @@ const auth = getAuth()
 const db = getDatabase()
 
 //----------------Elements----------------//
-const login_button = document.getElementById("login_button")
-const register_button = document.getElementById("register_button")
+const form_name = document.getElementById("form_name")
 
 const username_input_section = document.getElementById("username")
 const email_input_section = document.getElementById("email")
@@ -29,20 +28,21 @@ const password_input_section = document.getElementById("password")
 const username_input = document.getElementById("input_username")
 const email_input = document.getElementById("input_email")
 const password_input = document.getElementById("input_password")
-const password_checkbox = document.getElementById("show_password")
+const toggle_password = document.getElementById("toggle_password")
+const toggle_password_icon = document.getElementById("toggle_password_icon")
 
 const submit_button = document.getElementById("submit_button")
+const toggle_link = document.getElementById("toggle_link")
 //----------------Signin----------------//
 let register_activated = false
-document.getElementById("signin").addEventListener("submit", function(event){
-    let name = document.getElementById("input_username").value
-    let email = document.getElementById("input_email").value
-    let password = document.getElementById("input_password").value
+let show_password = false
+document.getElementById("access_form").addEventListener("submit", function(event){
+    let name = username_input.value
+    let email = email_input.value
+    let password = password_input.value
     if(register_activated){
-        console.log(email + " | " + password)
         createUserWithEmailAndPassword(auth, email, password).then(function(user_credential){
-            let uid = user_credential.user.uid
-            set(ref(db, "userdata/" + uid),{
+            set(ref(db, "userdata/" + user_credential["user"].uid),{
                 username: name,
                 email: email,
                 score: 0,
@@ -67,28 +67,29 @@ document.getElementById("signin").addEventListener("submit", function(event){
     event.preventDefault()
 })
 
-password_checkbox.addEventListener("change", function(e){
-    if(password_checkbox.checked == true){
-        password_input.type = "text"
-    }else{
+toggle_password.addEventListener("click", function(e){
+    if(show_password == true){
         password_input.type = "password"
+        toggle_password_icon.classList.replace("bi-eye-slash", "bi-eye")
+    }else{
+        password_input.type = "text"
+        toggle_password_icon.classList.replace("bi-eye", "bi-eye-slash")
     }
+    show_password = !show_password
 })
 
-login_button.addEventListener("click", function(){
-    register_activated = false
-    login_button.classList.replace("btn-secondary", "btn-primary")
-    register_button.classList.replace("btn-primary", "btn-secondary")
-    username_input_section.style.visibility = "hidden"
-    username_input_section.style.height = "0px"
-    submit_button.textContent = "Login"
+toggle_link.addEventListener("click", function(){
+    if(register_activated == true){
+        toggle_link.textContent = "Don't have an account? Register here!"
+        username_input_section.style.display = "none"
+        submit_button.textContent = "LOGIN"
+        form_name.textContent = "Login"
+    } else {
+        toggle_link.textContent = "Already have an account? Login here!"
+        username_input_section.style.display = "block"
+        submit_button.textContent = "REGISTER"
+        form_name.textContent = "Register"
+    }
+    register_activated = !register_activated
 })
 
-register_button.addEventListener("click", function(){
-    register_activated = true
-    login_button.classList.replace("btn-primary", "btn-secondary")
-    register_button.classList.replace("btn-secondary", "btn-primary")
-    username_input_section.style.visibility = "visible"
-    username_input_section.style.height = ""
-    submit_button.textContent = "Register"
-})
