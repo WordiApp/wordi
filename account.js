@@ -126,5 +126,7 @@ onAuthStateChanged(auth, function (user) {
             auth.signOut()
             document.location.href = "index.html"
         })
+
+        display_info(user)
     }
 })
