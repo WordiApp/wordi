@@ -1,4 +1,8 @@
-.account_container{
+#title{
+    margin-top: 15px;
+}
+
+#account_container{
     max-width: 600px;
     margin: 25px auto;
     padding: 30px;
@@ -9,10 +13,6 @@
 
 #account_information{
   margin-bottom: 10px;
-}
-
-#title{
-    margin-top: 15px;
 }
 
 .edit{

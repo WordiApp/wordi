@@ -1,3 +1,4 @@
+/* Color Scheme */
 :root{
   --white: #EDEDE9;
   --beige: #F5EBE0;
@@ -7,6 +8,7 @@
   --error-red: #F05656;
 }
 
+/* Body */
 body{
   font-family: "Playfair Display", serif !important;
   font-optical-sizing: auto !important;
@@ -15,10 +17,12 @@ body{
   background: var(--cardboard) !important;
 }
 
+/* Navbar */
 .navbar{
   background: var(--tan) !important;
 }
 
+/* Notification System */
 .notifications{
     position: fixed;
     bottom: 20px;
@@ -63,6 +67,7 @@ body{
     }
 }
 
+/* Scrollbars */
 ::-webkit-scrollbar {
     background-color: var(--white);
 }

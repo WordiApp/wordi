@@ -1,3 +1,4 @@
+//----------------Database----------------//
 // Import the functions you need from the SDKs you need
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js"
 import {getDatabase, ref, get, update} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js"
@@ -19,46 +20,46 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const auth = getAuth()
 const db = getDatabase()
+//----------------Elements & Variables----------------//
+const spinner = document.getElementById("spinner")
+const definition_area = document.getElementById("word_definition")
+const word_history = document.getElementById("word_history")
+const search_button = document.getElementById("search_button")
+const random_button = document.getElementById("random_button")
 
 let previous_word = ""
-
-function sleep(ms) {
-    return new Promise(function (resolve) {
-        setTimeout(resolve, ms)
-    })
-}
-
+//----------------Load----------------//
 onAuthStateChanged(auth, async function (user) {
     if (user == null) {
         window.location.href = "index.html"
     } else {
+        //----------------Search History----------------//
         function refresh_word_history() {
             if (user != null) {
                 get(ref(db, "userdata/" + user.uid)).then(async function (snapshot) {
-                    let word_history = JSON.parse(snapshot.val()["word_history"])
-                    document.getElementById("word_history").innerHTML = ""
-                    for (let i = 0; i < Math.min(100, word_history.length); i++) {
+                    let data = JSON.parse(snapshot.val()["word_history"])
+                    word_history.innerHTML = ""
+                    for (let i = 0; i < Math.min(100, data.length); i++) {
                         let card = document.createElement("div")
                         card.classList.add("word_card")
-                        card.textContent = word_history[i]
+                        card.textContent = data[i]
                         card.addEventListener("click", function () {
-                            search_word(word_history[i], false)
+                            search_word(data[i], false)
                             window.scrollTo({top: 0, left: 0, behavior: "smooth"})
                         })
-                        document.getElementById("word_history").appendChild(card)
+                        word_history.appendChild(card)
                     }
                 })
             }
         }
-
+        //----------------Search Word----------------//
         async function search_word(input, evaluate) {
-            document.getElementById("spinner").style.display = "block"
+            spinner.style.display = "block"
             let wordObj = new Word()
             await wordObj.create_word(input)
             let word = wordObj.get_word()
             let definitions = wordObj.get_definitions()
 
-            const definition_area = document.getElementById("word_definition")
             if (document.getElementById("word") != null) {
                 document.getElementById("word").remove()
             }
@@ -77,7 +78,7 @@ onAuthStateChanged(auth, async function (user) {
                     definition_div.textContent = definition
                     word_div.append(definition_div)
                 })
-                    get(ref(db, "userdata/" + user.uid))
+                get(ref(db, "userdata/" + user.uid))
                     .then(function (snapshot) {
                         let word_history = JSON.parse(snapshot.val()["word_history"])
                         let current_words_searched = Number(snapshot.val()["words_searched"])
@@ -90,7 +91,7 @@ onAuthStateChanged(auth, async function (user) {
                             word_history.splice(word_history.indexOf(word), 1)
                             word_history.unshift(word)
                         }
-                        if(evaluate == false || previous_word == word){
+                        if (evaluate == false || previous_word == word) {
                             added_points = 0
                         } else {
                             previous_word = word
@@ -102,7 +103,7 @@ onAuthStateChanged(auth, async function (user) {
                         })
                             .then(function () {
                                 refresh_word_history()
-                                if(added_points > 0){
+                                if (added_points > 0) {
                                     notification("You earned " + added_points + " point(s)! 🪙", 5)
                                 }
                             })
@@ -122,12 +123,12 @@ onAuthStateChanged(auth, async function (user) {
             definition_area.textContent = ""
             definition_area.append(word_div)
 
-            document.getElementById("spinner").style.display = "none"
+            spinner.style.display = "none"
         }
-
-        document.getElementById("search_button").addEventListener("click", async function (e) {
+        //----------------Buttons----------------//
+        search_button.addEventListener("click", async function () {
             let val = document.getElementById("word_input").value
-            document.getElementById("search_button").disabled = true
+            search_button.disabled = true
             if (val != "") {
                 search_word(val.toLowerCase())
             } else {
@@ -138,7 +139,7 @@ onAuthStateChanged(auth, async function (user) {
             }, 100)
         })
 
-        document.getElementById("random_button").addEventListener("click", async function (e) {
+        random_button.addEventListener("click", async function () {
             document.getElementById("random_button").disabled = true
             search_word()
             setTimeout(function () {
@@ -147,11 +148,10 @@ onAuthStateChanged(auth, async function (user) {
         })
 
         refresh_word_history()
-
-        if(localStorage["word_to_look_up"] != undefined){
+        //----------------Dashboard Lookup----------------//
+        if (localStorage["word_to_look_up"] != undefined) {
             search_word(localStorage["word_to_look_up"], false)
             delete localStorage["word_to_look_up"]
         }
     }
 })
-

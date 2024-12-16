@@ -1,3 +1,4 @@
+/* Logo Styling */
 #logo {
     width: 100%;
     text-align: center;
@@ -14,7 +15,7 @@
     margin-bottom: 20px;
 }
 
-
+/* Form Container */
 .container {
     background-color: var(--white);
     color: var(--black);
@@ -30,6 +31,7 @@
     justify-content: space-between;
 }
 
+/* Toggle Password Button */
 .toggle_password {
     position: absolute;
     right: 10px;
@@ -42,6 +44,7 @@
     color: var(--black);
 }
 
+/* Submit Button */
 #submit_button {
     width: 80%;
     padding: 10px;
@@ -54,6 +57,7 @@
     transition: all 0.3s;
 }
 
+/* Toggle Link */
 .toggle_link {
     font-size: 0.9rem;
     color: var(--black);
@@ -61,10 +65,11 @@
     text-decoration: underline;
 }
 
-.toggle-link:hover {
+.toggle_link:hover {
     text-decoration: underline;
 }
 
+/* Forgot Password */
 #forgot_password {
     display: block;
     margin-top: -10px;

@@ -1,88 +1,48 @@
-#leaderboard{
-    display: block;
-    overflow: auto;   
-    max-height: 275px;
-}
-
-#word_history{
-    display: block;
-    overflow: auto;
-    max-height: 275px;
-}
-
-#signin_area{
-    width: 500px;
-    border: solid 5px;
-    margin: 10px;
-    padding: 10px;
-}
-
-.option_button{
-    width: 40%;
-    margin-left: 6%;
-}
-
+/* General Layout and Structure */
 .dashboard {
     width: 100%;
     max-width: 800px;
     margin: auto;
-  }
-  
-  #calendar{
-    width: 100%;
-    height: 75%;
-    border-radius: 10px;
-  }
-  
-  .icon {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 1.5rem;
-    color: #6c757d;
-  }
-  
-  .grid-container {
+}
+
+.grid-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 20px;
     padding: 20px;
     margin-top: -10px;
-  }
-  
-  .box {
+}
+
+/* Cards and Boxes */
+.box {
     background-color: var(--white);
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     position: relative;
     transition: transform 0.3s, box-shadow 0.3s;
-  }
-  
-  .box:hover {
+}
+
+.box:hover {
     transform: translateY(-5px);
     box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
-  }
-  
-  .bottom {
-    margin-top: 10px;
-  }
-  
-  .stack{
+}
+
+.stack {
     padding: 0px;
     display: flex;
     flex-direction: column;
     background-color: transparent;
     box-shadow: none;
     justify-content: center;
-  }
-  
-  .stack:hover{
+}
+
+.stack:hover {
     transform: none !important;
     box-shadow: none !important;
-  }
-  
-  .square {
+}
+
+.square {
     width: 30vw;
     height: 30vw;
     max-height: 100%;
@@ -92,83 +52,110 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-  }
-  
-  .wide {
+}
+
+.wide {
     grid-column: span 2;
-  }
-  
-  .wider { 
+}
+
+.wider {
     grid-column: span 3;
-  }
-  
-  .widest { 
+}
+
+.widest {
     grid-column: span 4;
-  }
-  
-  
-  @media (max-width: 768px) {
-    .wide, .wider, .widest{
-      grid-column: span 4;
-    }
-  
-    .stack{
-      flex-direction: row;
-      grid-column: span 4;
-      max-height: 200px;
-    }
-  
-    .bottom{
-      margin-top: 0px;
-      margin-left: 50px;
-    }
+}
 
-    #calendar{
-        height: 70%;
-    }
-  }
-
-
-  /* Card styling */
+/* Card Styling */
 .word_card {
-    width: 98%; /* Make the card responsive */
-    height: 40px; /* Fixed height for each card */
-    background-color: #ffffff; /* Card background */
-    border: 1px solid #ddd; /* Light border for the card */
-    border-radius: 5px; /* Optional: Rounded corners */
-    font-size: 1rem; /* Text size */
-    display: flex; /* Flexbox for centering content */
+    width: 98%;
+    height: 40px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    display: flex;
     justify-content: center;
-    align-items: center; /* Center-align text */
+    align-items: center;
     text-align: center;
-    cursor: pointer; /* Pointer cursor for hover effect */
-    position: relative; /* For the hover effect */
+    cursor: pointer;
+    position: relative;
     margin-bottom: 10px;
-  }
-  
-  /* Hover effect */
-  .word_card:hover {
-    background-color: var(--cardboard); /* Change background color on hover */
+}
+
+.word_card:hover {
+    background-color: var(--cardboard);
     color: transparent;
-  }
-  
-  /* Hidden hover text */
-  .word_card::after {
+}
+
+.word_card::after {
     width: 100%;
-    content: "View Definition"; /* Text to display on hover */
+    content: "View Definition";
     word-break: keep-all;
-    position: absolute; /* Position it relative to the card */
+    position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%); /* Center the text */
-    color: black; /* Text color */
-    font-size: 0.9rem; /* Text size */
-    opacity: 0; /* Initially hidden */
-    pointer-events: none; /* Prevent interaction with the text */
-  }
-  
-  /* Show text on hover */
-  .word_card:hover::after {
-    opacity: 1; /* Make the text visible */
-  }
-  
+    transform: translate(-50%, -50%);
+    color: black;
+    font-size: 0.9rem;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.word_card:hover::after {
+    opacity: 1;
+}
+
+/* Dashboard Specific Elements */
+#leaderboard {
+    display: block;
+    overflow: auto;   
+    max-height: 275px;
+}
+
+#word_history {
+    display: block;
+    overflow: auto;
+    max-height: 275px;
+}
+
+#calendar {
+    width: 100%;
+    height: 75%;
+    border-radius: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .wide, .wider, .widest {
+        grid-column: span 4;
+    }
+
+    .stack {
+        flex-direction: row;
+        grid-column: span 4;
+        max-height: 200px;
+    }
+
+    .bottom {
+        margin-top: 0px;
+        margin-left: 50px;
+    }
+
+    #calendar {
+        height: 70%;
+    }
+}
+
+/* Other Styling */
+.icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5rem;
+    color: #6c757d;
+}
+
+.bottom {
+    margin-top: 10px;
+}

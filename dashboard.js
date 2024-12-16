@@ -1,3 +1,4 @@
+//----------------Database----------------//
 // Import the functions you need from the SDKs you need
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js"
 import {getDatabase, query, orderByChild, limitToFirst, ref, get, set, update} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js"
@@ -18,9 +19,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const auth = getAuth()
 const db = getDatabase()
-
-const greetings = ["Hello, ", "Greetings, ", "Salutations, ", "Good day, ", "Welcome back, ", "Why hello there, ", "Nice to see you,  ", "Glad you're back, ", "Hope you're having a good day, ", "Welcome to Wordi, ", "Aloha, "]
-
+//----------------Elements & Variables----------------//
 const greeting = document.getElementById("greeting")
 const streak = document.getElementById("streak")
 const word_count = document.getElementById("word_count")
@@ -28,6 +27,8 @@ const date_box = document.getElementById("date_box")
 const word_history = document.getElementById("word_history")
 const leaderboard = document.getElementById("leaderboard")
 
+const greetings = ["Hello, ", "Greetings, ", "Salutations, ", "Good day, ", "Welcome back, ", "Why hello there, ", "Nice to see you,  ", "Glad you're back, ", "Hope you're having a good day, ", "Welcome to Wordi, ", "Aloha, "]
+//----------------Load----------------//
 onAuthStateChanged(auth, function (user) {
     if (user == null) {
         document.location.href = "index.html"
@@ -42,12 +43,12 @@ onAuthStateChanged(auth, function (user) {
                 if (current_streak == "") {
                     update(ref(db, "userdata/" + user.uid), {
                         last_streak_log: new Date(),
-                        streak: 1
+                        streak: 1,
                     })
-                        .then(function(){
+                        .then(function () {
                             streak.textContent = "1 days"
                         })
-                        .catch(function(err){
+                        .catch(function (err) {
                             notification("Streak Error: " + err)
                         })
                 }
@@ -94,7 +95,7 @@ onAuthStateChanged(auth, function (user) {
                 word_count.textContent = count + " Words"
                 //----------------Word History----------------//
                 let history = JSON.parse(snapshot.val()["word_history"])
-                for(let i = 0; i < Math.min(history.length, 50); i++){
+                for (let i = 0; i < Math.min(history.length, 50); i++) {
                     let card = document.createElement("div")
                     card.classList.add("word_card")
                     card.textContent = history[i]

@@ -1,5 +1,5 @@
 export default function notification(text, duration, background_color, text_color){
-    // Declares the notification container or sets it up if it doesn't exist
+    // References the notification container or sets it up if it doesn't exist
     let container = document.getElementById("notifications")
     if(container == null){
         container = document.createElement("div")

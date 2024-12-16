@@ -1,5 +1,6 @@
+//----------------Database----------------//
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import {initializeApp} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js"
 import {getDatabase, ref, get, query, orderByChild, limitToFirst, startAt} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -12,33 +13,33 @@ const firebaseConfig = {
     projectId: "words-3a481",
     storageBucket: "words-3a481.firebasestorage.app",
     messagingSenderId: "448694732469",
-    appId: "1:448694732469:web:5bbdaffef9bf6564a4e0fc"
-};
+    appId: "1:448694732469:web:5bbdaffef9bf6564a4e0fc",
+}
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig)
 const db = getDatabase()
-
-export default class Word{
-    constructor(){
+//----------------Class----------------//
+export default class Word {
+    constructor() {
         this.word = ""
         this.word_length = 0
         this.word_definitions = []
     }
 
-    async create_word(given){
-        if(given != null && given != "" && given != undefined){
+    async create_word(given) {
+        if (given != null && given != "" && given != undefined) {
             this.word = given
             this.word_length = given.length
-            try{
+            try {
                 const snapshot_definition = await get(ref(db, "words/" + given))
                 this.word_definitions = JSON.parse(snapshot_definition.val()["definition"])
-            } catch{
+            } catch {
                 this.word_definitions = null
             }
         } else {
             let word_count = await get(ref(db, "/word_count"))
-            let rand = Math.floor(Math.random()*Number(word_count.val()))
+            let rand = Math.floor(Math.random() * Number(word_count.val()))
             let snapshot_word = await get(query(ref(db, "/words"), orderByChild("id"), limitToFirst(1), startAt(rand)))
 
             this.word = Object.keys(snapshot_word.val())[0]
@@ -47,15 +48,15 @@ export default class Word{
         }
     }
 
-    get_word(){
+    get_word() {
         return this.word
     }
 
-    get_definitions(){
+    get_definitions() {
         return this.word_definitions
     }
 
-    get_length(){
+    get_length() {
         return this.word_length
     }
 }
