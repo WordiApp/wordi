@@ -60,3 +60,50 @@
 .card:hover::after {
     opacity: 1;
 }
+
+  .quiz-container {
+    width: 90%;
+    max-width: 400px;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+
+  .word-display {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  .answer-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .answer-item {
+    margin-bottom: 10px;
+  }
+
+  .answer-button {
+    width: 100%;
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: white;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .answer-button:hover {
+    background-color: #0056b3;
+  }
+
+  .answer-button:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
