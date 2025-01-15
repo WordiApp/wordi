@@ -46,6 +46,7 @@ export default class Word {
             this.word_length = Object.keys(snapshot_word.val())[0].length
             this.word_definitions = JSON.parse(Object.values(snapshot_word.val())[0]["definition"])
         }
+        return [this.word, this.word_definitions]
     }
 
     get_word() {

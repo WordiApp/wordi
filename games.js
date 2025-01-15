@@ -1,4 +1,12 @@
+import Word from "./word.js";
+
 const timer = document.getElementById("timer")
+
+async function new_question(){
+    let answer_word = await new Word().create_word()
+
+    console.log(answer_word[0] + " | " + answer_word[1])
+}
 
 function sleep(seconds) {
     return new Promise(function(resolve){
@@ -15,4 +23,6 @@ async function start_timer(length){
     }
 }
 
-start_timer(10)
+
+new_question()
+//start_timer(10)
