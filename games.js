@@ -23,6 +23,10 @@ async function start_timer(length){
     }
 }
 
+function ask_word(){
+    
+}
+
 
 new_question()
 //start_timer(10)

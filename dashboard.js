@@ -133,14 +133,14 @@ onAuthStateChanged(auth, function (user) {
                         if (i < data_keys.length) {
                             get(ref(db, "userdata/" + data_keys[i] + "/username"))
                                 .then(function (snapshot) {
-                                    spot.textContent = String("#" + (i + 1) + " " + snapshot.val() + " - " + data_values[i].score) + " Points"
+                                    spot.innerHTML = String("<b>#" + (i + 1) + "</b> " + snapshot.val() + " - " + data_values[i].score) + " Points"
                                 })
                                 .catch(function (err) {
-                                    spot.textContent = String("#" + (i + 1) + " Username Unknown - " + data_values[i].score) + " Points"
+                                    spot.innerHTML = String("<b>#" + (i + 1) + "<b>    Username Unknown - " + data_values[i].score) + " Points"
                                     console.log("Leadeboard error: " + err)
                                 })
                         } else {
-                            spot.textContent = String("#" + (i + 1) + " ???")
+                            spot.innerHTML = String("<b>#" + (i + 1) + "</b> ???")
                         }
                     }
                 })
