@@ -1,16 +1,37 @@
-import Word from "./word.js";
+//----------------Database----------------//
+// Import the functions you need from the SDKs you need
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js"
+import {getDatabase, ref, get, update} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js"
+import {getAuth, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js"
+import Word from "./word.js"
+import notification from "./notification.js"
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyDft-OAjQovGmUmmcyowkcYgV0kEPBMrME",
+    authDomain: "wordsearch-8ef82.firebaseapp.com",
+    projectId: "wordsearch-8ef82",
+    storageBucket: "wordsearch-8ef82.appspot.com",
+    messagingSenderId: "483921968995",
+    appId: "1:483921968995:web:040b330d0dd874fbfc9d56",
+}
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig)
+const auth = getAuth()
+const db = getDatabase()
 
 const timer = document.getElementById("timer")
 const word_question = document.getElementById("word_question")
 
 function correct(){
     // Add points
-    console.log("Correct")
+    notification("Correct!", 5, "#00FF00")
     new_question()
 }
 
 function incorrect(){
-    console.log("Wrong")
+    notification("Incorrect...", 5, "#FF0000")
     new_question()
 }
 
@@ -55,4 +76,4 @@ async function start_timer(length){
 }
 
 new_question()
-//start_timer(10)
+start_timer(10)
