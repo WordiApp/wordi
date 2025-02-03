@@ -61,7 +61,7 @@
     opacity: 1;
 }
 
-  .quiz-container {
+  #quiz_container {
     width: 90%;
     max-width: 600px;
     margin-left: auto;

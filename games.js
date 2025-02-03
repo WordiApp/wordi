@@ -22,6 +22,7 @@ const auth = getAuth()
 const db = getDatabase()
 
 const timer = document.getElementById("timer")
+const quiz_container = document.getElementById("quiz_container")
 const word_question = document.getElementById("word_question")
 
 function correct(){
@@ -34,8 +35,6 @@ function incorrect(){
     notification("Incorrect...", 5, "#FF0000")
     new_question()
 }
-
-let correct_choice
 
 async function new_question(){
     let answer_word = await new Word().create_word()
@@ -55,9 +54,16 @@ async function new_question(){
         }
     }
 
-    correct_choice = document.getElementById("choice-" + String(correct_index + 1))
+    let correct_choice = document.getElementById("choice-" + String(correct_index + 1))
     correct_choice.innerHTML = String(answer_word[1])
     correct_choice.addEventListener("click", correct)
+}
+
+function new_round(){
+    start_timer(10)
+    // while(flag){
+    //     new_question()
+    // } 
 }
 
 function sleep(seconds) {
@@ -67,13 +73,14 @@ function sleep(seconds) {
 }
 
 async function start_timer(length){
+    quiz_container.style.display = "Block"
     let counter = length
     while (counter > 0){
         timer.textContent = Math.floor(counter*100)/100 + "s"
         await sleep(0.1)
         counter -= 0.1
     }
+    quiz_container.style.display = "None"
 }
 
-new_question()
-start_timer(10)
+new_round()
