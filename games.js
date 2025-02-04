@@ -25,13 +25,17 @@ const timer = document.getElementById("timer")
 const quiz_container = document.getElementById("quiz_container")
 const word_question = document.getElementById("word_question")
 
+let points = 0
+let questions = 0
 function correct(){
-    // Add points
+    points += 1
+    questions += 1
     notification("Correct!", 5, "#00FF00")
     new_question()
 }
 
 function incorrect(){
+    questions += 1
     notification("Incorrect...", 5, "#FF0000")
     new_question()
 }
@@ -59,11 +63,11 @@ async function new_question(){
     correct_choice.addEventListener("click", correct)
 }
 
-function new_round(){
+function new_game(){
+    points = 0
+    questions = 0
     start_timer(10)
-    // while(flag){
-    //     new_question()
-    // } 
+    new_question()
 }
 
 function sleep(seconds) {
@@ -81,6 +85,7 @@ async function start_timer(length){
         counter -= 0.1
     }
     quiz_container.style.display = "None"
+    console.log(points + "/" + questions)
 }
 
-new_round()
+//new_game()

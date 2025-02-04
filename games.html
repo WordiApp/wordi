@@ -52,7 +52,13 @@
         <h1 class="text-center mb-1">Wordi Games</h1>
         <h5 class="text-center mb-1">Enhance your vocabulary and have fun along the way!</h5>
     </div>
-      <div id="quiz_container">
+    <div id="game_container">
+        <h2>Quiz Game!</h2>
+        <div>Get the most amount of correct definitions in 30 seconds!</div>
+        <div id="previous">Previous Result: 0/0</div>
+        <button class="btn btn-success" id="start_button">Start</button>
+    </div>
+    <div id="quiz_container" style="display: none;">
         <div class="word-display" id="word_question">
           Word Goes Here
         </div>
@@ -63,6 +69,6 @@
           <li class="answer-item"><button class="answer-button" id="choice-4">Answer 4</button></li>
         </ul>
         <div id="timer">10.0s</div>
-      </div>
+    </div>
 </body>
 </html>
