@@ -22,11 +22,15 @@ const auth = getAuth()
 const db = getDatabase()
 
 const timer = document.getElementById("timer")
+const start_button = document.getElementById("start_button")
 const quiz_container = document.getElementById("quiz_container")
+const game_container = document.getElementById("game_container")
 const word_question = document.getElementById("word_question")
+const results = document.getElementById("results")
 
 let points = 0
 let questions = 0
+
 function correct(){
     points += 1
     questions += 1
@@ -78,6 +82,7 @@ function sleep(seconds) {
 
 async function start_timer(length){
     quiz_container.style.display = "Block"
+    game_container.style.display = "None"
     let counter = length
     while (counter > 0){
         timer.textContent = Math.floor(counter*100)/100 + "s"
@@ -85,7 +90,10 @@ async function start_timer(length){
         counter -= 0.1
     }
     quiz_container.style.display = "None"
-    console.log(points + "/" + questions)
+    game_container.style.display = "Block"
+    results.textContent = (points + "/" + questions)
 }
 
-//new_game()
+start_button.addEventListener("click", function(){
+    new_game()
+})
