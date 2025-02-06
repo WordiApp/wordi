@@ -92,6 +92,16 @@ async function start_timer(length){
     quiz_container.style.display = "None"
     game_container.style.display = "Block"
     results.textContent = (points + "/" + questions)
+
+    get(ref(db, "userdata/" + auth.currentUser.uid + "/score")).then(function(snapshot){
+        update(ref(db, "userdata/" + auth.currentUser.uid), {
+            score: snapshot.val() + points
+        }).then(function(){
+            notification("You earned " + points + " points!", 5)
+        }).catch(function(err){
+            notification("Error: " + err, 5, "var(--error-red)")
+        })
+    })
 }
 
 start_button.addEventListener("click", function(){
