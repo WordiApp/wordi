@@ -31,6 +31,12 @@ const results = document.getElementById("results")
 let points = 0
 let questions = 0
 
+function sleep(seconds) {
+    return new Promise(function(resolve){
+        setTimeout(resolve, seconds*1000)
+    });
+}
+
 function correct(){
     points += 1
     questions += 1
@@ -70,14 +76,8 @@ async function new_question(){
 function new_game(){
     points = 0
     questions = 0
-    start_timer(10)
     new_question()
-}
-
-function sleep(seconds) {
-    return new Promise(function(resolve){
-        setTimeout(resolve, seconds*1000)
-    });
+    start_timer(10)
 }
 
 async function start_timer(length){
@@ -90,8 +90,8 @@ async function start_timer(length){
         counter -= 0.1
     }
     quiz_container.style.display = "None"
-    game_container.style.display = "Block"
-    results.textContent = (points + "/" + questions)
+    game_container.style.display = "Flex"
+    results.textContent = "Your Previous Score: " + (points + "/" + questions)
 
     get(ref(db, "userdata/" + auth.currentUser.uid + "/score")).then(function(snapshot){
         update(ref(db, "userdata/" + auth.currentUser.uid), {
