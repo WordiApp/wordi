@@ -103,7 +103,7 @@
 }
 
   #quiz_container {
-    background-color: var(--white);
+  background-color: var(--white);
   width: 90%;
   margin-left: auto;
   margin-right: auto;
@@ -146,7 +146,8 @@
     overflow: hidden;
     height: 95px;
     color: white;
-    background-color: #007BFF;
+    background-color: var(--cardboard);
+    color: var(--black);
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -156,12 +157,12 @@
   }
 
   .answer-button:hover {
-    background-color: #0056b3;
+    background-color: var(--);
   }
 
   .answer-button:focus {
     outline: none;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    box-shadow: 0 0 5px var(--black);
   }
 
   #timer{

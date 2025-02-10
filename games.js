@@ -73,37 +73,41 @@ async function new_question(){
     correct_choice.addEventListener("click", correct)
 }
 
-function new_game(){
+async function new_game(length){
+    // Resets global variables
     points = 0
     questions = 0
+    // Starts the question loop
     new_question()
-    start_timer(10)
-}
-
-async function start_timer(length){
+    // Shows the quiz screen, hides the main screen
     quiz_container.style.display = "Block"
     game_container.style.display = "None"
+    // Timer that lasts for <length> seconds
     let counter = length
     while (counter > 0){
         timer.textContent = Math.floor(counter*100)/100 + "s"
         await sleep(0.1)
         counter -= 0.1
     }
+    // Hides the quiz screen, goes back to main screen
     quiz_container.style.display = "None"
-    game_container.style.display = "Flex"
+    game_container.style.display = "Flex"  
+    // Gives the user their final result 
     results.textContent = "Your Previous Score: " + (points + "/" + questions)
-
-    get(ref(db, "userdata/" + auth.currentUser.uid + "/score")).then(function(snapshot){
-        update(ref(db, "userdata/" + auth.currentUser.uid), {
-            score: snapshot.val() + points
-        }).then(function(){
-            notification("You earned " + points + " points!", 5)
-        }).catch(function(err){
-            notification("Error: " + err, 5, "var(--error-red)")
+    // Adds points to user's account and notifies them
+    if(points > 0){
+        get(ref(db, "userdata/" + auth.currentUser.uid + "/score")).then(function(snapshot){
+            update(ref(db, "userdata/" + auth.currentUser.uid), {
+                score: snapshot.val() + points
+            }).then(function(){
+                notification("You earned " + points + " points!", 5)
+            }).catch(function(err){
+                notification("Error: " + err, 5, "var(--error-red)")
+            })
         })
-    })
+    }
 }
 
 start_button.addEventListener("click", function(){
-    new_game()
+    new_game(10)
 })
