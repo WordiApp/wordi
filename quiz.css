@@ -142,7 +142,7 @@
   .answer-button {
     width: 100%;
     padding: 10px;
-    font-size: fit-content;
+    font-size: 25px;
     overflow: hidden;
     height: 95px;
     color: white;

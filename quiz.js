@@ -40,13 +40,13 @@ function sleep(seconds) {
 function correct(){
     points += 1
     questions += 1
-    notification("Correct!", 5, "#00FF00")
+    notification("Correct!", 5, "var(--success-green)")
     new_question()
 }
 
 function incorrect(){
     questions += 1
-    notification("Incorrect...", 5, "#FF0000")
+    notification("Incorrect...", 5, "var(--error-red)")
     new_question()
 }
 
@@ -83,6 +83,7 @@ async function new_game(length){
     quiz_container.style.display = "Block"
     game_container.style.display = "None"
     // Timer that lasts for <length> seconds
+    await sleep(0.5)
     let counter = length
     while (counter > 0){
         timer.textContent = Math.floor(counter*100)/100 + "s"
@@ -109,5 +110,5 @@ async function new_game(length){
 }
 
 start_button.addEventListener("click", function(){
-    new_game(10)
+    new_game(30)
 })
