@@ -108,10 +108,10 @@
   margin-left: auto;
   margin-right: auto;
   margin-top: 50px;
+  position: relative;
   padding: 10px;
   border-radius: 1rem;
   max-width: 525px;
-  height: 525px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.2);
   transform: translateY(-20px);
   opacity: 0;
@@ -119,8 +119,8 @@
   font-size: clamp(16px, calc(min(525px, 90vw) / 20), 26px);
 
     display: grid;
-    grid-template-columns: repeat(15, 1fr); /* 15 columns */
-    grid-template-rows: repeat(15, 1fr); /* 15 rows */
+    grid-template-columns: repeat(12, 1fr); /* 12 columns */
+    grid-template-rows: repeat(12, 1fr); /* 12 rows */
     gap: 5px;
 }
 
@@ -130,8 +130,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 17px;
+    font-size: 20px;
     font-weight: bold;
+    padding: 3px;
+    border-radius: 100%;
+
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
 }
 
   .word-display {
