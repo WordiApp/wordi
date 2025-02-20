@@ -1,4 +1,5 @@
 let selected_elements = []
+let lines = []
 let previous_element = null
 let search_container =  document.getElementById("search_container")
 
@@ -21,14 +22,15 @@ function draw_line(element1, element2, line){
     if(line == null){
         line = document.createElement("p")
         line.style.width = dist
-        line.style.height = "5px"
-        line.style.backgroundColor = "#000000"
+        line.style.backgroundColor = "rgb(151, 172, 240)"
+        line.style.height = "10px"
         line.style.position = "absolute"
+        lines.push(line)
     }
     
-    line.style.width = dist
-    line.style.top = yMid
-    line.style.left = xMid - (dist/2)
+    line.style.width = dist/2
+    line.style.top = yMid - 5
+    line.style.left = xMid - (dist/4)
     line.style.transform = "rotate(" + slopeInDegrees + "deg)"
 
     document.body.appendChild(line)
@@ -43,20 +45,47 @@ function dynamic_line(element1, element2){
     })
 }
 
-for(let i = 0; i < 12; i++){
-    for(let k = 0; k < 12; k++){
+function select_element(div){
+    if(String(div.style.backgroundColor) != "rgb(151, 172, 240)"){
+        selected_elements.push(div)
+        if(previous_element != null){
+            dynamic_line(previous_element, div)
+        }
+    }
+    previous_element = div
+    div.style.backgroundColor = "rgb(151, 172, 240)"
+}
+
+let mouse_down = false
+
+document.addEventListener("mousedown", function(){
+    mouse_down = true
+    console.log("down")
+})
+
+document.addEventListener("mouseup", function(){
+    mouse_down = false
+    for(let i = 0; i < selected_elements.length; i++){
+        selected_elements[i].style.backgroundColor = "transparent"
+    }
+    for(let i = 0; i < lines.length; i++){
+        lines[i].remove()
+    }
+    previous_element = null
+})
+
+for(let i = 0; i < 10; i++){
+    for(let k = 0; k < 10; k++){
         let div = document.createElement("div")
         div.textContent = "A"
         document.getElementById("search_container").appendChild(div)
         div.addEventListener("mouseover", function(e){
-            if(String(div.style.backgroundColor) != "rgb(255, 0, 255)"){
-                selected_elements.push(div)
-                if(previous_element != null){
-                    dynamic_line(previous_element, div)
-                }
-                previous_element = div
+            if(mouse_down){
+                select_element(div)
             }
-            div.style.backgroundColor = "#FF00FF"
+        })
+        div.addEventListener("mousedown", function(){
+            select_element(div)
         })
     }
 }
