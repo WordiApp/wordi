@@ -45,22 +45,36 @@ function dynamic_line(element1, element2){
     })
 }
 
+function is_touching(first_id, second_id){
+    let [row_first, column_first] = first_id.split("|").map(Number)
+    let [row_second, column_second] = second_id.split("|").map(Number)
+    console.log(row_first, column_first, row_second, column_second)
+    console.log(column_first + 1)
+    if(Math.abs(row_second - row_first) <= 1 && Math.abs(column_second - column_first) <= 1){
+        return true
+    }
+    return false
+}
+
 function select_element(div){
     if(String(div.style.backgroundColor) != "rgb(151, 172, 240)"){
-        selected_elements.push(div)
-        if(previous_element != null){
+        if(previous_element == null){
+            selected_elements.push(div)
+            div.style.backgroundColor = "rgb(151, 172, 240)"
+            previous_element = div
+        } else if(is_touching(previous_element.id, div.id)) {
+            selected_elements.push(div)
+            div.style.backgroundColor = "rgb(151, 172, 240)"
             dynamic_line(previous_element, div)
+            previous_element = div
         }
     }
-    previous_element = div
-    div.style.backgroundColor = "rgb(151, 172, 240)"
 }
 
 let mouse_down = false
 
 document.addEventListener("mousedown", function(){
     mouse_down = true
-    console.log("down")
 })
 
 document.addEventListener("mouseup", function(){
@@ -78,6 +92,8 @@ for(let i = 0; i < 10; i++){
     for(let k = 0; k < 10; k++){
         let div = document.createElement("div")
         div.textContent = "A"
+        div.id =  i + "|" + k
+       
         document.getElementById("search_container").appendChild(div)
         div.addEventListener("mouseover", function(e){
             if(mouse_down){
@@ -89,4 +105,3 @@ for(let i = 0; i < 10; i++){
         })
     }
 }
-
