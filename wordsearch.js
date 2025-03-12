@@ -1,7 +1,15 @@
+const alphabet = "abcdefghijklmnopqrstuvwxyz"
+
 let selected_elements = []
+let selected = ""
+
 let lines = []
+
 let previous_element = null
-let search_container =  document.getElementById("search_container")
+
+const selected_letters = document.getElementById("selected_letters")
+const letter_grid = document.getElementById("letter_grid")
+const find_word = document.getElementById("find_word")
 
 function draw_line(element1, element2, line){
     let rect1 = element1.getBoundingClientRect()
@@ -48,8 +56,6 @@ function dynamic_line(element1, element2){
 function is_touching(first_id, second_id){
     let [row_first, column_first] = first_id.split("|").map(Number)
     let [row_second, column_second] = second_id.split("|").map(Number)
-    console.log(row_first, column_first, row_second, column_second)
-    console.log(column_first + 1)
     if(Math.abs(row_second - row_first) <= 1 && Math.abs(column_second - column_first) <= 1){
         return true
     }
@@ -60,14 +66,17 @@ function select_element(div){
     if(String(div.style.backgroundColor) != "rgb(151, 172, 240)"){
         if(previous_element == null){
             selected_elements.push(div)
+            selected = div.textContent
             div.style.backgroundColor = "rgb(151, 172, 240)"
             previous_element = div
         } else if(is_touching(previous_element.id, div.id)) {
             selected_elements.push(div)
+            selected += div.textContent
             div.style.backgroundColor = "rgb(151, 172, 240)"
             dynamic_line(previous_element, div)
             previous_element = div
         }
+        selected_letters.textContent = selected
     }
 }
 
@@ -85,16 +94,18 @@ document.addEventListener("mouseup", function(){
     for(let i = 0; i < lines.length; i++){
         lines[i].remove()
     }
+    selected = "..."
+    selected_letters.textContent = selected
     previous_element = null
 })
 
 for(let i = 0; i < 10; i++){
     for(let k = 0; k < 10; k++){
         let div = document.createElement("div")
-        div.textContent = "A"
+        div.textContent = alphabet.charAt(Number(Math.random()*26)).toUpperCase()
         div.id =  i + "|" + k
        
-        document.getElementById("search_container").appendChild(div)
+        document.getElementById("letter_grid").appendChild(div)
         div.addEventListener("mouseover", function(e){
             if(mouse_down){
                 select_element(div)
