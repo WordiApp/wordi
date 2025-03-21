@@ -21,11 +21,6 @@ const app = initializeApp(firebaseConfig)
 const auth = getAuth()
 const db = getDatabase()
 //----------------Elements & Variables----------------//
-<<<<<<< HEAD
-=======
-const wordGenerator = new WordGenerator()
-const dictionary = new Dictionary()
->>>>>>> 0ef339160a56120957ae977459246150923ecdc2
 const spinner = document.getElementById("spinner")
 const definition_area = document.getElementById("word_definition")
 const word_history = document.getElementById("word_history")
@@ -60,14 +55,9 @@ onAuthStateChanged(auth, async function (user) {
         //----------------Search Word----------------//
         async function search_word(input, evaluate) {
             spinner.style.display = "block"
-<<<<<<< HEAD
             const wordObj = await Word.New(input)
             let word = wordObj.get_word()
             let definitions = wordObj.get_definitions()
-=======
-            let word = input
-            let definitions = await dictionary.define(input)
->>>>>>> 0ef339160a56120957ae977459246150923ecdc2
 
             if (document.getElementById("word") != null) {
                 document.getElementById("word").remove()

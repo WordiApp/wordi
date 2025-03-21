@@ -53,16 +53,9 @@ function incorrect(){
 }
 
 async function new_question(){
-<<<<<<< HEAD
     let answer_word = await Word.New()
     let correct_index = parseInt(Math.random()*4)
     word_question.textContent = answer_word.get_word()
-=======
-    let answer_word = await wordGenerator.generate()
-    let answer_definition = await dictionary.define(answer_word)
-    let correct_index = parseInt(Math.random()*4)
-    word_question.textContent = answer_word
->>>>>>> 0ef339160a56120957ae977459246150923ecdc2
 
     for(let i = 0; i < 4; i++){
         let choice = document.getElementById("choice-" + String(i + 1))
@@ -70,25 +63,15 @@ async function new_question(){
         choice.removeEventListener("click", incorrect)
 
         if(i != correct_index){
-<<<<<<< HEAD
             let wordObj = await Word.New()
             choice.innerHTML = String(wordObj.get_definitions()[0])
-=======
-            let word = await wordGenerator.generate()
-            let definition = await dictionary.define(word)
-            choice.innerHTML = String(definition)
->>>>>>> 0ef339160a56120957ae977459246150923ecdc2
             choice.removeEventListener("click", incorrect)
             choice.addEventListener("click", incorrect)
         }
     }
 
     let correct_choice = document.getElementById("choice-" + String(correct_index + 1))
-<<<<<<< HEAD
     correct_choice.innerHTML = String(answer_word.get_word())
-=======
-    correct_choice.innerHTML = String(answer_definition)
->>>>>>> 0ef339160a56120957ae977459246150923ecdc2
     correct_choice.addEventListener("click", correct)
 }
 

@@ -20,21 +20,10 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const db = getDatabase()
 //----------------Classes----------------//
-<<<<<<< HEAD
 export default class Word {
     constructor() {
         this.word = ""
         this.word_definitions = []
-=======
-export class WordGenerator {
-    constructor() {}
-
-    async generate() {
-        let word_count = await get(ref(db, "/word_count"))
-        let rand = Math.floor(Math.random() * Number(word_count.val()))
-        let snapshot_word =  await get(query(ref(db, "/words"), orderByChild("id"), limitToFirst(1), startAt(rand)))
-        return Object.keys(snapshot_word.val())[0]
->>>>>>> 0ef339160a56120957ae977459246150923ecdc2
     }
 
     static async New(given){
