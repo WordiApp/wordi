@@ -26,7 +26,8 @@ export class WordGenerator {
     async generate() {
         let word_count = await get(ref(db, "/word_count"))
         let rand = Math.floor(Math.random() * Number(word_count.val()))
-        return await get(query(ref(db, "/words"), orderByChild("id"), limitToFirst(1), startAt(rand)))
+        let snapshot_word =  await get(query(ref(db, "/words"), orderByChild("id"), limitToFirst(1), startAt(rand)))
+        return Object.keys(snapshot_word.val())[0]
     }
 }
 

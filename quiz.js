@@ -3,7 +3,7 @@
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js"
 import {getDatabase, ref, get, update} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js"
 import {getAuth, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js"
-import Word from "./word.js"
+import {WordGenerator, Dictionary} from "./word.js"
 import notification from "./notification.js"
 
 // Your web app's Firebase configuration
@@ -21,6 +21,8 @@ const app = initializeApp(firebaseConfig)
 const auth = getAuth()
 const db = getDatabase()
 
+const wordGenerator = new WordGenerator()
+const dictionary = new Dictionary()
 const timer = document.getElementById("timer")
 const start_button = document.getElementById("start_button")
 const quiz_container = document.getElementById("quiz_container")
@@ -51,9 +53,10 @@ function incorrect(){
 }
 
 async function new_question(){
-    let answer_word = await new Word().create_word()
+    let answer_word = await wordGenerator.generate()
+    let answer_definition = await dictionary.define(answer_word)
     let correct_index = parseInt(Math.random()*4)
-    word_question.textContent = answer_word[0]
+    word_question.textContent = answer_word
 
     for(let i = 0; i < 4; i++){
         let choice = document.getElementById("choice-" + String(i + 1))
@@ -61,15 +64,16 @@ async function new_question(){
         choice.removeEventListener("click", incorrect)
 
         if(i != correct_index){
-            let word = await new Word().create_word()
-            choice.innerHTML = String(word[1])
+            let word = await wordGenerator.generate()
+            let definition = await dictionary.define(word)
+            choice.innerHTML = String(definition)
             choice.removeEventListener("click", incorrect)
             choice.addEventListener("click", incorrect)
         }
     }
 
     let correct_choice = document.getElementById("choice-" + String(correct_index + 1))
-    correct_choice.innerHTML = String(answer_word[1])
+    correct_choice.innerHTML = String(answer_definition)
     correct_choice.addEventListener("click", correct)
 }
 

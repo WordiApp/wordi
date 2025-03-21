@@ -22,7 +22,7 @@ const auth = getAuth()
 const db = getDatabase()
 //----------------Elements & Variables----------------//
 const wordGenerator = new WordGenerator()
-const dictionary = new Dictionary
+const dictionary = new Dictionary()
 const spinner = document.getElementById("spinner")
 const definition_area = document.getElementById("word_definition")
 const word_history = document.getElementById("word_history")
@@ -58,7 +58,7 @@ onAuthStateChanged(auth, async function (user) {
         async function search_word(input, evaluate) {
             spinner.style.display = "block"
             let word = input
-            let definitions = await Dictionary.define(input)
+            let definitions = await dictionary.define(input)
 
             if (document.getElementById("word") != null) {
                 document.getElementById("word").remove()
@@ -141,7 +141,7 @@ onAuthStateChanged(auth, async function (user) {
 
         random_button.addEventListener("click", async function () {
             document.getElementById("random_button").disabled = true
-            search_word()
+            search_word(wordGenerator.generate())
             setTimeout(function () {
                 document.getElementById("random_button").disabled = false
             }, 1000)
