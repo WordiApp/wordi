@@ -3,7 +3,7 @@
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js"
 import {getDatabase, ref, get, update} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js"
 import {getAuth, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js"
-import {WordGenerator, Dictionary} from "./word.js"
+import Word from "./word.js"
 import notification from "./notification.js"
 
 // Your web app's Firebase configuration
@@ -21,8 +21,6 @@ const app = initializeApp(firebaseConfig)
 const auth = getAuth()
 const db = getDatabase()
 //----------------Elements & Variables----------------//
-const wordGenerator = new WordGenerator()
-const dictionary = new Dictionary
 const spinner = document.getElementById("spinner")
 const definition_area = document.getElementById("word_definition")
 const word_history = document.getElementById("word_history")
@@ -57,8 +55,9 @@ onAuthStateChanged(auth, async function (user) {
         //----------------Search Word----------------//
         async function search_word(input, evaluate) {
             spinner.style.display = "block"
-            let word = input
-            let definitions = await Dictionary.define(input)
+            const wordObj = await Word.New(input)
+            let word = wordObj.get_word()
+            let definitions = wordObj.get_definitions()
 
             if (document.getElementById("word") != null) {
                 document.getElementById("word").remove()

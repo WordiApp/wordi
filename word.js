@@ -20,25 +20,42 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const db = getDatabase()
 //----------------Classes----------------//
-export class WordGenerator {
-    constructor() {}
-
-    async generate() {
-        let word_count = await get(ref(db, "/word_count"))
-        let rand = Math.floor(Math.random() * Number(word_count.val()))
-        return await get(query(ref(db, "/words"), orderByChild("id"), limitToFirst(1), startAt(rand)))
+export default class Word {
+    constructor() {
+        this.word = ""
+        this.word_definitions = []
     }
-}
 
-export class Dictionary{
-    constructor() {}
+    static async New(given){
+        const wordInstance = new Word()
+        await wordInstance.create_word(given)
+        return wordInstance
+    }
 
-    async define(word){
-        try {
-            let snapshot_definition = await get(ref(db, "words/" + word))
-            return JSON.parse(snapshot_definition.val()["definition"])
-        } catch {
-            return []
+    async create_word(given) {
+        if (given != null && given != "" && given != undefined) {
+            this.word = given
+            try {
+                let snapshot_definition = await get(ref(db, "words/" + given))
+                this.word_definitions = JSON.parse(snapshot_definition.val()["definition"])
+            } catch {
+                this.word_definitions = null
+            }
+        } else {
+            let word_count = await get(ref(db, "/word_count"))
+            let rand = Math.floor(Math.random() * Number(word_count.val()))
+            let snapshot_word = await get(query(ref(db, "/words"), orderByChild("id"), limitToFirst(1), startAt(rand)))
+
+            this.word = Object.keys(snapshot_word.val())[0]
+            this.word_definitions = JSON.parse(Object.values(snapshot_word.val())[0]["definition"])
         }
+    }
+
+    get_word() {
+        return this.word
+    }
+
+    get_definitions() {
+        return this.word_definitions
     }
 }
