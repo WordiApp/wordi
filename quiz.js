@@ -3,7 +3,7 @@
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js"
 import {getDatabase, ref, get, update} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js"
 import {getAuth, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js"
-import {WordGenerator, Dictionary} from "./word.js"
+import {WordGenerator} from "./word.js"
 import notification from "./notification.js"
 
 // Your web app's Firebase configuration
