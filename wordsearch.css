@@ -1,160 +1,187 @@
-#title{
+  /*----Basic Elements----*/
+  #title {
     margin-top: 15px;
-}
+  }
 
-/* Card Container */
-.card_container {
-    margin: 100px;
+  /*----Layout Containers----*/
+  /* Main Game Area */
+  #game_container {
+    background-color: var(--white);
+    width: 90%;
+    max-width: 525px;
+    height: 525px;
+    margin: 50px auto 0;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    position: relative;
+    font-size: clamp(16px, calc(min(525px, 90vw) / 20), 26px);
+    text-align: center;
+  
+    display: block;
+    justify-content: center;
+    align-items: center;
+  
+    transform: translateY(-20px);
+    opacity: 0;
+    animation: fadeIn 0.5s forwards ease-in-out;
+  }
+  
+  #game_container > div {
+    margin-bottom: 5px;
+    font-size: 1rem;
+  }
+  
+  /* Search Container */
+  #search_container {
+    background-color: var(--white);
+    width: 90%;
+    max-width: 525px;
+    min-width: 375px;
+    margin: 50px auto 0;
+    padding: 10px;
+    border-radius: 1rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    position: relative;
+    font-size: clamp(16px, calc(min(525px, 90vw) / 20), 26px);
+  
+    display: block;
+    justify-content: center;
+    align-content: center;
+  
+    transform: translateY(-20px);
+    opacity: 0;
+    animation: fadeIn 0.5s forwards ease-in-out;
+  }
+  
+  /*----Letter Grid and Puzzle Elements---- */
+  #selected_letters {
+    font-weight: bold;
+    direction: rtl;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  #letter_grid {
+    --size: 10;
+    --letter-size: 22px;
+  
+    display: grid;
+    grid-template-columns: repeat(var(--size), 1fr);
+    grid-template-rows: repeat(var(--size), 1fr);
+    gap: 10px;
+  
+    width: 350px;
+    height: 350px;
+    margin: 0 auto;
+    aspect-ratio: 1 / 1;
+  
+    pointer-events: none;
+    position: relative;
+  }
+  
+  .letter {
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    font-size: var(--letter-size);
+    font-weight: bold;
+    border-radius: 100%;
+  
+    position: relative;
+    z-index: 2;
+    pointer-events: auto;
+  
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  .line {
+    height: 10px;
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+    background-color: rgb(151, 172, 240);
+    transform-origin: center center;
+  }
+
+  #find_word {
+    font-weight: bold;
+    text-align: center;
+    padding-bottom: 5px;
+  }
+  
+  /*---- Card UI & Definitions Section----*/
+  .card_container {
+    margin: 100px auto;
     max-width: 600px;
     height: 500px;
-    padding: 20px;
+    padding: 5px;
+  
     background-color: var(--white);
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     text-align: center;
-    color: var(--black) ;
-
+    color: var(--black);
+  
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
     gap: 10px;
-    max-width: 100%;
     overflow: auto;
-    padding: 5px;
-}
-
-/* Card Styling */
-.card {
+  }
+  
+  .card {
     max-width: 100%;
     height: 40px;
     background-color: #ffffff;
     border: 1px solid #ddd;
     border-radius: 5px;
+  
     font-size: 1rem;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
+  
     cursor: pointer;
     position: relative;
-}
-
-.card:hover {
+  }
+  
+  .card:hover {
     background-color: var(--cardboard);
     color: transparent;
-}
-
-.card::after {
-    width: 100%;
+  }
+  
+  .card::after {
     content: "View Definition";
+    width: 100%;
     word-break: keep-all;
+  
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+  
     color: black;
     font-size: 0.9rem;
     opacity: 0;
     pointer-events: none;
-}
-
-.card:hover::after {
-    opacity: 1;
-}
-
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(-20px);
   }
-  100% {
+  
+  .card:hover::after {
     opacity: 1;
-    transform: translateY(0);
   }
-}
-
-#game_container {
-  background-color: var(--white);
-  width: 90%;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 50px;
-  padding: 2rem;
-  border-radius: 1rem;
-  text-align: center;
-  max-width: 525px;
-  height: 525px;
-  position: relative;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  transform: translateY(-20px);
-  opacity: 0;
-  animation: fadeIn 0.5s forwards ease-in-out;
-  font-size: clamp(16px, calc(min(525px, 90vw) / 20), 26px);
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-#game_container > div {
-  margin-bottom: 5px;
-  font-size: 1rem;
-}
-
-  #search_container {
-  background-color: var(--white);
-  width: 90%;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 50px;
-  position: relative;
-  padding: 10px;
-  border-radius: 1rem;
-  max-width: 525px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  transform: translateY(-20px);
-  opacity: 0;
-  animation: fadeIn 0.5s forwards ease-in-out;
-  font-size: clamp(16px, calc(min(525px, 90vw) / 20), 26px);
-
-}
-
-#letter_grid{
-  display: grid;
-  grid-template-columns: repeat(8, 1fr); /* 12 columns */
-  grid-template-rows: repeat(8, 1fr); /* 12 rows */
-  gap: 5px;
-}
-
-#letter_grid div {
-  aspect-ratio: 1/1;
-  background-color: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 25px;
-  font-weight: bold;
-  padding: 3px;
-  border-radius: 100%;
-
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* IE 10 and IE 11 */
-  user-select: none; /* Standard syntax */
-}
-
-#selected_letters{
-  font-weight: bold;
-  text-align: center;
-}
-
-#find_word{
-  font-weight: bold;
-  text-align: center;
-  padding-bottom: 5px;
-}
-
-  /* Button styling */
+  
+  /*----Button Styling----*/
   #start_button {
     background-color: var(--success-green);
     color: var(--white);
@@ -162,6 +189,7 @@
     outline: none;
     padding: 0.75rem 1.5rem;
     margin-top: 20px;
+  
     width: 30%;
     height: 12.5%;
     font-size: 1.35rem;
@@ -169,12 +197,26 @@
     cursor: pointer;
     transition: 0.3s;
   }
-
+  
   #start_button:hover {
     background-color: var(--success-green);
     transform: translateY(-2px);
   }
+  
   #start_button:active {
     background-color: var(--success-green);
     transform: translateY(0);
   }
+  
+  /*----Animations----*/
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  

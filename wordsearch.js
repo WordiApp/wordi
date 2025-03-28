@@ -23,58 +23,51 @@ const db = getDatabase()
 
 const alphabet = "abcdefghijklmnopqrstuvwxyz"
 
-let selected_elements = []
-let selected = ""
-let current_word = ""
-
+let selected = []
 let lines = []
-
-let previous_element = null
+let letters = ""
+let current_word = ""
 
 const selected_letters = document.getElementById("selected_letters")
 const letter_grid = document.getElementById("letter_grid")
 const find_word = document.getElementById("find_word")
 
-function in_between(num, min, max){
-    if(num >= min && num <= max){
-        return true
-    }
-    return false
-}
-
-function draw_line(element1, element2, line){
-    let rect1 = element1.getBoundingClientRect()
-    let rect2 = element2.getBoundingClientRect()
-    let x1 = rect1.left + (rect1.right - rect1.left)/2
-    let y1 = rect1.top +(rect1.bottom  - rect1.top)/2
-    let x2 = rect2.left +(rect2.right - rect2.left)/2
-    let y2 = rect2.top + (rect2.bottom  - rect2.top)/2
-
-
-    let xMid = (x1 + x2)/2
-    let yMid = (y1 + y2)/2
-    let dist = Math.sqrt((x2-x1)**2 + (y2-y1)**2)
-
-    let slopeInRadians = Math.atan2(y1-y2, x1-x2)
-    let slopeInDegrees = (slopeInRadians*180)/Math.PI
-
-    if(line == null){
-        line = document.createElement("p")
+function drawLine(element1, element2, relativeTo = document.body, line = null){
+    // Getting rect for the element that the lines will be relative to
+    const relativeToRect = relativeTo.getBoundingClientRect()
+    relativeTo.style.position = "relative"
+    // Getting the rect of both endpoints
+    const rect1 = element1.getBoundingClientRect()
+    const rect2 = element2.getBoundingClientRect()
+    // Getting the coordinates of both endpoints (adjusted for scroll and the relativeTo element)
+    const x1 = rect1.left + rect1.width/2 - relativeToRect.left
+    const y1 = rect1.top + rect2.height/2 - relativeToRect.top + window.scrollY
+    const x2 = rect2.left + rect2.width/2 - relativeToRect.left
+    const y2 = rect2.top + rect2.height/2 - relativeToRect.top + window.scrollY
+    // Calculations for drawing the line
+    const xMid = (x1 + x2)/2
+    const yMid = (y1 + y2)/2
+    const dist = Math.hypot(y2-y1, x2-x1)
+    const angleDeg = Math.atan2(y2-y1, x2-x1)*180/Math.PI
+    // Creating a line if one doesn't exist already
+    if(!line){
+        // Element Creation
+        line = document.createElement("div")
         line.id = element1.id + "-" + element2.id
-        line.style.width = dist
-        line.style.backgroundColor = "rgb(151, 172, 240)"
-        line.style.height = "10px"
+        line.classList.add("line")
         line.style.position = "absolute"
+        // (SCENARIO-SPECIFIC) Adds our line to the lines list
         lines.push(line)
     }
-    
-    line.style.width = dist/2
-    line.style.top = yMid - 5
-    line.style.left = xMid - (dist/4)
-    line.style.transform = "rotate(" + slopeInDegrees + "deg)"
-
-    document.body.appendChild(line)
-    
+    // Resizes and rotates the line
+    const lineThickness = 10
+    line.style.top = `${yMid - 5}px`
+    line.style.height = `${lineThickness}px`
+    line.style.width = `${dist}px`
+    line.style.left = `${xMid - (dist/2)}px`
+    line.style.transform = `rotate(${angleDeg}deg)`
+    // Adds the line to our element that the lines are relative to and returns it
+    relativeTo.appendChild(line)
     return line
 }
 
@@ -88,29 +81,27 @@ function is_touching(first_id, second_id){
 }
 
 function select_element(div){
-    if(String(div.style.backgroundColor) != "rgb(151, 172, 240)"){
-        if(previous_element == null){
-            selected_elements.push(div)
-            selected = div.textContent
+    let position = selected.indexOf(div)
+    let touching = (selected.length > 0 && is_touching(selected[selected.length - 1].id, div.id))
+    if(position == -1){
+        if(selected.length == 0 || touching){
+            letters += div.textContent
             div.style.backgroundColor = "rgb(151, 172, 240)"
-            previous_element = div
-        } else if(is_touching(previous_element.id, div.id)) {
-            selected_elements.push(div)
-            selected += div.textContent
-            div.style.backgroundColor = "rgb(151, 172, 240)"
-            draw_line(previous_element, div)
-            previous_element = div
+            if(touching){
+                drawLine(selected[selected.length - 1], div, letter_grid)
+            }
+            selected.push(div)
         }
-        selected_letters.textContent = selected
-    } else {
-        if(selected_elements.length >= 2 && selected_elements.indexOf(div) == selected_elements.length - 2){
-            let unselect = selected_elements[selected_elements.length - 1]
-            unselect.style.backgroundColor = "transparent"
-            document.getElementById(div.id + "-" + unselect.id).remove()
+    } else if(position == selected.length - 2) {
+        for(let i = selected.length - 1; i > position; i--){
+            letters = letters.substring(0, i)
+            selected[i].style.backgroundColor = "transparent"
+            selected.pop()
+            lines[i-1].remove()
             lines.pop()
-            selected_elements.pop()
         }
     }
+    selected_letters.textContent = letters
 }
 
 
@@ -168,84 +159,110 @@ function findPath(pathLength, rows, cols){
     return path
 }
 
-// function hide_word(rows, cols, word){
-//     let directions = ["-1,1", "-1,0", "-1,-1", "0,1", "0,-1", "1,1", "1,0", "1,-1"]
-//     let positions = []
-//     let word_length = word.length
-
-//     let current_pos = parseInt(Math.random()*rows) + "," + parseInt(Math.random()*cols)
-//     positions.push(current_pos)
-
-//     let count = 0
-//     for(let i = 1; i < word_length; i++){
-//        count = 0
-//        while(count < 500){
-//             let direction = directions[parseInt(Math.random()*directions.length)]
-//             let temp_pos = String(parseInt(current_pos.split(",")[0]) + parseInt(direction.split(",")[0])) 
-//                             + "," + 
-//                            String(parseInt(current_pos.split(",")[1]) + parseInt(direction.split(",")[1]))
-            
-//             if(in_between(temp_pos.split(",")[0], 0, rows-1) && in_between(temp_pos.split(",")[1], 0, cols-1) && positions.indexOf(temp_pos) == -1){
-//                 positions.push(temp_pos)
-//                 current_pos = temp_pos
-//                 break
-//             } else {
-//                 temp_pos = current_pos
-//             }
-//             count++
-//        }
-//        if(count >= 250){
-//         positions = null
-//         break
-//        }
-//     }
-//     return positions
-// }
-
-function generate_grid(rows, cols, word){
-    for(let i = 0; i < rows; i++){
-        for(let k = 0; k < cols; k++){
-            let div = document.createElement("div")
-            div.textContent = alphabet.charAt(parseInt(Math.random()*26)).toUpperCase()
-            div.id =  i + "," + k
-            div.addEventListener("mouseover", function(e){
-                if(mouse_down){
-                    select_element(div)
+function generateGrid(word, size){
+    letter_grid.innerHTML = ""
+    let path = findPath(word.length, size, size)
+    if(path != null){
+        for(let i = 0; i < size; i++){
+            for(let k = 0; k < size; k++){
+                let div = document.createElement("div")
+                if(path.indexOf(`${i},${k}`) != -1){
+                    div.textContent = word[path.indexOf(`${i},${k}`)].toUpperCase()
+                } else {
+                    div.textContent = alphabet.charAt(parseInt(Math.random()*26)).toUpperCase()
                 }
-            })
-            div.addEventListener("mousedown", function(){
-                select_element(div)
-            })
-            letter_grid.appendChild(div)
+                div.id =  i + "," + k
+                div.classList.add("letter")
+                div.addEventListener("mousedown", function(){
+                    select_element(div)
+                })
+                div.addEventListener("touchstart", function(){
+                    select_element(div)
+                })
+                letter_grid.appendChild(div)
+            }
         }
+        let width = parseInt(window.getComputedStyle(letter_grid).width)
+        let height = parseInt(window.getComputedStyle(letter_grid).height)
+        let gap = parseInt(window.getComputedStyle(letter_grid).gap)
+        letter_grid.style.setProperty("--letter-size", `${Math.sqrt(((width*height-(width*gap*(size-1)+height*gap*(size-1)-gap*gap*(size-1)*(size-1))))/(2.25*size*size))}px`)
+        letter_grid.style.setProperty("--size", size)
+        current_word = word
+    } else {
+        console.log("IMPOSSIBLE")
+        // Refresh
+    }
+}
+
+function clearSelection(){
+    if(letters.toLowerCase() == current_word){
+        for(let i = 0; i < selected.length; i++){
+            selected[i].style.backgroundColor = "Green"
+            if(i > 0){
+                lines[i-1].style.backgroundColor = "Green"
+            }
+            setTimeout(function(){
+                generateGrid("supernatural", 8)
+            }, 2000)
+        }
+    } else {
+        for(let i = selected.length - 1 ; i >= 0 ; i--){
+            selected[i].style.backgroundColor = "transparent"
+            selected.pop()
+        }
+        for(let i = lines.length - 1; i >= 0; i--){
+            lines[i].remove()
+            lines.pop()
+        }
+        letters = ""
+        selected_letters.textContent = "..."
     }
 }
 
 let mouse_down = false
 
+document.addEventListener("mouseup", function(){
+    mouse_down = false
+    clearSelection()
+})
+
 document.addEventListener("mousedown", function(){
     mouse_down = true
 })
 
-document.addEventListener("mouseup", function(){
-    mouse_down = false
-    for(let i = 0; i < selected_elements.length; i++){
-        selected_elements[i].style.backgroundColor = "transparent"
+letter_grid.addEventListener("mousemove", function(e){
+    if(!mouse_down){return}
+
+    const element = document.elementFromPoint(e.clientX, e.clientY)
+    if(element.parentElement == letter_grid){
+        select_element(element)
     }
-    for(let i = lines.length - 1; i >= 0; i--){
-        lines[i].remove()
-        lines.pop()
-    }
-    selected = "..."
-    selected_letters.textContent = selected
-    previous_element = null
 })
+
+document.addEventListener("touchstart", function(){
+    mouse_down = true;
+}, { passive: true });
+
+document.addEventListener("touchend", function(){
+    mouse_down = false;
+    clearSelection();
+}, { passive: true });
+
+letter_grid.addEventListener("touchmove", function(e){
+    if(!mouse_down){return}
+    e.preventDefault()
+    const touch = e.touches[0]
+    const element = document.elementFromPoint(touch.clientX, touch.clientY)
+    if(element.parentElement == letter_grid){
+        select_element(element)
+    }
+}, {passive: false})
 
 window.addEventListener("resize", function redraw(){
     for(let i = 0; i < lines.length; i++){
         let splitID = lines[i].id.split("-")
-        draw_line(document.getElementById(splitID[0]), document.getElementById(splitID[1]), lines[i])
+        drawLine(document.getElementById(splitID[0]), document.getElementById(splitID[1]), letter_grid, lines[i])
     }
 })
 
-generate_grid(8, 8)
+generateGrid("supernatural", 8)
