@@ -73,8 +73,8 @@
     grid-template-rows: repeat(var(--size), 1fr);
     gap: 10px;
   
-    width: 350px;
-    height: 350px;
+    width: 500px;
+    height: 500px;
     margin: 0 auto;
     aspect-ratio: 1 / 1;
   

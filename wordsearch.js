@@ -195,14 +195,16 @@ function generateGrid(word, size){
 }
 
 function clearSelection(){
-    if(letters.toLowerCase() == current_word){
+    if(letters.toLowerCase() == current_word.toLowerCase()){
         for(let i = 0; i < selected.length; i++){
             selected[i].style.backgroundColor = "Green"
             if(i > 0){
                 lines[i-1].style.backgroundColor = "Green"
             }
             setTimeout(function(){
-                generateGrid("supernatural", 8)
+                generateGrid("supernatural", 10)
+                letters = ""
+                selected_letters.textContent = "..."
             }, 2000)
         }
     } else {
@@ -265,4 +267,4 @@ window.addEventListener("resize", function redraw(){
     }
 })
 
-generateGrid("supernatural", 8)
+generateGrid("Antidisestablishmentarianism", 10)
