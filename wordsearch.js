@@ -81,29 +81,30 @@ function is_touching(first_id, second_id){
 }
 
 function select_element(div){
-    let position = selected.indexOf(div)
-    let touching = (selected.length > 0 && is_touching(selected[selected.length - 1].id, div.id))
-    if(position == -1){
-        if(selected.length == 0 || touching){
-            letters += div.textContent
-            div.style.backgroundColor = "rgb(151, 172, 240)"
-            if(touching){
-                drawLine(selected[selected.length - 1], div, letter_grid)
+    if(canSearch){
+        const position = selected.indexOf(div)
+        const touching = (selected.length > 0 && is_touching(selected[selected.length - 1].id, div.id))
+        if(position == -1){
+            if(selected.length == 0 || touching){
+                letters += div.textContent
+                div.style.backgroundColor = "rgb(151, 172, 240)"
+                if(touching){
+                    drawLine(selected[selected.length - 1], div, letter_grid)
+                }
+                selected.push(div)
             }
-            selected.push(div)
+        } else if(position == selected.length - 2) {
+            for(let i = selected.length - 1; i > position; i--){
+                letters = letters.substring(0, i)
+                selected[i].style.backgroundColor = "transparent"
+                selected.pop()
+                lines[i-1].remove()
+                lines.pop()
+            }
         }
-    } else if(position == selected.length - 2) {
-        for(let i = selected.length - 1; i > position; i--){
-            letters = letters.substring(0, i)
-            selected[i].style.backgroundColor = "transparent"
-            selected.pop()
-            lines[i-1].remove()
-            lines.pop()
-        }
+        selected_letters.textContent = letters
     }
-    selected_letters.textContent = letters
 }
-
 
 const directions = [
     [-1, 0], [0, 1], [1, 0], [0, -1], // Left, Up, Right, Down
@@ -159,6 +160,12 @@ function findPath(pathLength, rows, cols){
     return path
 }
 
+async function newSearch(){
+    const word = await Word.New()
+    find_word.textContent = "Find: " + word.get_word().toUpperCase()
+    generateGrid(word.get_word(), 10)
+}
+
 function generateGrid(word, size){
     letter_grid.innerHTML = ""
     let path = findPath(word.length, size, size)
@@ -190,24 +197,12 @@ function generateGrid(word, size){
         current_word = word
     } else {
         console.log("IMPOSSIBLE")
-        // Refresh
+        window.location.reload()
     }
 }
 
 function clearSelection(){
-    if(letters.toLowerCase() == current_word.toLowerCase()){
-        for(let i = 0; i < selected.length; i++){
-            selected[i].style.backgroundColor = "Green"
-            if(i > 0){
-                lines[i-1].style.backgroundColor = "Green"
-            }
-            setTimeout(function(){
-                generateGrid("supernatural", 10)
-                letters = ""
-                selected_letters.textContent = "..."
-            }, 2000)
-        }
-    } else {
+    function clearElements(){
         for(let i = selected.length - 1 ; i >= 0 ; i--){
             selected[i].style.backgroundColor = "transparent"
             selected.pop()
@@ -219,9 +214,28 @@ function clearSelection(){
         letters = ""
         selected_letters.textContent = "..."
     }
+    if(canSearch){
+        if(letters.toLowerCase() == current_word.toLowerCase()){
+            canSearch = false
+            for(let i = 0; i < selected.length; i++){
+                selected[i].style.backgroundColor = "Green"
+                if(i > 0){
+                    lines[i-1].style.backgroundColor = "Green"
+                }
+                setTimeout(function(){
+                    clearElements()
+                    newSearch()
+                    canSearch = true
+                }, 2000)
+            }
+        } else {
+            clearElements()
+        }
+    }
 }
 
 let mouse_down = false
+let canSearch = true
 
 document.addEventListener("mouseup", function(){
     mouse_down = false
@@ -267,4 +281,4 @@ window.addEventListener("resize", function redraw(){
     }
 })
 
-generateGrid("Antidisestablishmentarianism", 10)
+newSearch()
