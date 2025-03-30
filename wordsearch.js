@@ -20,97 +20,24 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const auth = getAuth()
 const db = getDatabase()
-
+//----------------Constants----------------//
 const alphabet = "abcdefghijklmnopqrstuvwxyz"
-
-let selected = []
-let lines = []
-let letters = ""
-let current_word = ""
-
-const selected_letters = document.getElementById("selected_letters")
-const letter_grid = document.getElementById("letter_grid")
-const find_word = document.getElementById("find_word")
-
-function drawLine(element1, element2, relativeTo = document.body, line = null){
-    // Getting rect for the element that the lines will be relative to
-    const relativeToRect = relativeTo.getBoundingClientRect()
-    relativeTo.style.position = "relative"
-    // Getting the rect of both endpoints
-    const rect1 = element1.getBoundingClientRect()
-    const rect2 = element2.getBoundingClientRect()
-    // Getting the coordinates of both endpoints (adjusted for scroll and the relativeTo element)
-    const x1 = rect1.left + rect1.width/2 - relativeToRect.left
-    const y1 = rect1.top + rect2.height/2 - relativeToRect.top + window.scrollY
-    const x2 = rect2.left + rect2.width/2 - relativeToRect.left
-    const y2 = rect2.top + rect2.height/2 - relativeToRect.top + window.scrollY
-    // Calculations for drawing the line
-    const xMid = (x1 + x2)/2
-    const yMid = (y1 + y2)/2
-    const dist = Math.hypot(y2-y1, x2-x1)
-    const angleDeg = Math.atan2(y2-y1, x2-x1)*180/Math.PI
-    // Creating a line if one doesn't exist already
-    if(!line){
-        // Element Creation
-        line = document.createElement("div")
-        line.id = element1.id + "-" + element2.id
-        line.classList.add("line")
-        line.style.position = "absolute"
-        // (SCENARIO-SPECIFIC) Adds our line to the lines list
-        lines.push(line)
-    }
-    // Resizes and rotates the line
-    const lineThickness = 10
-    line.style.top = `${yMid - 5}px`
-    line.style.height = `${lineThickness}px`
-    line.style.width = `${dist}px`
-    line.style.left = `${xMid - (dist/2)}px`
-    line.style.transform = `rotate(${angleDeg}deg)`
-    // Adds the line to our element that the lines are relative to and returns it
-    relativeTo.appendChild(line)
-    return line
-}
-
-function is_touching(first_id, second_id){
-    let [row_first, column_first] = first_id.split(",").map(Number)
-    let [row_second, column_second] = second_id.split(",").map(Number)
-    if(Math.abs(row_second - row_first) <= 1 && Math.abs(column_second - column_first) <= 1){
-        return true
-    }
-    return false
-}
-
-function select_element(div){
-    if(canSearch){
-        const position = selected.indexOf(div)
-        const touching = (selected.length > 0 && is_touching(selected[selected.length - 1].id, div.id))
-        if(position == -1){
-            if(selected.length == 0 || touching){
-                letters += div.textContent
-                div.style.backgroundColor = "rgb(151, 172, 240)"
-                if(touching){
-                    drawLine(selected[selected.length - 1], div, letter_grid)
-                }
-                selected.push(div)
-            }
-        } else if(position == selected.length - 2) {
-            for(let i = selected.length - 1; i > position; i--){
-                letters = letters.substring(0, i)
-                selected[i].style.backgroundColor = "transparent"
-                selected.pop()
-                lines[i-1].remove()
-                lines.pop()
-            }
-        }
-        selected_letters.textContent = letters
-    }
-}
-
 const directions = [
     [-1, 0], [0, 1], [1, 0], [0, -1], // Left, Up, Right, Down
     [1, 1], [-1, 1], [-1, -1], [1, -1] // NE, NW, SW, SE
 ]
 
+const selected_letters = document.getElementById("selected_letters")
+const letter_grid = document.getElementById("letter_grid")
+const find_word = document.getElementById("find_word")
+//----------------Variables----------------//
+let selected = []
+let lines = []
+let letters = ""
+let current_word = ""
+let mouseDown = false
+let canSearch = true
+//----------------Functions: Grid Generation----------------//
 // Fisher-Yates Shuffle Algorithm
 function shuffle(arr){
     for(let i = arr.length - 1; i >= 0; i--){
@@ -160,10 +87,43 @@ function findPath(pathLength, rows, cols){
     return path
 }
 
-async function newSearch(){
-    const word = await Word.New()
-    find_word.textContent = "Find: " + word.get_word().toUpperCase()
-    generateGrid(word.get_word(), 10)
+function drawLine(element1, element2, relativeTo = document.body, line = null){
+    // Getting rect for the element that the lines will be relative to
+    const relativeToRect = relativeTo.getBoundingClientRect()
+    relativeTo.style.position = "relative"
+    // Getting the rect of both endpoints
+    const rect1 = element1.getBoundingClientRect()
+    const rect2 = element2.getBoundingClientRect()
+    // Getting the coordinates of both endpoints (adjusted for scroll and the relativeTo element)
+    const x1 = rect1.left + rect1.width/2 - relativeToRect.left
+    const y1 = rect1.top + rect2.height/2 - relativeToRect.top + window.scrollY
+    const x2 = rect2.left + rect2.width/2 - relativeToRect.left
+    const y2 = rect2.top + rect2.height/2 - relativeToRect.top + window.scrollY
+    // Calculations for drawing the line
+    const xMid = (x1 + x2)/2
+    const yMid = (y1 + y2)/2
+    const dist = Math.hypot(y2-y1, x2-x1)
+    const angleDeg = Math.atan2(y2-y1, x2-x1)*180/Math.PI
+    // Creating a line if one doesn't exist already
+    if(!line){
+        // Element Creation
+        line = document.createElement("div")
+        line.id = element1.id + "-" + element2.id
+        line.classList.add("line")
+        line.style.position = "absolute"
+        // Adds our line to the lines list
+        lines.push(line)
+    }
+    // Resizes and rotates the line
+    const lineThickness = 10
+    line.style.top = `${yMid - 5}px`
+    line.style.height = `${lineThickness}px`
+    line.style.width = `${dist}px`
+    line.style.left = `${xMid - (dist/2)}px`
+    line.style.transform = `rotate(${angleDeg}deg)`
+    // Adds the line to our element that the lines are relative to and returns it
+    relativeTo.appendChild(line)
+    return line
 }
 
 function generateGrid(word, size){
@@ -201,6 +161,12 @@ function generateGrid(word, size){
     }
 }
 
+async function newSearch(){
+    const word = await Word.New()
+    find_word.textContent = "Find: " + word.get_word().toUpperCase()
+    generateGrid(word.get_word(), 10)
+}
+//----------------Functions: Drag System----------------//
 function clearSelection(){
     function clearElements(){
         for(let i = selected.length - 1 ; i >= 0 ; i--){
@@ -234,20 +200,52 @@ function clearSelection(){
     }
 }
 
-let mouse_down = false
-let canSearch = true
+function is_touching(first_id, second_id){
+    let [row_first, column_first] = first_id.split(",").map(Number)
+    let [row_second, column_second] = second_id.split(",").map(Number)
+    if(Math.abs(row_second - row_first) <= 1 && Math.abs(column_second - column_first) <= 1){
+        return true
+    }
+    return false
+}
 
+function select_element(div){
+    if(canSearch){
+        const position = selected.indexOf(div)
+        const touching = (selected.length > 0 && is_touching(selected[selected.length - 1].id, div.id))
+        if(position == -1){
+            if(selected.length == 0 || touching){
+                letters += div.textContent
+                div.style.backgroundColor = "rgb(151, 172, 240)"
+                if(touching){
+                    drawLine(selected[selected.length - 1], div, letter_grid)
+                }
+                selected.push(div)
+            }
+        } else if(position == selected.length - 2) {
+            for(let i = selected.length - 1; i > position; i--){
+                letters = letters.substring(0, i)
+                selected[i].style.backgroundColor = "transparent"
+                selected.pop()
+                lines[i-1].remove()
+                lines.pop()
+            }
+        }
+        selected_letters.textContent = letters
+    }
+}
+//----------------Listeners----------------//
 document.addEventListener("mouseup", function(){
-    mouse_down = false
+    mouseDown = false
     clearSelection()
 })
 
 document.addEventListener("mousedown", function(){
-    mouse_down = true
+    mouseDown = true
 })
 
 letter_grid.addEventListener("mousemove", function(e){
-    if(!mouse_down){return}
+    if(!mouseDown){return}
 
     const element = document.elementFromPoint(e.clientX, e.clientY)
     if(element.parentElement == letter_grid){
@@ -256,16 +254,16 @@ letter_grid.addEventListener("mousemove", function(e){
 })
 
 document.addEventListener("touchstart", function(){
-    mouse_down = true;
+    mouseDown = true;
 }, { passive: true });
 
 document.addEventListener("touchend", function(){
-    mouse_down = false;
+    mouseDown = false;
     clearSelection();
 }, { passive: true });
 
 letter_grid.addEventListener("touchmove", function(e){
-    if(!mouse_down){return}
+    if(!mouseDown){return}
     e.preventDefault()
     const touch = e.touches[0]
     const element = document.elementFromPoint(touch.clientX, touch.clientY)
