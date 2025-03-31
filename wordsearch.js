@@ -188,12 +188,23 @@ function clearSelection(){
                 if(i > 0){
                     lines[i-1].style.backgroundColor = "Green"
                 }
-                setTimeout(function(){
-                    clearElements()
-                    newSearch()
-                    canSearch = true
-                }, 2000)
             }
+            if(auth.currentUser.uid){
+                get(ref(db, "userdata/" + auth.currentUser.uid + "/score")).then(function(snapshot){
+                    update(ref(db, "userdata/" + auth.currentUser.uid), {
+                        score: snapshot.val() + 2
+                    }).then(function(){
+                        notification("You earned " + 2 + " points!", 5)
+                     }).catch(function(err){
+                        notification("Error: " + err, 5, "var(--error-red)")
+                    })
+                })
+            }
+            setTimeout(function(){
+                clearElements()
+                newSearch()
+                canSearch = true
+            }, 2000)
         } else {
             clearElements()
         }
