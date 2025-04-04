@@ -96,9 +96,9 @@ function drawLine(element1, element2, relativeTo = document.body, line = null){
     const rect2 = element2.getBoundingClientRect()
     // Getting the coordinates of both endpoints (adjusted for scroll and the relativeTo element)
     const x1 = rect1.left + rect1.width/2 - relativeToRect.left
-    const y1 = rect1.top + rect2.height/2 - relativeToRect.top + window.scrollY
+    const y1 = rect1.top + rect2.height/2 - relativeToRect.top
     const x2 = rect2.left + rect2.width/2 - relativeToRect.left
-    const y2 = rect2.top + rect2.height/2 - relativeToRect.top + window.scrollY
+    const y2 = rect2.top + rect2.height/2 - relativeToRect.top
     // Calculations for drawing the line
     const xMid = (x1 + x2)/2
     const yMid = (y1 + y2)/2
@@ -126,12 +126,12 @@ function drawLine(element1, element2, relativeTo = document.body, line = null){
     return line
 }
 
-function generateGrid(word, size){
+function generateGrid(word, rows, cols){
     letter_grid.innerHTML = ""
-    let path = findPath(word.length, size, size)
+    let path = findPath(word.length, rows, cols)
     if(path != null){
-        for(let i = 0; i < size; i++){
-            for(let k = 0; k < size; k++){
+        for(let i = 0; i < rows; i++){
+            for(let k = 0; k < cols; k++){
                 let div = document.createElement("div")
                 if(path.indexOf(`${i},${k}`) != -1){
                     div.textContent = word[path.indexOf(`${i},${k}`)].toUpperCase()
@@ -152,8 +152,15 @@ function generateGrid(word, size){
         let width = parseInt(window.getComputedStyle(letter_grid).width)
         let height = parseInt(window.getComputedStyle(letter_grid).height)
         let gap = parseInt(window.getComputedStyle(letter_grid).gap)
-        letter_grid.style.setProperty("--letter-size", `${Math.sqrt(((width*height-(width*gap*(size-1)+height*gap*(size-1)-gap*gap*(size-1)*(size-1))))/(2.25*size*size))}px`)
-        letter_grid.style.setProperty("--size", size)
+
+        let xL = (width - gap*(rows-1))/rows
+        let yL = (height - gap*(cols-1))/cols
+        let aText = Math.pow(Math.min(xL, yL), 2)
+        let fontSize = aText/40
+        console.log(fontSize)
+        letter_grid.style.setProperty("--letter-size", fontSize)        
+        letter_grid.style.setProperty("--rows", rows)
+        letter_grid.style.setProperty("--cols", cols)
         current_word = word
     } else {
         console.log("IMPOSSIBLE")
@@ -161,10 +168,10 @@ function generateGrid(word, size){
     }
 }
 
-async function newSearch(){
+async function newSearch(rows, cols){
     const word = await Word.New()
     find_word.textContent = "Find: " + word.get_word().toUpperCase()
-    generateGrid(word.get_word(), 10)
+    generateGrid(word.get_word(), rows, cols)
 }
 //----------------Functions: Drag System----------------//
 function clearSelection(){
@@ -278,7 +285,7 @@ letter_grid.addEventListener("touchmove", function(e){
     e.preventDefault()
     const touch = e.touches[0]
     const element = document.elementFromPoint(touch.clientX, touch.clientY)
-    if(element.parentElement == letter_grid){
+    if(element != null && element.parentElement == letter_grid){
         select_element(element)
     }
 }, {passive: false})
@@ -290,4 +297,4 @@ window.addEventListener("resize", function redraw(){
     }
 })
 
-newSearch()
+newSearch(5, 10)
