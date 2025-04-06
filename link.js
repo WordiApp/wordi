@@ -21,47 +21,62 @@ const app = initializeApp(firebaseConfig)
 const auth = getAuth()
 const db = getDatabase()
 
+const lengthRequirements = {
+    a: 6, e: 6, i: 6, o: 6, u: 6,
+    r: 5, s: 5, t: 5, 
+    v: 3, x: 3, z: 3,
+    default: 4
+};
+
+  
 const link = document.getElementById("link")
 const input = document.getElementById("word_input")
 const submit = document.getElementById("submit_button")
 
-
 let currentLink = []
-let currentLinkText = null 
-let previous_word = null
+
+const rules = [
+    {
+        check: (wordObj) => wordObj.get_definitions() != null,
+        error: "Can't link; this word does not exist."
+    },
+    {
+        check: (wordObj) => wordObj.get_word()[0] == getLinkingLetter(),
+        error: "Can't link; word must start with the last letter of the previous word."
+    },
+    {
+        check: (wordObj) => wordObj.get_word().length >= lengthRequirements[getLinkingLetter()] || lengthRequirements.default,
+        error: "Can't link; your word is too short."
+    },
+    {
+        check: (wordObj) => currentLink.indexOf(wordObj.get_word()) == -1,
+        error: "Can't link; no repeats allowed."
+    }
+]
+
+function getLinkingLetter(){
+    const previous_word = currentLink[currentLink.length-1]
+    return previous_word[previous_word.length-1]
+}
 
 async function newLink(){
     currentLink = []
-    previous_word = (await Word.New()).get_word().toLowerCase()
-    currentLink.push(previous_word)
-    currentLinkText = previous_word.toUpperCase() + " -> "
-    link.textContent = currentLinkText
+    const word = (await Word.New()).get_word().toLowerCase()
+    currentLink.push(word)
+    link.textContent = word.toUpperCase() + " -> "
 }
 
 submit.addEventListener("click", async function(){
-    const word = input.value.toLowerCase() 
-    if(word != ""){
-        const definition = (await Word.New(word)).get_definitions()
-        
-        if(definition == null){
-            notification("Can't link; this word doesn't exist.", 5)
-        } else {
-            if(previous_word[previous_word.length-1] == word[0]){
-                if(currentLink.indexOf(word) == -1){
-                    currentLink.push(word)
-                    currentLinkText += word.toUpperCase() + " -> "
-                    previous_word = word
-                    link.textContent = currentLinkText
-                    link.scrollLeft = link.scrollWidth
-                    input.value = ""
-                } else {
-                    notification("Can't link; no repeats allowed.", 5)
-                }
-            } else {
-               notification("Can't link; first letter of answer doesn't match last letter of previous word.", 5)
-            }
+    const wordObj = await Word.New(input.value.toLowerCase())
+    for(const {check, error} of rules){
+        if(!check(wordObj)){
+            return notification(error, 5)
         }
     }
+    currentLink.push(wordObj.get_word())
+    link.textContent = link.textContent + wordObj.get_word().toUpperCase() + " -> "
+    link.scrollLeft = link.scrollWidth
+    input.value = ""
 })
 
 newLink()
