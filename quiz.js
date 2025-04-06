@@ -3,7 +3,7 @@
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js"
 import {getDatabase, ref, get, update} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js"
 import {getAuth, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js"
-import {WordGenerator} from "./word.js"
+import Word from "./word.js"
 import notification from "./notification.js"
 
 // Your web app's Firebase configuration
@@ -21,8 +21,6 @@ const app = initializeApp(firebaseConfig)
 const auth = getAuth()
 const db = getDatabase()
 
-const wordGenerator = new WordGenerator()
-const dictionary = new Dictionary()
 const timer = document.getElementById("timer")
 const start_button = document.getElementById("start_button")
 const quiz_container = document.getElementById("quiz_container")
@@ -31,7 +29,10 @@ const word_question = document.getElementById("word_question")
 const results = document.getElementById("results")
 
 let points = 0
+let streak = 0
 let questions = 0
+let correct_answer = null
+let can_answer = false
 
 function sleep(seconds) {
     return new Promise(function(resolve){
@@ -40,39 +41,38 @@ function sleep(seconds) {
 }
 
 function correct(){
-    points += 1
+    can_answer = false
+    streak += 1
+    points += (1 + streak)
     questions += 1
-    notification("Correct!", 5, "var(--success-green)")
+    notification("Correct! Streak: " + streak, 5, "var(--success-green)")
     new_question()
 }
 
 function incorrect(){
+    can_answer = false
+    streak = 0
     questions += 1
-    notification("Incorrect...", 5, "var(--error-red)")
+    notification("Incorrect... streak lost.", 5, "var(--error-red)")
     new_question()
 }
 
 async function new_question(){
-    let answer_word = await Word.New()
-    let correct_index = parseInt(Math.random()*4)
-    word_question.textContent = answer_word.get_word()
-
+    word_question.innerHTML = '<div id="spinner" class="spinner-border" role="status""></div>'
     for(let i = 0; i < 4; i++){
         let choice = document.getElementById("choice-" + String(i + 1))
-        choice.removeEventListener("click", correct)
-        choice.removeEventListener("click", incorrect)
-
-        if(i != correct_index){
-            let wordObj = await Word.New()
-            choice.innerHTML = String(wordObj.get_definitions()[0])
-            choice.removeEventListener("click", incorrect)
-            choice.addEventListener("click", incorrect)
-        }
+        choice.textContent = "..."
     }
-
-    let correct_choice = document.getElementById("choice-" + String(correct_index + 1))
-    correct_choice.innerHTML = String(answer_word.get_word())
-    correct_choice.addEventListener("click", correct)
+    let words = [await Word.New(), await Word.New(), await Word.New(), await Word.New()]
+    let rand = parseInt(Math.random()*4)
+    word_question.textContent = words[rand].get_word()
+    correct_answer = words[rand].get_definitions()
+    console.log(correct_answer)
+    for(let i = 0; i < 4; i++){
+        let choice = document.getElementById("choice-" + String(i + 1))
+        choice.textContent = words[i].get_definitions()
+    }
+    can_answer = true
 }
 
 async function new_game(length){
@@ -109,6 +109,20 @@ async function new_game(length){
             })
         })
     }
+}
+
+for(let i = 0; i < 4; i++){
+    let choice = document.getElementById("choice-" + String(i + 1))
+    choice.addEventListener("click", function(){
+        if(can_answer){
+            console.log(choice.textContent)
+            if(choice.textContent == correct_answer){
+                correct()
+            } else {
+                incorrect()
+            }
+        }
+    })
 }
 
 start_button.addEventListener("click", function(){

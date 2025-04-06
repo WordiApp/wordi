@@ -23,6 +23,15 @@ body{
   background: var(--tan) !important;
 }
 
+.dropdown-menu{
+    background-color: var(--beige) !important;
+}
+
+.dropdown-menu *{
+    background-color: var(--beige) !important;
+    color: var(--black) !important;
+}
+
 /* Notification System */
 .notifications{
     position: fixed;

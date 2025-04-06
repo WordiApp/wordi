@@ -27,6 +27,9 @@ const directions = [
     [1, 1], [-1, 1], [-1, -1], [1, -1] // NE, NW, SW, SE
 ]
 
+const start_button = document.getElementById("start_button")
+const game_container = document.getElementById("game_container")
+const search_container = document.getElementById("search_container")
 const selected_letters = document.getElementById("selected_letters")
 const letter_grid = document.getElementById("letter_grid")
 const find_word = document.getElementById("find_word")
@@ -34,7 +37,7 @@ const find_word = document.getElementById("find_word")
 let selected = []
 let lines = []
 let letters = ""
-let current_word = ""
+let current_word = null
 let mouseDown = false
 let canSearch = true
 //----------------Functions: Grid Generation----------------//
@@ -199,9 +202,9 @@ function clearSelection(){
             if(auth.currentUser.uid){
                 get(ref(db, "userdata/" + auth.currentUser.uid + "/score")).then(function(snapshot){
                     update(ref(db, "userdata/" + auth.currentUser.uid), {
-                        score: snapshot.val() + 2
+                        score: snapshot.val() + 5
                     }).then(function(){
-                        notification("You earned " + 2 + " points!", 5)
+                        notification("You earned " + 5 + " points!", 5)
                      }).catch(function(err){
                         notification("Error: " + err, 5, "var(--error-red)")
                     })
@@ -297,4 +300,8 @@ window.addEventListener("resize", function redraw(){
     }
 })
 
-newSearch(5, 10)
+start_button.addEventListener("click", function(){
+    game_container.style.display = "none"
+    search_container.style.display = "block"
+    newSearch(10, 8)
+})

@@ -8,14 +8,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,450;1,450&family=Roboto+Slab:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     <!--CSS-->
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="dictionary.css">
+    <link rel="stylesheet" href="wordsearch.css">
     <!--Bootstrap-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <!--Script-->
-    <script src="dictionary.js" type="module"></script>
-    <title>Wordi | Dictionary</title>
+    <!--Scripts-->
+    <script src="wordsearch.js" type="module" defer></script>
+    <title>Word Search | Wordi</title>
+
+    
 </head>
 <body>
     <!--Navbar-->
@@ -34,7 +36,7 @@
                         <a class="nav-link" aria-current="page" href="dashboard.html"><i class="bi bi-clipboard-data"></i> Dashboard</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-controller"></i> Games
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -44,7 +46,7 @@
                         </ul>
                       </li>
                     <li class="nav-item"></li>
-                        <a class="nav-link active" href="dictionary.html"><i class="bi bi-journal-bookmark-fill"></i> Dictionary</a>
+                        <a class="nav-link" href="dictionary.html"><i class="bi bi-journal-bookmark-fill"></i> Dictionary</a>
                     </li>
                     <li class="nav-item"></li>
                         <a class="nav-link" href="account.html"><i class="bi bi-person"></i> Account</a>
@@ -53,50 +55,23 @@
             </div>
         </div>
     </nav>
-    <!--Title-->
     <div id="title">
-        <h1 class="text-center mb-1">Wordi Dicitonary</h1>
-        <h5 class="text-center mb-1">Look up words, learn, and earn points!</h5>
+        <h1 class="text-center mb-1">Wordi Games</h1>
+        <h5 class="text-center mb-1">Enhance your vocabulary and have fun along the way!</h5>
     </div>
-    <!--Dictionary-->
-    <div id="container">
-        <div class="dictionary_container">
-            <h2 class="text-center mb-2">Dictionary Search</h2>
-            <div class="input-group mb-3">
-                <input type="text" id="word_input" class="form-control" placeholder="Enter a word to look up" autofocus>
-                <div class="input-group-append">
-                    <button class="btn btn-primary" type="button" id="search_button">Look Up</button>
-                    <button class="btn btn-secondary" type="button" id="random_button">Random</button>
-                </div>
-            </div>
-        
-            <div class="definition_result">
-                <div id="spinner" class="spinner-border" role="status" style="display: none;"></div>
-                <div id="word_definition" class="mt-3"></div>
-            </div>
-        </div>
-    
-        <div class="history_container">
-            <h2 class="text-center mb-2">Search History</h2>
-            <div class="card_container" id="word_history"></div>
-        </div>
-    </div>
+    <div id="game_container" style="display: flex;">
+        <h2 style="font-size: 50px;"><b>Word Search</b></h2>
+        <div style="font-size: 18px;">Find words in grids full of letters!</div>
+        <button class="btn btn-success" id="start_button">Start</button>
+        <div id="spinner" class="spinner-border" role="status" style="display: none; margin-top: 10px;"></div>
+      </div>
 
-    <div class="modal fade" id="word_modal" tabindex="-1" aria-labelledby="word_modal" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="word_modal">New word!</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="definition_body">
-                    <div id="word"></div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="login_submit">Close</button>
-                </div>
-            </div>
-        </div>
+    <div id="search_container" draggable="false" style="display: none;">
+        <div id="selected_letters">...</div>
+        <hr>
+        <div id="letter_grid" draggable="false"></div>
+        <hr>
+        <div id="find_word">Find: This Word</div>
     </div>
 </body>
 </html>
