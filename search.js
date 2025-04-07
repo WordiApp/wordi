@@ -36,10 +36,10 @@ const find_word = document.getElementById("find_word")
 //----------------Variables----------------//
 let selected = []
 let lines = []
-let letters = ""
+let letters = "a"
 let current_word = null
 let mouseDown = false
-let canSearch = true
+let canSearch = false
 //----------------Functions: Grid Generation----------------//
 // Fisher-Yates Shuffle Algorithm
 function shuffle(arr){
@@ -160,7 +160,7 @@ function generateGrid(word, rows, cols){
         let yL = (height - gap*(cols-1))/cols
         let aText = Math.pow(Math.min(xL, yL), 2)
         let fontSize = aText/40
-        console.log(fontSize)
+        
         letter_grid.style.setProperty("--letter-size", fontSize)        
         letter_grid.style.setProperty("--rows", rows)
         letter_grid.style.setProperty("--cols", cols)
@@ -175,6 +175,7 @@ async function newSearch(rows, cols){
     const word = await Word.New()
     find_word.textContent = "Find: " + word.get_word().toUpperCase()
     generateGrid(word.get_word(), rows, cols)
+    canSearch = true
 }
 //----------------Functions: Drag System----------------//
 function clearSelection(){
@@ -212,8 +213,7 @@ function clearSelection(){
             }
             setTimeout(function(){
                 clearElements()
-                newSearch()
-                canSearch = true
+                newSearch(10, 8)
             }, 2000)
         } else {
             clearElements()
