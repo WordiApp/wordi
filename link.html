@@ -40,7 +40,7 @@
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                           <li><a class="dropdown-item" href="quiz.html"><i class="bi bi-patch-question"></i> Quiz</a></li>
                           <li><a class="dropdown-item" href="search.html"><i class="bi bi-search"></i> Search</a></li>
-                          <li><a class="dropdown-item" href="#"><i class="bi bi-link"></i> Link</a></li>
+                          <li><a class="dropdown-item" href="link.html"><i class="bi bi-link"></i> Link</a></li>
                         </ul>
                       </li>
                     <li class="nav-item"></li>
@@ -67,8 +67,12 @@
 
     <div id="link_container" style="display: none;">
         <h2 id="link"><b></b></h2>
-        <input type="text" id="word_input" placeholder="Type in a word...">
-        <button class="btn btn-success" id="submit_button">Submit</button>
+        <div id="answer_container">
+            <input type="text" id="word_input" placeholder="Type in a word...">
+            <button class="btn btn-success" id="submit_button"><i class="bi bi-link"></i></button>
+        </div>
+        <div id="info">Your next word must be X characters long</div>
+        <div id="strikes">Strikes Remaining: X X X</div>
     </div>
 
 </body>
