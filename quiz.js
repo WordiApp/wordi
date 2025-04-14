@@ -29,7 +29,6 @@ const word_question = document.getElementById("word_question")
 const results = document.getElementById("results")
 
 let points = 0
-let streak = 0
 let questions = 0
 let correct_answer = null
 let can_answer = false
@@ -43,9 +42,9 @@ function sleep(seconds) {
 function correct(){
     can_answer = false
     streak += 1
-    points += (1 + streak)
+    points += 1
     questions += 1
-    notification("Correct! Streak: " + streak, 5, "var(--success-green)")
+    notification("Correct!", 5, "var(--success-green)")
     new_question()
 }
 
@@ -53,7 +52,7 @@ function incorrect(){
     can_answer = false
     streak = 0
     questions += 1
-    notification("Incorrect... streak lost.", 5, "var(--error-red)")
+    notification("Incorrect...", 5, "var(--error-red)")
     new_question()
 }
 

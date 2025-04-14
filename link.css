@@ -102,7 +102,7 @@
   font-size: 1rem;
 }
 
-  #quiz_container {
+#link_container {
   background-color: var(--white);
   width: 90%;
   margin-left: auto;
@@ -125,7 +125,7 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  }
+}
 
   .word-display {
     font-size: 1.5rem;

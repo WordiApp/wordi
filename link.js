@@ -32,6 +32,9 @@ const lengthRequirements = {
 const link = document.getElementById("link")
 const input = document.getElementById("word_input")
 const submit = document.getElementById("submit_button")
+const game_container = document.getElementById("game_container")
+const link_container = document.getElementById("link_container")
+const start_button = document.getElementById("start_button")
 
 let currentLink = []
 
@@ -78,5 +81,12 @@ submit.addEventListener("click", async function(){
     link.scrollLeft = link.scrollWidth
     input.value = ""
 })
+
+start_button.addEventListener("click", function(){
+    game_container.style.display = "none"
+    link_container.style.display = "flex"
+})
+
+
 
 newLink()
