@@ -43,8 +43,8 @@
 }
 
 .square {
-    width: 30vw;
-    height: 30vw;
+    width: 35vw;
+    height: 35vw;
     max-height: 100%;
     max-width: 100%;
     max-width: 175px;
@@ -128,12 +128,12 @@
 /* Responsive Design */
 @media (max-width: 768px) {
     .wide, .wider, .widest {
-        grid-column: span 4;
+        grid-column: span 3;
     }
 
     .stack {
         flex-direction: row;
-        grid-column: span 4;
+        grid-column: span 3;
         max-height: 200px;
     }
 

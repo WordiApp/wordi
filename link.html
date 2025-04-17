@@ -66,14 +66,14 @@
     </div>
 
     <div id="link_container" style="display: none;">
-        <h2 id="link"><b></b></h2>
+        <div id="linkLength">Link Length: 10</div>
+        <div id="link"></div>
         <div id="answer_container">
-            <input type="text" id="word_input" placeholder="Type in a word...">
+            <input type="text" id="word_input" placeholder="Type in a word..." autocomplete="off">
             <button class="btn btn-success" id="submit_button"><i class="bi bi-link"></i></button>
         </div>
-        <div id="info">Your next word must be X characters long</div>
+        <div id="requiredLength">Your next word must be # characters long</div>
         <div id="strikes">Strikes Remaining: X X X</div>
     </div>
-
 </body>
 </html>

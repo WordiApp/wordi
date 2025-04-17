@@ -41,7 +41,6 @@ function sleep(seconds) {
 
 function correct(){
     can_answer = false
-    streak += 1
     points += 1
     questions += 1
     notification("Correct!", 5, "var(--success-green)")
@@ -50,7 +49,6 @@ function correct(){
 
 function incorrect(){
     can_answer = false
-    streak = 0
     questions += 1
     notification("Incorrect...", 5, "var(--error-red)")
     new_question()

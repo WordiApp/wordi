@@ -26,6 +26,7 @@ const definition_area = document.getElementById("word_definition")
 const word_history = document.getElementById("word_history")
 const search_button = document.getElementById("search_button")
 const random_button = document.getElementById("random_button")
+const searchbar = document.getElementById("searchbar")
 
 let previous_word = ""
 //----------------Load----------------//
@@ -43,8 +44,9 @@ onAuthStateChanged(auth, async function (user) {
                         let card = document.createElement("div")
                         card.classList.add("word_card")
                         card.textContent = data[i]
-                        card.addEventListener("click", function () {
-                            search_word(data[i], false)
+                        card.addEventListener("click", async function () {
+                            const wordObj = await Word.New(data[i]) 
+                            display_word(wordObj, false)
                             window.scrollTo({top: 0, left: 0, behavior: "smooth"})
                         })
                         word_history.appendChild(card)
@@ -53,9 +55,8 @@ onAuthStateChanged(auth, async function (user) {
             }
         }
         //----------------Search Word----------------//
-        async function search_word(input, evaluate) {
+        async function display_word(wordObj, evaluate) {
             spinner.style.display = "block"
-            const wordObj = await Word.New(input)
             let word = wordObj.get_word()
             let definitions = wordObj.get_definitions()
 
@@ -126,10 +127,11 @@ onAuthStateChanged(auth, async function (user) {
         }
         //----------------Buttons----------------//
         search_button.addEventListener("click", async function () {
-            let val = document.getElementById("word_input").value
+            let val = searchbar.value
             search_button.disabled = true
             if (val != "") {
-                search_word(val.toLowerCase())
+                const wordObj = await Word.New(val.toLowerCase())
+                search_word(wordObj)
             } else {
                 notification("Please enter a word!")
             }
@@ -140,7 +142,8 @@ onAuthStateChanged(auth, async function (user) {
 
         random_button.addEventListener("click", async function () {
             document.getElementById("random_button").disabled = true
-            search_word(wordGenerator.generate())
+            const wordObj = await Word.New()
+            display_word(wordObj)
             setTimeout(function () {
                 document.getElementById("random_button").disabled = false
             }, 1000)
@@ -149,7 +152,8 @@ onAuthStateChanged(auth, async function (user) {
         refresh_word_history()
         //----------------Dashboard Lookup----------------//
         if (localStorage["word_to_look_up"] != undefined) {
-            search_word(localStorage["word_to_look_up"], false)
+            const wordObj = await Word.New(localStorage["word_to_look_up"])
+            display_word(wordObj, false)
             delete localStorage["word_to_look_up"]
         }
     }
