@@ -42,7 +42,6 @@ document.getElementById("access_form").addEventListener("submit", function (even
     if (register_activated) {
         createUserWithEmailAndPassword(auth, email, password)
             .then(function (user_credential) {
-                console.log(user_credential["user"].uid)
                 set(ref(db, "userdata/" + user_credential["user"].uid), {
                     username: name,
                     email: email,
@@ -54,11 +53,10 @@ document.getElementById("access_form").addEventListener("submit", function (even
                 })
                 setTimeout(function(){
                     document.location.href = "dashboard.html"
-                }, 2500)
+                }, 1000)
             })
             .catch(function (err) {
                 notification("Register Error: " + err, 5, "var(--error-red)")
-                console.log(err)
             })
     } else {
         signInWithEmailAndPassword(auth, email, password)
@@ -67,7 +65,6 @@ document.getElementById("access_form").addEventListener("submit", function (even
             })
             .catch(function (err) {
                 notification("Login Error: " + err, 5, "var(--error-red)")
-                console.log(err)
             })
     }
     event.preventDefault()

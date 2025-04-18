@@ -144,10 +144,10 @@ function generateGrid(word, rows, cols){
                 div.id =  i + "," + k
                 div.classList.add("letter")
                 div.addEventListener("mousedown", function(){
-                    select_element(div)
+                    selectElement(div)
                 })
                 div.addEventListener("touchstart", function(){
-                    select_element(div)
+                    selectElement(div)
                 })
                 letterGrid.appendChild(div)
             }
@@ -173,8 +173,8 @@ function generateGrid(word, rows, cols){
 
 async function newSearch(rows, cols){
     const word = await Word.New()
-    findWord.textContent = "Find: " + word.get_word().toUpperCase()
-    generateGrid(word.get_word(), rows, cols)
+    findWord.textContent = "Find: " + word.getWord().toUpperCase()
+    generateGrid(word.getWord(), rows, cols)
     canSearch = true
 }
 //----------------Functions: Drag System----------------//
@@ -221,19 +221,19 @@ function clearSelection(){
     }
 }
 
-function is_touching(first_id, second_id){
-    let [row_first, column_first] = first_id.split(",").map(Number)
-    let [row_second, column_second] = second_id.split(",").map(Number)
-    if(Math.abs(row_second - row_first) <= 1 && Math.abs(column_second - column_first) <= 1){
+function isTouching(firstID, secondID){
+    let [rowFirst, columnFirst] = firstID.split(",").map(Number)
+    let [rowSecond, columnSecond] = secondID.split(",").map(Number)
+    if(Math.abs(rowSecond - rowFirst) <= 1 && Math.abs(columnSecond - columnFirst) <= 1){
         return true
     }
     return false
 }
 
-function select_element(div){
+function selectElement(div){
     if(canSearch){
         const position = selected.indexOf(div)
-        const touching = (selected.length > 0 && is_touching(selected[selected.length - 1].id, div.id))
+        const touching = (selected.length > 0 && isTouching(selected[selected.length - 1].id, div.id))
         if(position == -1){
             if(selected.length == 0 || touching){
                 letters += div.textContent
@@ -270,7 +270,7 @@ letterGrid.addEventListener("mousemove", function(e){
 
     const element = document.elementFromPoint(e.clientX, e.clientY)
     if(element.parentElement == letterGrid){
-        select_element(element)
+        selectElement(element)
     }
 })
 
@@ -289,7 +289,7 @@ letterGrid.addEventListener("touchmove", function(e){
     const touch = e.touches[0]
     const element = document.elementFromPoint(touch.clientX, touch.clientY)
     if(element != null && element.parentElement == letterGrid){
-        select_element(element)
+        selectElement(element)
     }
 }, {passive: false})
 

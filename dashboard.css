@@ -67,7 +67,7 @@
 }
 
 /* Card Styling */
-.word_card {
+.word-card {
     width: 98%;
     height: 40px;
     background-color: #ffffff;
@@ -83,12 +83,12 @@
     margin-bottom: 10px;
 }
 
-.word_card:hover {
+.word-card:hover {
     background-color: var(--cardboard);
     color: transparent;
 }
 
-.word_card::after {
+.word-card::after {
     width: 100%;
     content: "View Definition";
     word-break: keep-all;
@@ -102,7 +102,7 @@
     pointer-events: none;
 }
 
-.word_card:hover::after {
+.word-card:hover::after {
     opacity: 1;
 }
 
@@ -113,7 +113,7 @@
     max-height: 275px;
 }
 
-#word_history {
+#word-history {
     display: block;
     overflow: auto;
     max-height: 275px;

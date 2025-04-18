@@ -22,89 +22,88 @@ const auth = getAuth()
 const db = getDatabase()
 //----------------Elements & Variables----------------//
 const spinner = document.getElementById("spinner")
-const definition_area = document.getElementById("word_definition")
-const word_history = document.getElementById("word_history")
-const search_button = document.getElementById("search_button")
-const random_button = document.getElementById("random_button")
+const result = document.getElementById("result")
+const wordHistory = document.getElementById("word-history")
+const searchButton = document.getElementById("search-button")
+const randomButton = document.getElementById("random-button")
 const searchbar = document.getElementById("searchbar")
 
-let previous_word = ""
+let previousWord = ""
 //----------------Load----------------//
 onAuthStateChanged(auth, async function (user) {
     if (user == null) {
         window.location.href = "index.html"
     } else {
         //----------------Search History----------------//
-        function refresh_word_history() {
+        function refreshWordHistory() {
             if (user != null) {
                 get(ref(db, "userdata/" + user.uid)).then(async function (snapshot) {
                     let data = JSON.parse(snapshot.val()["word_history"])
-                    word_history.innerHTML = ""
+                    wordHistory.innerHTML = ""
                     for (let i = 0; i < Math.min(100, data.length); i++) {
                         let card = document.createElement("div")
-                        card.classList.add("word_card")
+                        card.classList.add("word-card")
                         card.textContent = data[i]
                         card.addEventListener("click", async function () {
                             const wordObj = await Word.New(data[i]) 
-                            display_word(wordObj, false)
+                            displayWord(wordObj, false)
                             window.scrollTo({top: 0, left: 0, behavior: "smooth"})
                         })
-                        word_history.appendChild(card)
+                        wordHistory.appendChild(card)
                     }
                 })
             }
         }
-        //----------------Search Word----------------//
-        async function display_word(wordObj, evaluate) {
+        //----------------Display Word----------------//
+        async function displayWord(wordObj, evaluate) {
             spinner.style.display = "block"
-            let word = wordObj.get_word()
-            let definitions = wordObj.get_definitions()
+            let word = wordObj.getWord()
+            let definitions = wordObj.getDefinitions()
 
             if (document.getElementById("word") != null) {
                 document.getElementById("word").remove()
             }
-            let word_div = document.createElement("div")
-            word_div.id = "word"
+            const wordContainer = document.createElement("div")
+            wordContainer.id = "word"
 
-            let defined_word = document.createElement("div")
-            defined_word.classList.add("defined_word")
-            defined_word.textContent = word
-            word_div.append(defined_word)
+            const definitionContainer = document.createElement("div")
+            definitionContainer.classList.add("defined-word")
+            definitionContainer.textContent = word
+            wordContainer.append(definitionContainer)
 
             if (definitions != null) {
                 definitions.forEach(function (definition) {
-                    let definition_div = document.createElement("div")
-                    definition_div.classList.add("definition")
-                    definition_div.textContent = definition
-                    word_div.append(definition_div)
+                    const definitionLine = document.createElement("div")
+                    definitionLine.classList.add("definition")
+                    definitionLine.textContent = definition
+                    wordContainer.append(definitionLine)
                 })
                 get(ref(db, "userdata/" + user.uid))
                     .then(function (snapshot) {
-                        let word_history = JSON.parse(snapshot.val()["word_history"])
-                        let current_words_searched = Number(snapshot.val()["words_searched"])
-                        let current_points = Number(snapshot.val()["score"])
-                        let added_points = 1
-                        if (word_history.includes(word) == false) {
-                            added_points = 2
-                            word_history.unshift(word)
+                        let wordHistory = JSON.parse(snapshot.val()["word_history"])
+                        let wordsSearched = Number(snapshot.val()["words_searched"])
+                        let points = Number(snapshot.val()["score"])
+                        let addedPoints = 1
+                        if (wordHistory.includes(word) == false) {
+                            addedPoints = 2
                         } else {
-                            word_history.splice(word_history.indexOf(word), 1)
-                            word_history.unshift(word)
+                            wordHistory.splice(wordHistory.indexOf(word), 1)
                         }
-                        if (evaluate == false || previous_word == word) {
-                            added_points = 0
+                        wordHistory.unshift(word)
+                        if (evaluate == false || previousWord == word) {
+                            addedPoints = 0
                         } else {
-                            previous_word = word
+                            previousWord = word
                         }
                         update(ref(db, "userdata/" + user.uid), {
-                            score: current_points + added_points,
-                            words_searched: current_words_searched + 1,
-                            word_history: JSON.stringify(word_history),
+                            score: points + addedPoints,
+                            words_searched: wordsSearched + 1,
+                            word_history: JSON.stringify(wordHistory),
                         })
                             .then(function () {
-                                refresh_word_history()
-                                if (added_points > 0) {
-                                    notification("You earned " + added_points + " point(s)! 🪙", 5)
+                                refreshWordHistory()
+                                if (addedPoints > 0) {
+                                    notification("You earned " + addedPoints + " point(s)!", 5)
                                 }
                             })
                             .catch(function (err) {
@@ -115,45 +114,44 @@ onAuthStateChanged(auth, async function (user) {
                         notification("Error1: " + err, 5)
                     })
             } else {
-                let no_definition_div = document.createElement("div")
-                no_definition_div.classList.add("definition")
-                no_definition_div.textContent = "No definition found for this word."
-                word_div.append(no_definition_div)
+                const noDefinition = document.createElement("div")
+                noDefinition.classList.add("definition")
+                noDefinition.textContent = "No definition found for this word."
+                wordContainer.append(noDefinition)
             }
-            definition_area.textContent = ""
-            definition_area.append(word_div)
-
+            result.textContent = ""
+            result.append(wordContainer)
             spinner.style.display = "none"
         }
         //----------------Buttons----------------//
-        search_button.addEventListener("click", async function () {
+        searchButton.addEventListener("click", async function () {
             let val = searchbar.value
-            search_button.disabled = true
+            searchButton.disabled = true
             if (val != "") {
                 const wordObj = await Word.New(val.toLowerCase())
-                search_word(wordObj)
+                displayWord(wordObj)
             } else {
                 notification("Please enter a word!")
             }
             setTimeout(function () {
-                document.getElementById("search_button").disabled = false
+                searchButton.disabled = false
             }, 100)
         })
 
-        random_button.addEventListener("click", async function () {
-            document.getElementById("random_button").disabled = true
+        randomButton.addEventListener("click", async function () {
+            randomButton.disabled = true
             const wordObj = await Word.New()
-            display_word(wordObj)
+            displayWord(wordObj)
             setTimeout(function () {
-                document.getElementById("random_button").disabled = false
+                randomButton.disabled = false
             }, 1000)
         })
 
-        refresh_word_history()
+        refreshWordHistory()
         //----------------Dashboard Lookup----------------//
         if (localStorage["word_to_look_up"] != undefined) {
             const wordObj = await Word.New(localStorage["word_to_look_up"])
-            display_word(wordObj, false)
+            displayWord(wordObj, false)
             delete localStorage["word_to_look_up"]
         }
     }

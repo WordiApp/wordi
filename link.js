@@ -26,38 +26,38 @@ let lengthRequrirement = 3
 let strikes = 3
 
 const link = document.getElementById("link")
-const requiredLength = document.getElementById("requiredLength")
+const requiredLength = document.getElementById("required-length")
 const strikesDisplay = document.getElementById("strikes")
 const results = document.getElementById("results")
-const linkLength = document.getElementById("linkLength")
-const input = document.getElementById("word_input")
-const submit = document.getElementById("submit_button")
-const game_container = document.getElementById("game_container")
-const link_container = document.getElementById("link_container")
-const start_button = document.getElementById("start_button")
+const linkLength = document.getElementById("link-length")
+const input = document.getElementById("word-input")
+const submit = document.getElementById("submit-button")
+const linkContainer = document.getElementById("link-container")
+const startContainer = document.getElementById("start-container")
+const startButton = document.getElementById("start-button")
 
 const rules = [
     {
-        check: (wordObj) => wordObj.get_definitions() != null,
+        check: (wordObj) => wordObj.getDefinitions() != null,
         error: "Can't link; this word does not exist."
     },
     {
-        check: (wordObj) => wordObj.get_word()[0] == getLinkingLetter(),
+        check: (wordObj) => wordObj.getWord()[0] == getLinkingLetter(),
         error: "Can't link; word must start with the last letter of the previous word."
     },
     {
-        check: (wordObj) => wordObj.get_word().length >= lengthRequrirement,
+        check: (wordObj) => wordObj.getWord().length >= lengthRequrirement,
         error: "Can't link; your word is too short."
     },
     {
-        check: (wordObj) => currentLink.indexOf(wordObj.get_word()) == -1,
+        check: (wordObj) => currentLink.indexOf(wordObj.getWord()) == -1,
         error: "Can't link; no repeats allowed."
     }
 ]
 
 function getLinkingLetter(){
-    const previous_word = currentLink[currentLink.length-1]
-    return previous_word[previous_word.length-1]
+    const previousWord = currentLink[currentLink.length-1]
+    return previousWord[previousWord.length-1]
 }
 
 function addLink(word){
@@ -84,7 +84,7 @@ async function newLink(){
     currentLink = []
     strikes = 3
     strikesDisplay.innerHTML = "Strikes Remaining: <i>" + "X ".repeat(strikes).trim() + "</i>"
-    const startingWord = (await Word.New()).get_word().toLowerCase()
+    const startingWord = (await Word.New()).getWord().toLowerCase()
     addLink(startingWord)
 }
 
@@ -97,8 +97,8 @@ submit.addEventListener("click", async function(){
             strikesDisplay.textContent = "Strikes Remaining: " + "X ".repeat(strikes).trim()
             if(strikes <= 0){
                 notification("GAME OVER!! | " + error, 5, "var(--error-red)")
-                game_container.style.display = "flex"
-                link_container.style.display = "none"
+                startContainer.style.display = "flex"
+                linkContainer.style.display = "none"
                 results.style.display = "block"
                 results.textContent = "Previous Link Length: " + currentLink.length
                 if(currentLink.length > 0){
@@ -118,11 +118,11 @@ submit.addEventListener("click", async function(){
             return
         }
     }
-    addLink(wordObj.get_word())
+    addLink(wordObj.getWord())
 })
 
-start_button.addEventListener("click", function(){
-    game_container.style.display = "none"
-    link_container.style.display = "flex"
+startButton.addEventListener("click", function(){
+    startContainer.style.display = "none"
+    linkContainer.style.display = "flex"
     newLink()
 })

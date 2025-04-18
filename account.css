@@ -2,7 +2,7 @@
     margin-top: 15px;
 }
 
-#account_container{
+#account-container{
     background-color: var(--white);
     width: 90%;
     margin-left: auto;
@@ -10,25 +10,91 @@
     margin-top: 25px;
     padding: 2rem;
     border-radius: 1rem;
-    max-width: 525px;
-    height: 525px;
+    height: 600px;
+    max-width: 600px;
     position: relative;
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  
+    
     display: flex;
     flex-direction: column;
+    font-size: 20px;
+    overflow-y: auto;
 }
 
-#account_information{
+#account-information{
   margin-bottom: 10px;
 }
+
+#top{
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.update{
+    display: flex;
+    align-items: center;
+}
+
+.section{
+    margin-bottom: 10px;
+}
+
+.info{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 5px;
+    word-break: break-all;
+}
+
 
 .edit{
     background-color: var(--black) !important;
     border: var(--black) solid !important;
+    aspect-ratio: 1/1;
+    height: 30px;
+    width: 30px;
+    font-size: 15px !important;
+    padding: 0 !important;
 }
 
-#signout_button{
+.update{
+    display: none;
+}
+
+.input{
+    width: 70% !important;
+}
+
+.confirm{
+    background-color: var(--success-green) !important;
+    border: var(--success-green) solid !important;
+    height: 30px;
+    width: 30px;
+    aspect-ratio: 1/1;
+    font-size: 25px !important;
+    padding: 0 !important;
+}
+
+#signout-button{
     background-color: var(--error-red) !important;
     border: var(--error-red) solid !important;
+    align-self: center;
+    width: 100%;
+    margin-top: auto;
+    margin-bottom: 10px;
+    font-size: 18px;
 }
+
+#delete-button{
+    background-color: var(--deep-red) !important;
+    border: var(--deep-red) solid !important;
+    align-self: center;
+    width: 100%;
+    font-size: 18px;
+}
+
+
+

@@ -1,71 +1,46 @@
-#title{
+/* ── Title ── */
+#title {
     margin-top: 15px;
 }
-
-@keyframes fadeIn {
-  0% {
+  
+/* ── Game Container ── */
+#game-container {
+    background-color: var(--white);
+    width: 90%;
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 2rem;
+    border-radius: 1rem;
+    text-align: center;
+    height: 600px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     opacity: 0;
-    transform: translateY(-20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    animation: fade-in 0.5s forwards ease-in-out;
+    font-size: 1.5rem;
 }
 
-#game_container {
-  background-color: var(--white);
-  width: 90%;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 50px;
-  padding: 2rem;
-  border-radius: 1rem;
-  text-align: center;
-  max-width: 525px;
-  height: 525px;
-  position: relative;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  transform: translateY(-20px);
-  opacity: 0;
-  animation: fadeIn 0.5s forwards ease-in-out;
-  font-size: clamp(16px, calc(min(525px, 90vw) / 20), 26px);
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+/* ── Fade‑in Keyframes ── */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+}
 }
 
-#game_container > div {
-  margin-bottom: 5px;
-  font-size: 1rem;
-}
-
-#link_container {
-  background-color: var(--white);
-  width: 90%;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 50px;
-  padding: 2rem;
-  border-radius: 1rem;
-  text-align: center;
-  max-width: 525px;
-  height: 525px;
-  position: relative;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  transform: translateY(-20px);
-  opacity: 0;
-  animation: fadeIn 0.5s forwards ease-in-out;
-  font-size: clamp(16px, calc(min(525px, 90vw) / 20), 26px);
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+/* ── Screens ── */
+#start-container,
+#link-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
 }
 
   .word-display {
@@ -157,7 +132,7 @@
     margin-top: 20px;
 }
 
-#requiredLength{
+#required-length{
     font-size: 16px;
 }
 
@@ -165,11 +140,33 @@
     font-size: 16px;
 }
 
-#linkLength{
+#link-length{
     font-size: 16px;
     width: 90%;
 }
 
-#submit_button{
+#submit-button{
     font-size: 20px;
+}
+
+/*---- Start Button ----*/
+#start-button {
+    width: 100px;
+    margin-top: 20px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1.35rem;
+    background: var(--success-green);
+    color: var(--white);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+#start-button:hover { 
+    transform: translateY(-2px); 
+}
+
+#start-button:active { 
+    transform: translateY(0); 
 }

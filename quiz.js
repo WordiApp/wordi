@@ -23,8 +23,8 @@ const db = getDatabase()
 //----------------Variables----------------//
 let points = 0
 let questions = 0
-let correct_answer = null
-let can_answer = false
+let correctAnswer = null
+let canAnswer = false
 
 const quizContainer = document.getElementById("quiz-container")
 const startContainer = document.getElementById("start-container")
@@ -40,21 +40,21 @@ function sleep(seconds) {
 }
 
 function correct(){
-    can_answer = false
+    canAnswer = false
     points += 1
     questions += 1
     notification("Correct!", 5, "var(--success-green)")
-    new_question()
+    newQuestion()
 }
 
 function incorrect(){
-    can_answer = false
+    canAnswer = false
     questions += 1
     notification("Incorrect...", 5, "var(--error-red)")
-    new_question()
+    newQuestion()
 }
 
-async function new_question(){
+async function newQuestion(){
     // Shows spinner
     wordQuestion.innerHTML = '<div id="spinner" class="spinner-border" role="status""></div>'
     // Makes all choices load
@@ -66,23 +66,23 @@ async function new_question(){
     let words = [await Word.New(), await Word.New(), await Word.New(), await Word.New()]
     // Picks a random word to be correct
     let rand = parseInt(Math.random()*4)
-    wordQuestion.textContent = words[rand].get_word()
-    correct_answer = words[rand].get_definitions()
+    wordQuestion.textContent = words[rand].getWord()
+    correctAnswer = words[rand].getDefinitions()
     // Shows all the definitions
     for(let i = 0; i < 4; i++){
         let choice = document.getElementById("choice-" + String(i + 1))
-        choice.textContent = words[i].get_definitions()
+        choice.textContent = words[i].getDefinitions()
     }
     // Allows the user to answer
-    can_answer = true
+    canAnswer = true
 }
 
-async function new_game(length){
+async function newGame(length){
     // Resets global variables
     points = 0
     questions = 0
     // Starts the question loop
-    new_question()
+    newQuestion()
     // Shows the quiz screen, hides the main screen
     quizContainer.style.display = "flex"
     startContainer.style.display = "none"
@@ -116,8 +116,8 @@ async function new_game(length){
 for(let i = 0; i < 4; i++){
     let choice = document.getElementById("choice-" + String(i + 1))
     choice.addEventListener("click", function(){
-        if(can_answer){
-            if(choice.textContent == correct_answer){
+        if(canAnswer){
+            if(choice.textContent == correctAnswer){
                 correct()
             } else {
                 incorrect()
@@ -127,5 +127,5 @@ for(let i = 0; i < 4; i++){
 }
 
 startButton.addEventListener("click", function(){
-    new_game(30)
+    newGame(30)
 })
