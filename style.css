@@ -43,14 +43,14 @@ body{
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    height: 205px;
+    height: 175px;
     justify-content: flex-end;
     gap: 10px;
     padding-bottom: 20px;
 }
 
 .notification{
-    padding: 15px;
+    padding: 10px;
     border-radius: 8px;
     background-color: var(--tan);
     color: rgb(20, 20, 20);

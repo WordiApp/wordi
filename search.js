@@ -27,17 +27,17 @@ const directions = [
     [1, 1], [-1, 1], [-1, -1], [1, -1] // NE, NW, SW, SE
 ]
 
-const start_button = document.getElementById("start_button")
-const game_container = document.getElementById("game_container")
-const search_container = document.getElementById("search_container")
-const selected_letters = document.getElementById("selected_letters")
-const letter_grid = document.getElementById("letter_grid")
-const find_word = document.getElementById("find_word")
+const startButton = document.getElementById("start-button")
+const startContainer = document.getElementById("start-container")
+const searchContainer = document.getElementById("search-container")
+const selectedLetters = document.getElementById("selected-letters")
+const letterGrid = document.getElementById("letter-grid")
+const findWord = document.getElementById("find-word")
 //----------------Variables----------------//
 let selected = []
 let lines = []
-let letters = "a"
-let current_word = null
+let letters = ""
+let currentWord = null
 let mouseDown = false
 let canSearch = false
 //----------------Functions: Grid Generation----------------//
@@ -130,7 +130,7 @@ function drawLine(element1, element2, relativeTo = document.body, line = null){
 }
 
 function generateGrid(word, rows, cols){
-    letter_grid.innerHTML = ""
+    letterGrid.innerHTML = ""
     let path = findPath(word.length, rows, cols)
     if(path != null){
         for(let i = 0; i < rows; i++){
@@ -149,22 +149,22 @@ function generateGrid(word, rows, cols){
                 div.addEventListener("touchstart", function(){
                     select_element(div)
                 })
-                letter_grid.appendChild(div)
+                letterGrid.appendChild(div)
             }
         }
-        let width = parseInt(window.getComputedStyle(letter_grid).width)
-        let height = parseInt(window.getComputedStyle(letter_grid).height)
-        let gap = parseInt(window.getComputedStyle(letter_grid).gap)
+        let width = parseInt(window.getComputedStyle(letterGrid).width)
+        let height = parseInt(window.getComputedStyle(letterGrid).height)
+        let gap = parseInt(window.getComputedStyle(letterGrid).gap)
 
         let xL = (width - gap*(rows-1))/rows
         let yL = (height - gap*(cols-1))/cols
         let aText = Math.pow(Math.min(xL, yL), 2)
         let fontSize = aText/40
         
-        letter_grid.style.setProperty("--letter-size", fontSize)        
-        letter_grid.style.setProperty("--rows", rows)
-        letter_grid.style.setProperty("--cols", cols)
-        current_word = word
+        letterGrid.style.setProperty("--letter-size", fontSize)        
+        letterGrid.style.setProperty("--rows", rows)
+        letterGrid.style.setProperty("--cols", cols)
+        currentWord = word
     } else {
         console.log("IMPOSSIBLE")
         window.location.reload()
@@ -173,7 +173,7 @@ function generateGrid(word, rows, cols){
 
 async function newSearch(rows, cols){
     const word = await Word.New()
-    find_word.textContent = "Find: " + word.get_word().toUpperCase()
+    findWord.textContent = "Find: " + word.get_word().toUpperCase()
     generateGrid(word.get_word(), rows, cols)
     canSearch = true
 }
@@ -189,15 +189,15 @@ function clearSelection(){
             lines.pop()
         }
         letters = ""
-        selected_letters.textContent = "..."
+        selectedLetters.textContent = "..."
     }
     if(canSearch){
-        if(letters.toLowerCase() == current_word.toLowerCase()){
+        if(letters.toLowerCase() == currentWord.toLowerCase()){
             canSearch = false
             for(let i = 0; i < selected.length; i++){
-                selected[i].style.backgroundColor = "Green"
+                selected[i].style.backgroundColor = "var(--success-green)"
                 if(i > 0){
-                    lines[i-1].style.backgroundColor = "Green"
+                    lines[i-1].style.backgroundColor = "var(--success-green)"
                 }
             }
             if(auth.currentUser.uid){
@@ -213,7 +213,7 @@ function clearSelection(){
             }
             setTimeout(function(){
                 clearElements()
-                newSearch(10, 8)
+                newSearch(9, 7)
             }, 2000)
         } else {
             clearElements()
@@ -239,7 +239,7 @@ function select_element(div){
                 letters += div.textContent
                 div.style.backgroundColor = "rgb(151, 172, 240)"
                 if(touching){
-                    drawLine(selected[selected.length - 1], div, letter_grid)
+                    drawLine(selected[selected.length - 1], div, letterGrid)
                 }
                 selected.push(div)
             }
@@ -252,7 +252,7 @@ function select_element(div){
                 lines.pop()
             }
         }
-        selected_letters.textContent = letters
+        selectedLetters.textContent = letters
     }
 }
 //----------------Listeners----------------//
@@ -265,11 +265,11 @@ document.addEventListener("mousedown", function(){
     mouseDown = true
 })
 
-letter_grid.addEventListener("mousemove", function(e){
+letterGrid.addEventListener("mousemove", function(e){
     if(!mouseDown){return}
 
     const element = document.elementFromPoint(e.clientX, e.clientY)
-    if(element.parentElement == letter_grid){
+    if(element.parentElement == letterGrid){
         select_element(element)
     }
 })
@@ -283,12 +283,12 @@ document.addEventListener("touchend", function(){
     clearSelection();
 }, { passive: true });
 
-letter_grid.addEventListener("touchmove", function(e){
+letterGrid.addEventListener("touchmove", function(e){
     if(!mouseDown){return}
     e.preventDefault()
     const touch = e.touches[0]
     const element = document.elementFromPoint(touch.clientX, touch.clientY)
-    if(element != null && element.parentElement == letter_grid){
+    if(element != null && element.parentElement == letterGrid){
         select_element(element)
     }
 }, {passive: false})
@@ -296,12 +296,12 @@ letter_grid.addEventListener("touchmove", function(e){
 window.addEventListener("resize", function redraw(){
     for(let i = 0; i < lines.length; i++){
         let splitID = lines[i].id.split("-")
-        drawLine(document.getElementById(splitID[0]), document.getElementById(splitID[1]), letter_grid, lines[i])
+        drawLine(document.getElementById(splitID[0]), document.getElementById(splitID[1]), letterGrid, lines[i])
     }
 })
 
-start_button.addEventListener("click", function(){
-    game_container.style.display = "none"
-    search_container.style.display = "block"
-    newSearch(10, 8)
+startButton.addEventListener("click", function(){
+    startContainer.style.display = "none"
+    searchContainer.style.display = "flex"
+    newSearch(9, 7)
 })

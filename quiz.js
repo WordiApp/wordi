@@ -20,19 +20,19 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const auth = getAuth()
 const db = getDatabase()
-
-const timer = document.getElementById("timer")
-const start_button = document.getElementById("start_button")
-const quiz_container = document.getElementById("quiz_container")
-const game_container = document.getElementById("game_container")
-const word_question = document.getElementById("word_question")
-const results = document.getElementById("results")
-
+//----------------Variables----------------//
 let points = 0
 let questions = 0
 let correct_answer = null
 let can_answer = false
 
+const quizContainer = document.getElementById("quiz-container")
+const startContainer = document.getElementById("start-container")
+const startButton = document.getElementById("start-button")
+const wordQuestion = document.getElementById("word-question")
+const timer = document.getElementById("timer")
+const results = document.getElementById("results")
+//----------------Functions----------------//
 function sleep(seconds) {
     return new Promise(function(resolve){
         setTimeout(resolve, seconds*1000)
@@ -55,20 +55,25 @@ function incorrect(){
 }
 
 async function new_question(){
-    word_question.innerHTML = '<div id="spinner" class="spinner-border" role="status""></div>'
+    // Shows spinner
+    wordQuestion.innerHTML = '<div id="spinner" class="spinner-border" role="status""></div>'
+    // Makes all choices load
     for(let i = 0; i < 4; i++){
         let choice = document.getElementById("choice-" + String(i + 1))
         choice.textContent = "..."
     }
+    // Generates 4 random words
     let words = [await Word.New(), await Word.New(), await Word.New(), await Word.New()]
+    // Picks a random word to be correct
     let rand = parseInt(Math.random()*4)
-    word_question.textContent = words[rand].get_word()
+    wordQuestion.textContent = words[rand].get_word()
     correct_answer = words[rand].get_definitions()
-    console.log(correct_answer)
+    // Shows all the definitions
     for(let i = 0; i < 4; i++){
         let choice = document.getElementById("choice-" + String(i + 1))
         choice.textContent = words[i].get_definitions()
     }
+    // Allows the user to answer
     can_answer = true
 }
 
@@ -79,10 +84,10 @@ async function new_game(length){
     // Starts the question loop
     new_question()
     // Shows the quiz screen, hides the main screen
-    quiz_container.style.display = "Block"
-    game_container.style.display = "None"
+    quizContainer.style.display = "flex"
+    startContainer.style.display = "none"
     // Timer that lasts for <length> seconds
-    await sleep(0.5)
+    await sleep(0.25)
     let counter = length
     while (counter > 0){
         timer.textContent = Math.floor(counter*100)/100 + "s"
@@ -90,8 +95,8 @@ async function new_game(length){
         counter -= 0.1
     }
     // Hides the quiz screen, goes back to main screen
-    quiz_container.style.display = "None"
-    game_container.style.display = "Flex"  
+    quizContainer.style.display = "none"
+    startContainer.style.display = "flex"  
     // Gives the user their final result 
     results.textContent = "Your Previous Score: " + (points + "/" + questions)
     // Adds points to user's account and notifies them
@@ -107,12 +112,11 @@ async function new_game(length){
         })
     }
 }
-
+//----------------Game Loop----------------//
 for(let i = 0; i < 4; i++){
     let choice = document.getElementById("choice-" + String(i + 1))
     choice.addEventListener("click", function(){
         if(can_answer){
-            console.log(choice.textContent)
             if(choice.textContent == correct_answer){
                 correct()
             } else {
@@ -122,6 +126,6 @@ for(let i = 0; i < 4; i++){
     })
 }
 
-start_button.addEventListener("click", function(){
+startButton.addEventListener("click", function(){
     new_game(30)
 })

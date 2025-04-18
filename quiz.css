@@ -1,198 +1,115 @@
-#title{
+/* ── Title ── */
+#title {
     margin-top: 15px;
 }
-
-/* Card Container */
-.card_container {
-    margin: 100px;
-    max-width: 600px;
-    height: 500px;
-    padding: 20px;
+  
+/* ── Game Container ── */
+#game-container {
     background-color: var(--white);
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 2rem;
+    border-radius: 1rem;
     text-align: center;
-    color: var(--black) ;
-
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
-    gap: 10px;
-    max-width: 100%;
-    overflow: auto;
-    padding: 5px;
+    height: 600px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    opacity: 0;
+    animation: fade-in 0.5s forwards ease-in-out;
+    font-size: 1.5rem;
 }
 
-/* Card Styling */
-.card {
-    max-width: 100%;
-    height: 40px;
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 20px;
+/* ── Fade‑in Keyframes ── */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+}
+}
+
+/* ── Screens ── */
+#start-container,
+#quiz-container {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    text-align: center;
-    cursor: pointer;
-    position: relative;
-}
-
-.card:hover {
-    background-color: var(--cardboard);
-    color: transparent;
-}
-
-.card::after {
     width: 100%;
-    content: "View Definition";
-    word-break: keep-all;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: black;
-    font-size: 0.9rem;
-    opacity: 0;
-    pointer-events: none;
+    height: 100%;
 }
 
-.card:hover::after {
-    opacity: 1;
-}
-
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-#game_container {
-  background-color: var(--white);
-  width: 90%;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 25px;
-  padding: 2rem;
-  border-radius: 1rem;
-  text-align: center;
-  max-width: 525px;
-  height: 525px;
-  position: relative;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  transform: translateY(-20px);
-  opacity: 0;
-  animation: fadeIn 0.5s forwards ease-in-out;
-  font-size: clamp(16px, calc(min(525px, 90vw) / 20), 26px);
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-#game_container > div {
-  margin-bottom: 5px;
-  font-size: 1rem;
-}
-
-  #quiz_container {
-  background-color: var(--white);
-  width: 90%;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 25px;
-  padding: 2rem;
-  border-radius: 1rem;
-  text-align: center;
-  max-width: 525px;
-  height: 525px;
-  position: relative;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  transform: translateY(-20px);
-  opacity: 0;
-  animation: fadeIn 0.5s forwards ease-in-out;
-  font-size: clamp(16px, calc(min(525px, 90vw) / 20), 26px);
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  }
-
-  .word-display {
+.word-display {
     font-size: 1.5rem;
     font-weight: bold;
-    margin-bottom: 20px;
+    margin: 20px 0;
+    height: 40px;
     color: #333;
-  }
+}
 
-  .answer-list {
+#spinner {
+    width: 36px;
+    height: 36px;
+}
+
+.answer-list {
     list-style: none;
     padding: 0;
-  }
-
-  .answer-button {
     width: 100%;
-    padding: 10px;
-    font-size: 25px;
-    overflow: hidden;
-    height: 95px;
-    color: white;
+}
+
+/* ── Answer Buttons ── */
+.answer-button {
+    display: block;
+    width: 100%;
+    padding: 5px;
+    height: 110px;
+    font-size: 1.25rem;
+    line-height: 35px;
     background-color: var(--cardboard);
     color: var(--black);
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
-    margin-bottom: 10px;
+    overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 20px;
-  }
+    transition: background-color 0.3s, box-shadow 0.15s;
+    margin-bottom: 10px;
+}
 
-  .answer-button:hover {
-    background-color: var(--);
-  }
-
-  .answer-button:focus {
+.answer-button:hover {
     outline: none;
     box-shadow: 0 0 5px var(--black);
-  }
+}
 
-  #timer{
+#timer {
     position: absolute;
     top: 10px;
     right: 20px;
-  }
+}
 
-  /* Button styling */
-  #start_button {
-    background-color: var(--success-green);
+/*---- Start Button ----*/
+#start-button {
+    width: 100px;
+    margin-top: 20px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1.35rem;
+    background: var(--success-green);
     color: var(--white);
     border: none;
-    outline: none;
-    padding: 0.75rem 1.5rem;
-    margin-top: 20px;
-    width: 100px;
-    height: 12.5%;
-    font-size: 1.35rem;
     border-radius: 5px;
     cursor: pointer;
-    transition: 0.3s;
-  }
+    transition: transform 0.3s;
+}
 
-  #start_button:hover {
-    background-color: var(--success-green);
-    transform: translateY(-2px);
-  }
-  #start_button:active {
-    background-color: var(--success-green);
-    transform: translateY(0);
-  }
+#start-button:hover { 
+    transform: translateY(-2px); 
+}
+
+#start-button:active { 
+    transform: translateY(0); 
+}

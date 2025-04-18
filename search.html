@@ -55,23 +55,27 @@
             </div>
         </div>
     </nav>
+    <!--Game-->
     <div id="title">
         <h1 class="text-center mb-1">Wordi Games</h1>
         <h5 class="text-center mb-1">Enhance your vocabulary and have fun along the way!</h5>
     </div>
-    <div id="game_container" style="display: flex;">
-        <h2 style="font-size: 50px;"><b>Word Search</b></h2>
-        <div style="font-size: 18px;">Look for hidden words!</div>
-        <button class="btn btn-success" id="start_button">Start</button>
-        <div id="spinner" class="spinner-border" role="status" style="display: none; margin-top: 10px;"></div>
-      </div>
 
-    <div id="search_container" draggable="false" style="display: none;">
-        <div id="selected_letters">...</div>
-        <hr>
-        <div id="letter_grid" draggable="false"></div>
-        <hr>
-        <div id="find_word">Find: This Word</div>
+    <div id="game-container">
+        <div id="start-container">
+            <h2 style="font-size: 50px;"><b>Word Search</b></h2>
+            <div style="font-size: 18px;">Look for hidden words!</div>
+            <button class="btn btn-success" id="start-button">Start</button>
+            <div id="spinner" class="spinner-border" role="status" style="display: none; margin-top: 10px;"></div>
+        </div>
+
+        <div id="search-container" draggable="false" style="display: none;">
+            <div id="top"><div id="selected-letters">...</div></div>
+            <hr>
+            <div id="letter-grid" draggable="false"></div>
+            <hr>
+            <div id="find-word">Find: This Word</div>
+        </div>
     </div>
 </body>
 </html>
