@@ -1,7 +1,9 @@
+/*---- Title ----*/
 #title{
     margin-top: 15px;
 }
 
+/*---- Account Container ----*/
 #account-container{
     background-color: var(--white);
     width: 90%;
@@ -22,17 +24,12 @@
 }
 
 #account-information{
-  margin-bottom: 10px;
+    margin-bottom: 10px;
 }
-
+/*---- Display Information ----*/
 #top{
     font-size: 25px;
     font-weight: 700;
-}
-
-.update{
-    display: flex;
-    align-items: center;
 }
 
 .section{
@@ -49,7 +46,6 @@
     word-break: break-all;
 }
 
-
 .edit{
     background-color: var(--black) !important;
     border: var(--black) solid !important;
@@ -62,6 +58,7 @@
 
 .update{
     display: none;
+    align-items: center;
 }
 
 .input{
@@ -78,6 +75,7 @@
     padding: 0 !important;
 }
 
+/*---- Buttons ----*/
 #signout-button{
     background-color: var(--error-red) !important;
     border: var(--error-red) solid !important;
@@ -95,6 +93,4 @@
     width: 100%;
     font-size: 18px;
 }
-
-
 

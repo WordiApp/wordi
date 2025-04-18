@@ -91,7 +91,7 @@ toggle_password.addEventListener("click", function () {
     }
     show_password = !show_password
 })
-//----------------Switch Rorms----------------//
+//----------------Switch Forms----------------//
 toggle_link.addEventListener("click", function () {
     if (register_activated == true) {
         toggle_link.textContent = "Don't have an account? Register here!"

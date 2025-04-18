@@ -1,4 +1,4 @@
-/* General Layout and Structure */
+/*---- General Layout and Structure ----*/
 .dashboard {
     width: 100%;
     max-width: 800px;
@@ -13,7 +13,7 @@
     margin-top: -10px;
 }
 
-/* Cards and Boxes */
+/*---- Cards and Boxes ----*/
 .box {
     background-color: var(--white);
     border-radius: 10px;
@@ -66,7 +66,7 @@
     grid-column: span 4;
 }
 
-/* Card Styling */
+/*---- Card Styling ----*/
 .word-card {
     width: 98%;
     height: 40px;
@@ -106,7 +106,7 @@
     opacity: 1;
 }
 
-/* Dashboard Specific Elements */
+/*---- Dashboard Specific Elements ----*/
 #leaderboard {
     display: block;
     overflow: auto;   
@@ -125,7 +125,7 @@
     border-radius: 10px;
 }
 
-/* Responsive Design */
+/*---- Responsive Design ----*/
 @media (max-width: 768px) {
     .wide, .wider, .widest {
         grid-column: span 3;
@@ -147,7 +147,7 @@
     }
 }
 
-/* Other Styling */
+/*---- Other Styling ----*/
 .icon {
     position: absolute;
     top: 10px;

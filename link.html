@@ -61,23 +61,24 @@
         <h5 class="text-center mb-1">Enhance your vocabulary and have fun along the way!</h5>
     </div>
     <div id="game-container">
-
         <div id="start-container">
-            <h2 style="font-size: 50px;"><b>Link Game!</b></h2>
-            <div style="font-size: 18px;">Start with a random word, and create links by typing in new words that start with the last letter of the previous word.</div>
+            <h2 style="font-size: 50px;"><b><i class="bi bi-link-45deg"></i>Link</b></h2>
+            <div style="font-size: 18px;">Link words with common start and end letters!</div>
             <div id="results" style="font-size: 18px;"></div>
             <button class="btn btn-success" id="start-button">Start</button>
         </div>
 
         <div id="link-container" style="display: none;">
-            <div id="link-length">Link Length: 10</div>
+            <div id="link-length">Link Length: ???</div>
             <div id="link"></div>
-            <div id="answer-container">
-                <input type="text" id="word-input" placeholder="Type in a word..." autocomplete="off">
-                <button class="btn btn-success" id="submit-button"><i class="bi bi-link"></i></button>
+            <div id="info">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="word-input" placeholder="Type in a word..." autocomplete="off"/>
+                    <button class="btn btn-success" id="submit-button"><i class="bi bi-link-45deg"></i></button>
+                </div>
+                <div id="required-length">Your next word must be # characters long and start with ?</div>
+                <div id="strikes">Strikes Remaining: X X X</div>
             </div>
-            <div id="required-length">Your next word must be # characters long</div>
-            <div id="strikes">Strikes Remaining: X X X</div>
         </div>
 
     </div>

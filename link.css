@@ -55,61 +55,14 @@
     padding: 0;
   }
 
-  .answer-button {
-    width: 100%;
-    padding: 10px;
+  #submit-button {
     font-size: 25px;
     overflow: hidden;
-    height: 95px;
     color: white;
-    background-color: var(--cardboard);
-    color: var(--black);
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin-bottom: 10px;
-    text-overflow: ellipsis;
-  }
-
-  .answer-button:hover {
-    background-color: var(--);
-  }
-
-  .answer-button:focus {
-    outline: none;
-    box-shadow: 0 0 5px var(--black);
-  }
-
-  #timer{
-    position: absolute;
-    top: 10px;
-    right: 20px;
-  }
-
-  /* Button styling */
-  #start_button {
-    background-color: var(--success-green);
+    background-color: var(--success-green) !important;
     color: var(--white);
     border: none;
-    outline: none;
-    padding: 0.75rem 1.5rem;
-    margin-top: 20px;
-    width: 30%;
-    height: 12.5%;
-    font-size: 1.35rem;
-    border-radius: 5px;
     cursor: pointer;
-    transition: 0.3s;
-  }
-
-  #start_button:hover {
-    background-color: var(--success-green);
-    transform: translateY(-2px);
-  }
-  #start_button:active {
-    background-color: var(--success-green);
-    transform: translateY(0);
   }
 
 #link{
@@ -118,18 +71,23 @@
     overflow-y: scroll;
     width: 100%;
     height: 350px;
-    font-size: 30px;
+    font-size: 27.5px;
     display: flex;
     flex-direction: column;
     align-content: center;
     scrollbar-width: none;
 }
 
-#answer_container{
-    display: flex;
-    gap: 10px;
-    height: 35px;
-    margin-top: 20px;
+#info{
+    margin-top: 50px;
+}
+
+#results{
+    font-style: oblique;
+}
+
+#word-input{
+    width: 20%;
 }
 
 #required-length{
@@ -138,6 +96,20 @@
 
 #strikes{
     font-size: 16px;
+    margin-top: 5px;
+}
+
+.highlight-green {
+    font-weight: bold;
+    font-style: oblique;
+    color: var(--success-green);
+  }
+  
+.highlight-red{
+    font-weight: bold;
+    color: var(--deep-red);
+    text-decoration: solid;
+    font-style: oblique;
 }
 
 #link-length{

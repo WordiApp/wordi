@@ -65,7 +65,8 @@ function addLink(word){
     linkLength.textContent = "Link Length: " + currentLink.length
     renderNewLink(word)
     lengthRequrirement = Math.max(parseInt(Math.random()*7), 3)
-    requiredLength.innerHTML = "Your next word must be at least <i>" + lengthRequrirement + "</i> characters long"
+    requiredLength.innerHTML = 'Your next word must be at least <span class="highlight-green">' + lengthRequrirement 
+                                + '</span> characters long and start with <span class="highlight-green">' + getLinkingLetter().toUpperCase() + '</span>!'
     link.scrollTop = link.scrollHeight
     input.value = ""
 }
@@ -83,7 +84,7 @@ function renderNewLink(word){
 async function newLink(){
     currentLink = []
     strikes = 3
-    strikesDisplay.innerHTML = "Strikes Remaining: <i>" + "X ".repeat(strikes).trim() + "</i>"
+    strikesDisplay.innerHTML = 'Strikes Remaining: <span class="highlight-red">' + 'X '.repeat(strikes).trim() + '</span>'
     const startingWord = (await Word.New()).getWord().toLowerCase()
     addLink(startingWord)
 }
@@ -94,11 +95,12 @@ submit.addEventListener("click", async function(){
     for(const {check, error} of rules){
         if(!check(wordObj)){
             strikes -= 1
-            strikesDisplay.textContent = "Strikes Remaining: " + "X ".repeat(strikes).trim()
+            strikesDisplay.innerHTML = 'Strikes Remaining: <span class="highlight-red">' + 'X '.repeat(strikes).trim() + '</span>'
             if(strikes <= 0){
                 notification("GAME OVER!! | " + error, 5, "var(--error-red)")
                 startContainer.style.display = "flex"
                 linkContainer.style.display = "none"
+                link.innerHTML = ""
                 results.style.display = "block"
                 results.textContent = "Previous Link Length: " + currentLink.length
                 if(currentLink.length > 0){

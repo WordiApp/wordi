@@ -19,7 +19,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const auth = getAuth()
 const db = getDatabase()
-//----------------Elements & Variables----------------//
+//----------------Elements----------------//
 const displayUsername = document.getElementById("username-display")
 const displayEmail = document.getElementById("email-display")
 const displayPassword = document.getElementById("password-display")
@@ -54,20 +54,28 @@ onAuthStateChanged(auth, function (user) {
         function displayInfo(user) {
             if (user != null) {
                 get(ref(db, "userdata/" + user.uid))
-                    .then(function (snapshot) {
-                        displayUsername.innerHTML = '<i class="bi bi-person"></i> Username: ' + snapshot.val()["username"]
-                        displayEmail.innerHTML = '<i class="bi bi-envelope"></i> Email: ' + snapshot.val()["email"]
-                        displayPassword.innerHTML = '<i class="bi bi-key"></i> Password: •••••••••••'
-                        displayScore.innerHTML = '<i class="bi bi-coin"></i> Total Points: ' + snapshot.val()["score"]
-                        displayStreak.innerHTML = '<i class="bi bi-fire"></i> Current Streak: ' + snapshot.val()["streak"]
-                        displaySearched.innerHTML = '<i class="bi bi-search"></i> Words Searched: ' + snapshot.val()["words_searched"]
-                    })
-                    .catch(function (err) {
-                        notification("Error: " + err, 5, "var(--error-red)")
-                    })
+                .then(function (snapshot) {
+                    displayUsername.innerHTML = '<i class="bi bi-person"></i> Username: ' + snapshot.val()["username"]
+                    displayEmail.innerHTML = '<i class="bi bi-envelope"></i> Email: ' + snapshot.val()["email"]
+                    displayPassword.innerHTML = '<i class="bi bi-key"></i> Password: •••••••••••'
+                    displayScore.innerHTML = '<i class="bi bi-coin"></i> Total Points: ' + snapshot.val()["score"]
+                    displayStreak.innerHTML = '<i class="bi bi-fire"></i> Current Streak: ' + snapshot.val()["streak"]
+                    displaySearched.innerHTML = '<i class="bi bi-search"></i> Words Searched: ' + snapshot.val()["words_searched"]
+                })
+                .catch(function (err) {
+                    notification("Error: " + err, 5, "var(--error-red)")
+                })
             }
         }
-        //----------------Buttons----------------//
+        //----------------Username----------------//
+        updateUsernameButton.addEventListener("click", function(){
+            if(window.getComputedStyle(updateUsernameTab).display == "flex"){
+                updateUsernameTab.style.display = "none"
+            } else {
+                updateUsernameTab.style.display = "flex"
+            }
+        })
+
         editUsernameButton.addEventListener("click", function (event) {
             let newUsername = editUsernameInput.value
             if (auth.currentUser != null && newUsername != "") {
@@ -89,6 +97,14 @@ onAuthStateChanged(auth, function (user) {
                 notification("Something went wrong.", 5, "var(--error-red)")
             }
             event.preventDefault()
+        })
+        //----------------Email----------------//
+        updateEmailButton.addEventListener("click", function(){
+            if(window.getComputedStyle(updateEmailTab).display == "flex"){
+                updateEmailTab.style.display = "none"
+            } else {
+                updateEmailTab.style.display = "flex"
+            }
         })
 
         editEmailButton.addEventListener("click", function (event) {
@@ -115,6 +131,14 @@ onAuthStateChanged(auth, function (user) {
             }
             event.preventDefault()
         })
+        //----------------Password----------------//
+        updatePasswordButton.addEventListener("click", function(){
+            if(window.getComputedStyle(updatePasswordTab).display == "flex"){
+                updatePasswordTab.style.display = "none"
+            } else {
+                updatePasswordTab.style.display = "flex"
+            }
+        })
 
         editPasswordButton.addEventListener("click", function (event) {
             let newPassword = editPasswordInput.value
@@ -136,36 +160,12 @@ onAuthStateChanged(auth, function (user) {
             }
             event.preventDefault()
         })
-
-        updateUsernameButton.addEventListener("click", function(){
-            if(window.getComputedStyle(updateUsernameTab).display == "flex"){
-                updateUsernameTab.style.display = "none"
-            } else {
-                updateUsernameTab.style.display = "flex"
-            }
-        })
-
-        updateEmailButton.addEventListener("click", function(){
-            if(window.getComputedStyle(updateEmailTab).display == "flex"){
-                updateEmailTab.style.display = "none"
-            } else {
-                updateEmailTab.style.display = "flex"
-            }
-        })
-
-        updatePasswordButton.addEventListener("click", function(){
-            if(window.getComputedStyle(updatePasswordTab).display == "flex"){
-                updatePasswordTab.style.display = "none"
-            } else {
-                updatePasswordTab.style.display = "flex"
-            }
-        })
-
+        //----------------Signout----------------//
         signoutButton.addEventListener("click", function () {
             auth.signOut()
             document.location.href = "index.html"
         })
-
+        //----------------Delete----------------//
         deleteButton.addEventListener("click", function () {
             const doDelete = confirm("Are you SURE you want to delete your Wordi account? This action CANNOT be undone.")
             if(doDelete){
