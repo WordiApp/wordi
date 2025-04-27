@@ -34,7 +34,3 @@ The primary purpose of this project was to familiarize myself more with the thre
 1. Head over to the 'deployments' tab on the repository page
 2. Click on the latest 'github-pages' deployment
 3. Create a free account to enjoy all the features of Wordi!
-
----
-
-Made with ❤️ by Dawid Wasniowski
