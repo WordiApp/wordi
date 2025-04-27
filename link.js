@@ -54,6 +54,12 @@ const rules = [
         error: "Can't link; no repeats allowed."
     }
 ]
+//----------------Security Check----------------//
+onAuthStateChanged(auth, function(user){
+    if (!user) {
+        window.location.href = "index.html"
+    }
+})
 
 function getLinkingLetter(){
     const previousWord = currentLink[currentLink.length-1]

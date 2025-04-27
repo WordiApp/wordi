@@ -45,146 +45,146 @@ const editPasswordButton = document.getElementById("edit-password-button")
 
 const signoutButton = document.getElementById("signout-button")
 const deleteButton = document.getElementById("delete-button")
-//----------------Load----------------//
-onAuthStateChanged(auth, function (user) {
-    if (user == null) {
-        document.location.href = "index.html"
+//----------------Security Check----------------//
+onAuthStateChanged(auth, function(user){
+    if (!user) {
+        window.location.href = "index.html"
     } else {
-        //----------------Display User Info----------------//
-        function displayInfo(user) {
-            if (user != null) {
-                get(ref(db, "userdata/" + user.uid))
+        displayInfo()
+    }
+})
+//----------------Display User Info----------------//
+function displayInfo() {
+    if (auth.currentUser != null) {
+        get(ref(db, "userdata/" + auth.currentUser.uid))
+        .then(function (snapshot) {
+            displayUsername.innerHTML = '<i class="bi bi-person"></i> Username: ' + snapshot.val()["username"]
+            displayEmail.innerHTML = '<i class="bi bi-envelope"></i> Email: ' + snapshot.val()["email"]
+            displayPassword.innerHTML = '<i class="bi bi-key"></i> Password: •••••••••••'
+            displayScore.innerHTML = '<i class="bi bi-coin"></i> Total Points: ' + snapshot.val()["score"]
+            displayStreak.innerHTML = '<i class="bi bi-fire"></i> Current Streak: ' + snapshot.val()["streak"]
+            displaySearched.innerHTML = '<i class="bi bi-search"></i> Words Searched: ' + snapshot.val()["words_searched"]
+        })
+        .catch(function (err) {
+            notification("Error: " + err, 5, "var(--error-red)")
+        })
+    }
+}
+//----------------Username----------------//
+updateUsernameButton.addEventListener("click", function(){
+    if(window.getComputedStyle(updateUsernameTab).display == "flex"){
+        updateUsernameTab.style.display = "none"
+    } else {
+        updateUsernameTab.style.display = "flex"
+    }
+})
+
+editUsernameButton.addEventListener("click", function (event) {
+    let newUsername = editUsernameInput.value
+    if (auth.currentUser != null && newUsername != "") {
+        if (newUsername.length >= 3) {
+            update(ref(db, "userdata/" + auth.currentUser.uid), {
+                username: newUsername,
+            })
                 .then(function (snapshot) {
-                    displayUsername.innerHTML = '<i class="bi bi-person"></i> Username: ' + snapshot.val()["username"]
-                    displayEmail.innerHTML = '<i class="bi bi-envelope"></i> Email: ' + snapshot.val()["email"]
-                    displayPassword.innerHTML = '<i class="bi bi-key"></i> Password: •••••••••••'
-                    displayScore.innerHTML = '<i class="bi bi-coin"></i> Total Points: ' + snapshot.val()["score"]
-                    displayStreak.innerHTML = '<i class="bi bi-fire"></i> Current Streak: ' + snapshot.val()["streak"]
-                    displaySearched.innerHTML = '<i class="bi bi-search"></i> Words Searched: ' + snapshot.val()["words_searched"]
+                    notification("Username succesfully updated!")
+                    displayInfo(auth.currentUser)
                 })
                 .catch(function (err) {
                     notification("Error: " + err, 5, "var(--error-red)")
                 })
-            }
+        } else {
+            notification("Username must be more than 3 characters long", 5, "var(--error-red)")
         }
-        //----------------Username----------------//
-        updateUsernameButton.addEventListener("click", function(){
-            if(window.getComputedStyle(updateUsernameTab).display == "flex"){
-                updateUsernameTab.style.display = "none"
-            } else {
-                updateUsernameTab.style.display = "flex"
-            }
-        })
+    } else {
+        notification("Something went wrong.", 5, "var(--error-red)")
+    }
+    event.preventDefault()
+})
+//----------------Email----------------//
+updateEmailButton.addEventListener("click", function(){
+    if(window.getComputedStyle(updateEmailTab).display == "flex"){
+        updateEmailTab.style.display = "none"
+    } else {
+        updateEmailTab.style.display = "flex"
+    }
+})
 
-        editUsernameButton.addEventListener("click", function (event) {
-            let newUsername = editUsernameInput.value
-            if (auth.currentUser != null && newUsername != "") {
-                if (newUsername.length >= 3) {
-                    update(ref(db, "userdata/" + auth.currentUser.uid), {
-                        username: newUsername,
-                    })
-                        .then(function (snapshot) {
-                            notification("Username succesfully updated!")
-                            displayInfo(auth.currentUser)
-                        })
-                        .catch(function (err) {
-                            notification("Error: " + err, 5, "var(--error-red)")
-                        })
-                } else {
-                    notification("Username must be more than 3 characters long", 5, "var(--error-red)")
-                }
-            } else {
-                notification("Something went wrong.", 5, "var(--error-red)")
-            }
-            event.preventDefault()
-        })
-        //----------------Email----------------//
-        updateEmailButton.addEventListener("click", function(){
-            if(window.getComputedStyle(updateEmailTab).display == "flex"){
-                updateEmailTab.style.display = "none"
-            } else {
-                updateEmailTab.style.display = "flex"
-            }
-        })
-
-        editEmailButton.addEventListener("click", function (event) {
-            let newEmail = editEmailInput.value
-            if (auth.currentUser != null && newEmail != "") {
-                updateEmail(auth.currentUser, newEmail)
+editEmailButton.addEventListener("click", function (event) {
+    let newEmail = editEmailInput.value
+    if (auth.currentUser != null && newEmail != "") {
+        updateEmail(auth.currentUser, newEmail)
+            .then(function () {
+                update(ref(db, "userdata/" + auth.currentUser.uid), {
+                    email: newEmail,
+                })
                     .then(function () {
-                        update(ref(db, "userdata/" + auth.currentUser.uid), {
-                            email: newEmail,
-                        })
-                            .then(function () {
-                                notification("Email successfully updated!")
-                                displayInfo(auth.currentUser)
-                            })
-                            .catch(function (err) {
-                                notification("Email Error: " + err, 5, "var(--error-red)")
-                            })
+                        notification("Email successfully updated!")
+                        displayInfo(auth.currentUser)
                     })
                     .catch(function (err) {
                         notification("Email Error: " + err, 5, "var(--error-red)")
                     })
-            } else {
-                notification("Something went wrong.", 5, "var(--error-red)")
-            }
-            event.preventDefault()
-        })
-        //----------------Password----------------//
-        updatePasswordButton.addEventListener("click", function(){
-            if(window.getComputedStyle(updatePasswordTab).display == "flex"){
-                updatePasswordTab.style.display = "none"
-            } else {
-                updatePasswordTab.style.display = "flex"
-            }
-        })
+            })
+            .catch(function (err) {
+                notification("Email Error: " + err, 5, "var(--error-red)")
+            })
+    } else {
+        notification("Something went wrong.", 5, "var(--error-red)")
+    }
+    event.preventDefault()
+})
+//----------------Password----------------//
+updatePasswordButton.addEventListener("click", function(){
+    if(window.getComputedStyle(updatePasswordTab).display == "flex"){
+        updatePasswordTab.style.display = "none"
+    } else {
+        updatePasswordTab.style.display = "flex"
+    }
+})
 
-        editPasswordButton.addEventListener("click", function (event) {
-            let newPassword = editPasswordInput.value
-            if (auth.currentUser != null && newPassword != "") {
-                if (newPassword.length >= 6) {
-                    updatePassword(auth.currentUser, newPassword)
-                        .then(function () {
-                            notification("Password successfully updated!")
-                            displayInfo(auth.currentUser)
-                        })
-                        .catch(function (err) {
-                            notification("Password Error: " + err, 5, "var(--error-red)")
-                        })
-                } else {
-                    notification("Password must be more than 6 characters long", 5, "var(--error-red)")
-                }
-            } else {
+editPasswordButton.addEventListener("click", function (event) {
+    let newPassword = editPasswordInput.value
+    if (auth.currentUser != null && newPassword != "") {
+        if (newPassword.length >= 6) {
+            updatePassword(auth.currentUser, newPassword)
+                .then(function () {
+                    notification("Password successfully updated!")
+                    displayInfo(auth.currentUser)
+                })
+                .catch(function (err) {
+                    notification("Password Error: " + err, 5, "var(--error-red)")
+                })
+        } else {
+            notification("Password must be more than 6 characters long", 5, "var(--error-red)")
+        }
+    } else {
+        notification("Something went wrong.", 5, "var(--error-red)")
+    }
+    event.preventDefault()
+})
+//----------------Signout----------------//
+signoutButton.addEventListener("click", function () {
+    auth.signOut()
+    document.location.href = "index.html"
+})
+//----------------Delete----------------//
+deleteButton.addEventListener("click", function () {
+    const doDelete = confirm("Are you SURE you want to delete your Wordi account? This action CANNOT be undone.")
+    if(doDelete){
+        remove(ref(db, "userdata/" + auth.currentUser.uid))
+        .then(function(){
+            auth.currentUser.delete()
+            .then(function(){
+                window.location.href = "index.html"
+            })
+            .catch(function(err){
                 notification("Something went wrong.", 5, "var(--error-red)")
-            }
-            event.preventDefault()
+            })
+            window.location.href = "index.html"
         })
-        //----------------Signout----------------//
-        signoutButton.addEventListener("click", function () {
-            auth.signOut()
-            document.location.href = "index.html"
+        .catch(function(err){
+            notification("Something went wrong.", 5, "var(--error-red)")
         })
-        //----------------Delete----------------//
-        deleteButton.addEventListener("click", function () {
-            const doDelete = confirm("Are you SURE you want to delete your Wordi account? This action CANNOT be undone.")
-            if(doDelete){
-                remove(ref(db, "userdata/" + auth.currentUser.uid))
-                .then(function(){
-                    auth.currentUser.delete()
-                    .then(function(){
-                        window.location.href = "index.html"
-                    })
-                    .catch(function(err){
-                        notification("Something went wrong.", 5, "var(--error-red)")
-                    })
-                    window.location.href = "index.html"
-                })
-                .catch(function(err){
-                    notification("Something went wrong.", 5, "var(--error-red)")
-                })
-            }
-        })
-        displayInfo(user)
     }
 })

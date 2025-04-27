@@ -40,6 +40,12 @@ let letters = ""
 let currentWord = null
 let mouseDown = false
 let canSearch = false
+//----------------Security Check----------------//
+onAuthStateChanged(auth, function(user){
+    if (!user) {
+        window.location.href = "index.html"
+    }
+})
 //----------------Functions: Grid Generation----------------//
 // Fisher-Yates Shuffle Algorithm
 function shuffle(arr){

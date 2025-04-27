@@ -32,6 +32,12 @@ const startButton = document.getElementById("start-button")
 const wordQuestion = document.getElementById("word-question")
 const timer = document.getElementById("timer")
 const results = document.getElementById("results")
+//----------------Security Check----------------//
+onAuthStateChanged(auth, function(user){
+    if (!user) {
+        window.location.href = "index.html"
+    }
+})
 //----------------Functions----------------//
 function sleep(seconds) {
     return new Promise(function(resolve){
