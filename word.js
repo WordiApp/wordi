@@ -33,7 +33,7 @@ export default class Word {
     }
 
     async createWord(given) {
-        if (given != null && given != "" && given != undefined) {
+        if (given) {
             this.word = given
             try {
                 let snapshotDefinition = await get(ref(db, "words/" + given))

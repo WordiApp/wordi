@@ -26,6 +26,7 @@ const wordCount = document.getElementById("word-count")
 const dateBox = document.getElementById("date-box")
 const wordHistory = document.getElementById("word-history")
 const leaderboard = document.getElementById("leaderboard")
+const currentPoints = document.getElementById("currentPoints")
 
 const greetings = ["Hello, ", "Greetings, ", "Salutations, ", "Good day, ", "Welcome back, ", "Why hello there, ", "Nice to see you,  ", "Glad you're back, ", "Hope you're having a good day, ", "Welcome to Wordi, ", "Aloha, "]
 //----------------Load----------------//
@@ -105,6 +106,8 @@ onAuthStateChanged(auth, function (user) {
                     })
                     wordHistory.appendChild(card)
                 }
+                //----------------Points----------------//
+                currentPoints.textContent = "Your Points: " + JSON.parse(snapshot.val()["score"])
             })
             .catch(function (err) {
                 notification("Error fetching user data: " + err, 5, "var(--error-red)")
